@@ -2,15 +2,24 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
-
+{ config, lib, pkgs, options, ... }:
+let
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
       ./disko-config.nix
+      (import "${home-manager}/nixos")
     ];
+
+  nix.nixPath = 
+    # Prepend default nixPath values!
+    options.nix.nixPath.default ++  
+    ["nixos-config=/home/igor/code/infra-nix-config/configuration.nix"]
+  ;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -62,8 +71,8 @@
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
-                "electron-25.9.0"  # needed for obsidian on 20240101
-              ];
+    "electron-25.9.0"  # needed for obsidian on 20240101
+  ];
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -71,21 +80,30 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
-      clementine
+      # authy
+      # clementine
       firefox
       libsForQt5.kdeconnect-kde
       obsidian
       steam
+      timeshift
       vscode
     ];
   };
-  users.users.igor2 = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      firefox
-    ];
+  home-manager.users.igor = { pkgs, ... }: {
+  # home.packages = [ pkgs.atool pkgs.httpie ];
+  # programs.bash.enable = true;
+    programs.git = {
+      enable = true;
+      userName  = "nikolarobottesla";
+      userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
+    };
+
+  # The state version is required and should stay at the version you
+  # originally installed.
+  home.stateVersion = "23.11";
   };
+  
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -105,6 +123,7 @@
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
+
   programs.mtr.enable = true;  # network diagnostic tool combining ping and traceroute
   programs.gnupg.agent = {
     enable = true;
@@ -127,6 +146,17 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  # Auto system update
+  system.autoUpgrade = {
+        enable = true;
+  };
+
+  # Automatic Garbage Collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
