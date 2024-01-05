@@ -5,6 +5,8 @@
 { config, lib, pkgs, options, ... }:
 let
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
+  # nix2211 = fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-22.11.tar.gz";
+  # nix2211Pkgs = import nix2211 { config.allowUnfree = true; }; # if you do need pkgs
 in
 {
   imports =
@@ -70,21 +72,24 @@ in
   services.xserver.libinput.enable = true;
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"  # needed for obsidian on 20240101
-  ];
+  # nixpkgs.config.permittedInsecurePackages = [
+  #   "electron-25.9.0"  # needed for obsidian on 20240101
+  # ];
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.igor = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" ]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # authy
+      # autorestic  # declarative backup
       # clementine
       firefox
       libsForQt5.kdeconnect-kde
-      obsidian
+      # obsidian
+      rclone
+      # restic
       steam
       timeshift
       vscode
@@ -137,8 +142,38 @@ in
     enable = true;
   };
 
+  services.duplicati = {
+    enable = true;
+    user = "igor";
+  };
   services.flatpak.enable = true;
   services.tailscale.enable = true;
+
+  # comment in after rclone config, make sure to name remote 'pcloud'
+  programs.fuse.userAllowOther = true;
+  systemd.services.rcpcloudmount = {
+    enable = true;
+    description = "rclone pcloud mounting service";
+    # after= [ "remote-fs.target" ];  # would probably also work
+    after= [ "network-online.target" ];
+
+    # path = [ pkgs.nix pkgs.su pkgs.rclone pkgs.fuse3];
+    path = [ pkgs.su ];
+    preStart = "su igor -c 'mkdir -p /home/igor/rcpcloud'";
+    # script = "rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --config /home/igor/.config/rclone/rclone.conf --allow-other";
+    script = "su igor -c 'rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --allow-other'";
+    preStop = "su igor -c 'fusermount -u /home/igor/rcpcloud'";
+    postStop = "su igor -c 'rmdir /home/igor/rcpcloud'";
+
+    restartIfChanged = true;  # doesn't seem to do anything
+    restartTriggers = [ "on-failure" ]; # doesn't seem to work
+    serviceConfig = {
+      Type = "simple";
+      # Environment = "PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.rclone pkgs.fuse3 ]}";  # didn't seem to work
+      # User = "igor"; # this works to give the user env but then the script had a permissions isssue
+      # Restart = "on-failure"; 
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
