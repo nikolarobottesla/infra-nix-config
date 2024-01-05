@@ -15,6 +15,7 @@ in
       "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
       ./disko-config.nix
       (import "${home-manager}/nixos")
+      ./semi-active-av.nix
     ];
 
   nix.nixPath = 
@@ -27,6 +28,9 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
+
+  # enable clamav with services
+  semi-active-av.enable = true;
 
   networking.hostName = "15TH-TURTLE"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -51,11 +55,10 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-
   # Enable the Plasma 5 Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  
+  services.xserver.displayManager.defaultSession = "plasmawayland";  # doesn't seem to work
 
   # Configure keymap in X11
 #   services.xserver.xkb.layout = "us";
