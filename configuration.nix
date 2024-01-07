@@ -66,6 +66,12 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  # Enable autodiscovery of network printers
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    openFirewall = true;
+  };
 
   # Enable sound.
   sound.enable = true;
@@ -89,11 +95,13 @@ in
       # autorestic  # declarative backup
       # clementine
       firefox
+      hunspell  # spell check in libreoffice
+      hunspellDicts.en_US  # english dict
+      libreoffice-qt 
       libsForQt5.kdeconnect-kde
       # obsidian
       rclone
       # restic
-      steam
       timeshift
       vscode
     ];
@@ -137,6 +145,10 @@ in
     enable = true;
     enableSSHSupport = true;
   };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  };
 
   # List services that you want to enable:
 
@@ -157,8 +169,9 @@ in
   systemd.services.rcpcloudmount = {
     enable = true;
     description = "rclone pcloud mounting service";
-    # after= [ "remote-fs.target" ];  # would probably also work
-    after= [ "network-online.target" ];
+    # after = [ "remote-fs.target" ];  # would probably also work
+    after = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
 
     # path = [ pkgs.nix pkgs.su pkgs.rclone pkgs.fuse3];
     path = [ pkgs.su ];
