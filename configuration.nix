@@ -130,6 +130,7 @@ in
     iotop
     kate
     partition-manager
+    snapper-gui  # needs services.snapper... to work
     tailscale
     tmux
     tree
@@ -196,6 +197,22 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  # enable snapper (btrfs snapshots)
+  # manually create 'sudo btrfs subvolume create /home/.snapshots'
+  services.snapper.snapshotInterval = "1d";
+  services.snapper.configs.home = {
+    SUBVOLUME = "/home";
+    ALLOW_USERS = [ "igor" ];
+    TIMELINE_CREATE = true;
+    TIMELINE_CLEANUP = true;
+    TIMELINE_MIN_AGE="1800";
+    TIMELINE_LIMIT_HOURLY="0";
+    TIMELINE_LIMIT_DAILY="3";
+    TIMELINE_LIMIT_WEEKLY="3";
+    TIMELINE_LIMIT_MONTHLY="1";
+    TIMELINE_LIMIT_YEARLY="0";
+  };
 
   # Auto system update
   system.autoUpgrade = {

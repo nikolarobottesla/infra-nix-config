@@ -37,10 +37,19 @@
                       mountpoint = "/";
                       mountOptions = [ "noatime" ];
                     };
+                    # if you want to use timeshift, use the @s
+                    # "/@" = {
+                    #   mountpoint = "/";
+                    #   mountOptions = [ "noatime" ];
+                    # };
                     "/home" = {
                       mountpoint = "/home";
                       mountOptions = [ "noatime" ];
                     };
+                    # "/@home" = {
+                    #   mountpoint = "/home";
+                    #   mountOptions = [ "noatime" ];
+                    # };
                     "/nix" = {
                       mountpoint = "/nix";
                       mountOptions = [ "noatime" ];
