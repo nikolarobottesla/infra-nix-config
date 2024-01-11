@@ -101,8 +101,9 @@ in
       libsForQt5.kdeconnect-kde
       # obsidian
       rclone
+      rpi-imager
       # restic
-      timeshift
+      # timeshift
       vscode
     ];
   };
@@ -178,7 +179,7 @@ in
     path = [ pkgs.su ];
     preStart = "su igor -c 'mkdir -p /home/igor/rcpcloud'";
     # script = "rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --config /home/igor/.config/rclone/rclone.conf --allow-other";
-    script = "su igor -c 'rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --allow-other'";
+    script = "su igor -c 'rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --allow-other --allow-non-empty'";
     preStop = "su igor -c 'fusermount -u /home/igor/rcpcloud'";
     postStop = "su igor -c 'rmdir /home/igor/rcpcloud'";
 
@@ -212,6 +213,18 @@ in
     TIMELINE_LIMIT_WEEKLY="3";
     TIMELINE_LIMIT_MONTHLY="1";
     TIMELINE_LIMIT_YEARLY="0";
+  };
+
+  virtualisation = {
+    podman = {
+      enable = true;
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
+    };
   };
 
   # Auto system update
