@@ -2,22 +2,26 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, options, ... }:
+{ config, lib, pkgs, options, home-manager, ... }:
 let
   user-name = "nixos";
   device-name = "coconut-2";
-  nixos-hardware = builtins.fetchTarball "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
+  # nixos-hardware = builtins.fetchTarball "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
+  # home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
+  # vscode-server = builtins.fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master";
 in
 {
-  imports =
-    [
-      <nixpkgs/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix>
-      (import "${nixos-hardware}/raspberry-pi/4")
-      # ./devices/${device-name}.nix
-      (import "${home-manager}/nixos")
-      (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
-    ];
+  # nixpkgs.crossSystem.system = "AArch64-linux";
+  # imports =
+  #   [
+  #     # <nixpkgs/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix>
+  #     (import "${nixos-hardware}/raspberry-pi/4")
+  #     # ./devices/${device-name}.nix
+  #     (import "${home-manager}/nixos")
+  #     (import "${vscode-server}")
+  #   ];
+  
+  # sdImage.compressImage = false;
 
   hardware = {
     raspberry-pi."4".apply-overlays-dtmerge.enable = true;
@@ -27,8 +31,7 @@ in
     };
   };
 
-  sdImage.compressImage = false;
-
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = 
     # Prepend default nixPath values!
     options.nix.nixPath.default ++  
@@ -135,6 +138,6 @@ in
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }

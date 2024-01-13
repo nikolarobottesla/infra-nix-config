@@ -18,7 +18,8 @@ in
       (import "${home-manager}/nixos")
       ./semi-active-av.nix
     ];
-
+  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.nixPath = 
     # Prepend default nixPath values!
     options.nix.nixPath.default ++  
