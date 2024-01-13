@@ -4,14 +4,15 @@
 
 { config, lib, pkgs, options, ... }:
 let
+  device-name = "15TH-TURTLE";
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
   # nix2211 = fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-22.11.tar.gz";
   # nix2211Pkgs = import nix2211 { config.allowUnfree = true; }; # if you do need pkgs
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+    [
+      ./devices/${device-name}.nix
       "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
       ./disko-config.nix
       (import "${home-manager}/nixos")
@@ -29,10 +30,13 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
+  # needed to build for pi
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   # enable clamav with services
   semi-active-av.enable = true;
 
-  networking.hostName = "15TH-TURTLE"; # Define your hostname.
+  networking.hostName = "${device-name}"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -104,16 +108,20 @@ in
       rpi-imager
       # restic
       # timeshift
-      vscode
     ];
   };
   home-manager.users.igor = { pkgs, ... }: {
   # home.packages = [ pkgs.atool pkgs.httpie ];
   # programs.bash.enable = true;
+    nixpkgs.config.allowUnfree = true;
     programs.git = {
       enable = true;
       userName  = "nikolarobottesla";
       userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
+    };
+    programs.vscode = {
+      enable = true;
+      package = pkgs.vscode.fhs;
     };
 
   # The state version is required and should stay at the version you
