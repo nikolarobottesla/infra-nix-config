@@ -9,30 +9,40 @@
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = { self, home-manager, nixos-hardware, nixpkgs, vscode-server}: rec {
-  # outputs = { self, nixos-hardware, nixpkgs}: rec {
-    nixosConfigurations.rpi4 = nixpkgs.lib.nixosSystem {
-      modules = [
-        "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-        ./rpi-config.nix
-        home-manager.nixosModules.home-manager
-        nixos-hardware.nixosModules.raspberry-pi-4
-        vscode-server.nixosModules.default
-        {
-          nixpkgs.config.allowUnsupportedSystem = true;
-          nixpkgs.hostPlatform.system = "aarch64-linux";
-          nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
-          # ... extra configs
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          nixpkgs.overlays = [
-            (final: super: {
-              makeModulesClosure = x:
-                super.makeModulesClosure (x // { allowMissing = true; });
-            })
-          ];
-        }
-      ];
+    nixosConfigurations = {
+      rpi4Image = nixpkgs.lib.nixosSystem {
+        modules = [
+          "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+          ./rpi-config.nix
+          home-manager.nixosModules.home-manager
+          nixos-hardware.nixosModules.raspberry-pi-4
+          vscode-server.nixosModules.default
+          {
+            nixpkgs.config.allowUnsupportedSystem = true;
+            nixpkgs.hostPlatform.system = "aarch64-linux";
+            nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
+            # ... extra configs
+
+            nixpkgs.overlays = [
+              (final: super: {
+                makeModulesClosure = x:
+                  super.makeModulesClosure (x // { allowMissing = true; });
+              })
+            ];
+          }
+        ];
+      };
+      rpi4 = nixpkgs.lib.nixosSystem {
+        modules = [
+          ./rpi-config.nix
+          home-manager.nixosModules.home-manager
+          nixos-hardware.nixosModules.raspberry-pi-4
+          vscode-server.nixosModules.default
+        ]
+      };
     };
-    images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
+    images.rpi4Image = nixosConfigurations.rpi4.config.system.build.sdImage;
+    builds.rpi4 = nixosConfigurations.rpi4.config.system.build.toplevel;
+    
   };
 }

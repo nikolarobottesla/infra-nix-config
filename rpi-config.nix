@@ -6,22 +6,14 @@
 let
   user-name = "nixos";
   device-name = "coconut-2";
-  # nixos-hardware = builtins.fetchTarball "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
-  # home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
-  # vscode-server = builtins.fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master";
 in
 {
-  # nixpkgs.crossSystem.system = "AArch64-linux";
-  # imports =
-  #   [
-  #     # <nixpkgs/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix>
-  #     (import "${nixos-hardware}/raspberry-pi/4")
-  #     # ./devices/${device-name}.nix
-  #     (import "${home-manager}/nixos")
-  #     (import "${vscode-server}")
-  #   ];
-  
-  # sdImage.compressImage = false;
+  imports =
+    [
+      # ./devices/${device-name}.nix
+      (import ./home-manager { user-name = user-name; })
+      # ./semi-active-av.nix
+    ];
 
   hardware = {
     raspberry-pi."4".apply-overlays-dtmerge.enable = true;
@@ -46,7 +38,7 @@ in
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "America/Chicago";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -77,15 +69,10 @@ in
   home-manager.users.${user-name} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
-    programs.git = {
-      enable = true;
-      userName  = "nikolarobottesla";
-      userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
-    };
 
     # enable VScode server support
     services.vscode-server.enable = true;
-    
+
   # The state version is required and should stay at the version you
   # originally installed.
   home.stateVersion = "23.11";
