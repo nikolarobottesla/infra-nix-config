@@ -102,6 +102,9 @@ in
   # enable VScode server support
   services.vscode-server.enable = true;
 
+  services.tailscale.enable = true;
+  # services.tailscale.useRoutingFeatures = ...
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
