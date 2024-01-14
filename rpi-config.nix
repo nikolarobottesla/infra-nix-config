@@ -24,11 +24,6 @@ in
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.nixPath = 
-    # Prepend default nixPath values!
-    options.nix.nixPath.default ++  
-    ["nixos-config=/home/${user-name}/code/infra-nix-config/rpi-config.nix"]
-  ;
 
   console.enable = false;
 
@@ -56,6 +51,10 @@ in
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
+  users.users.root.openssh.authorizedKeys.keys = [
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
+  ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user-name} = {
     isNormalUser = true;
@@ -69,9 +68,6 @@ in
   home-manager.users.${user-name} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
-
-    # enable VScode server support
-    services.vscode-server.enable = true;
 
   # The state version is required and should stay at the version you
   # originally installed.
@@ -99,7 +95,16 @@ in
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    # require public key authentication for better security
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+    #settings.PermitRootLogin = "yes";
+  };
+
+  # enable VScode server support
+  services.vscode-server.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
