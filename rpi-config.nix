@@ -100,6 +100,9 @@ in
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
+    # leaving pinentryFlavor default was causing mismatch dependency error
+    # "curses, tty also caused the same error
+    pinentryFlavor = null;
   };
 
   # List services that you want to enable:
@@ -107,7 +110,7 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # enable VScode server support
+  # # enable VScode server support
   services.vscode-server.enable = true;
 
   # Open ports in the firewall.
@@ -115,6 +118,30 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  virtualisation = {
+    podman = {
+      enable = true;
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
+  # Auto system update
+  system.autoUpgrade = {
+        enable = true;
+  };
+
+  # Automatic Garbage Collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

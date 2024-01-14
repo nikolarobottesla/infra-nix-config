@@ -1,13 +1,15 @@
 {
-  description = "Build pi4 image";
+  description = "build nix";
   inputs = {
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:nixOS/nixos-hardware";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = { self, home-manager, nixos-hardware, nixpkgs, vscode-server}: rec {
+  # outputs = { self, nixos-hardware, nixpkgs}: rec {
     nixosConfigurations.rpi4 = nixpkgs.lib.nixosSystem {
       modules = [
         "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
@@ -22,6 +24,12 @@
           # ... extra configs
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          nixpkgs.overlays = [
+            (final: super: {
+              makeModulesClosure = x:
+                super.makeModulesClosure (x // { allowMissing = true; });
+            })
+          ];
         }
       ];
     };
