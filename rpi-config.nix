@@ -82,6 +82,10 @@ in
       userName  = "nikolarobottesla";
       userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
     };
+
+    # enable VScode server support
+    services.vscode-server.enable = true;
+    
   # The state version is required and should stay at the version you
   # originally installed.
   home.stateVersion = "23.11";
@@ -109,9 +113,6 @@ in
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  # # enable VScode server support
-  services.vscode-server.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
