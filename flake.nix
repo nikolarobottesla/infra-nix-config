@@ -38,7 +38,7 @@
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
           vscode-server.nixosModules.default
-        ]
+        ];
       };
     };
     images.rpi4Image = nixosConfigurations.rpi4.config.system.build.sdImage;
