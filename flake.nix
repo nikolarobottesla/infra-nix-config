@@ -39,7 +39,7 @@
       # set user password before applying
       rpi4 = nixpkgs.lib.nixosSystem {
         modules = [
-          /etc/nixos/hardware-config.nix  # run nixos-generate-config 1st
+          ./devices/coconut-2.nix
           ./rpi-config.nix
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
