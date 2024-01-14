@@ -5,6 +5,7 @@
 { config, lib, pkgs, options, ... }:
 let
   device-name = "15TH-TURTLE";
+  user-name = "igor";
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
   # nix2211 = fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-22.11.tar.gz";
   # nix2211Pkgs = import nix2211 { config.allowUnfree = true; }; # if you do need pkgs
@@ -16,6 +17,7 @@ in
       "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
       ./disko-config.nix
       (import "${home-manager}/nixos")
+      (import ./home-manager { user-name = user-name; })
       ./semi-active-av.nix
     ];
   
@@ -43,7 +45,7 @@ in
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
-  time.timeZone = "America/Chicago";
+  services.automatic-timezoned.enable = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -114,12 +116,12 @@ in
   home-manager.users.igor = { pkgs, ... }: {
   # home.packages = [ pkgs.atool pkgs.httpie ];
   # programs.bash.enable = true;
-    nixpkgs.config.allowUnfree = true;
-    programs.git = {
-      enable = true;
-      userName  = "nikolarobottesla";
-      userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
-    };
+    # nixpkgs.config.allowUnfree = true;
+    # programs.git = {
+    #   enable = true;
+    #   userName  = "nikolarobottesla";
+    #   userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
+    # };
     programs.vscode = {
       enable = true;
       package = pkgs.vscode.fhs;
@@ -210,6 +212,7 @@ in
 
   # enable snapper (btrfs snapshots)
   # manually create 'sudo btrfs subvolume create /home/.snapshots'
+  #TODO get working
   services.snapper.snapshotInterval = "1d";
   services.snapper.configs.home = {
     SUBVOLUME = "/home";
