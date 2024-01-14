@@ -23,6 +23,10 @@
             nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
             # ... extra configs
 
+            users.users.root.openssh.authorizedKeys.keys = [
+              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
+            ];
+
             nixpkgs.overlays = [
               (final: super: {
                 makeModulesClosure = x:
@@ -32,6 +36,7 @@
           }
         ];
       };
+      # set user password before applying
       rpi4 = nixpkgs.lib.nixosSystem {
         modules = [
           /etc/nixos/hardware-config.nix  # run nixos-generate-config 1st
