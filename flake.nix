@@ -41,7 +41,7 @@
         ];
       };
     };
-    images.rpi4Image = nixosConfigurations.rpi4.config.system.build.sdImage;
+    images.rpi4 = nixosConfigurations.rpi4Image.config.system.build.sdImage;
     builds.rpi4 = nixosConfigurations.rpi4.config.system.build.toplevel;
     
   };
