@@ -4,8 +4,11 @@
   home-manager.useUserPackages = true;
 
   home-manager.users.${user-name} = { pkgs, ... }: {
-    # home.packages = [ pkgs.atool pkgs.httpie ];
+    home.packages = with pkgs; [
+      podman-compose
+    ];
     # programs.bash.enable = true;
+
     programs.git = {
       enable = true;
       userName  = "nikolarobottesla";
