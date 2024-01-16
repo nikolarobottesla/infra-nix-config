@@ -1,5 +1,19 @@
 # infra-nix-config
-my nixos configurations
+my nixos configurations, setup to use flakes
 
-* Currently this is designed for a desktop environment on an HP Elitebook 830 G6.
-I plan to modularize and expand to more of my device if I find that I like nixos.
+## machine types
+* workstation.nix
+* pi-server.nix
+
+## usage
+
+### pi
+```bash
+# build SDimage on a x86 box
+nix build .#images.rpi4
+
+# on pi, build
+nix build .#builds.rpi4
+# on pi, build and switch
+sudo nixos-rebuild switch --flake '.#rpi4'
+```

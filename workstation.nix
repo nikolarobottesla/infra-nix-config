@@ -2,31 +2,26 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, options, ... }:
+{ config, lib, pkgs, options, home-manager, ... }:
 let
   device-name = "15TH-TURTLE";
   user-name = "igor";
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
-  # nix2211 = fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-22.11.tar.gz";
-  # nix2211Pkgs = import nix2211 { config.allowUnfree = true; }; # if you do need pkgs
 in
 {
   imports =
     [
       ./devices/${device-name}.nix
-      "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
       ./disko-config.nix
-      (import "${home-manager}/nixos")
       (import ./home-manager { user-name = user-name; })
       ./semi-active-av.nix
     ];
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.nixPath = 
-    # Prepend default nixPath values!
-    options.nix.nixPath.default ++  
-    ["nixos-config=/home/igor/code/infra-nix-config/configuration.nix"]
-  ;
+  # nix.nixPath = 
+  #   # Prepend default nixPath values!
+  #   options.nix.nixPath.default ++  
+  #   ["nixos-config=/home/igor/code/infra-nix-config/configuration.nix"]
+  # ;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -34,7 +29,7 @@ in
   boot.supportedFilesystems = [ "ntfs" ];
 
   # needed to build for pi
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];  # not sure if it's needed for flake method
 
   # enable clamav with services
   semi-active-av.enable = true;
