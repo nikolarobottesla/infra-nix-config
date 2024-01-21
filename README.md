@@ -7,6 +7,11 @@ my nixos configurations, setup to use flakes
 
 ## usage
 
+```bash
+# navigate to this folder, then
+sudo nixos-rebuild switch --flake '.#'
+```
+
 ### pi
 ```bash
 # build SDimage on a x86 box

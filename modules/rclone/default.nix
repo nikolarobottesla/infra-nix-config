@@ -19,14 +19,15 @@ in
     path = [ pkgs.su ];
     preStart = "${su-c} 'mkdir -p /home/${user-name}/${remote-name}'";
     script = "${su-c} 'rclone mount ${remote-name}: /home/${user-name}/${remote-name} --vfs-cache-mode full --allow-other --allow-non-empty'";
-    preStop = "${su-c} 'fusermount -u /home/${user-name}/${remote-name}'";
-    postStop = "${su-c} 'rmdir /home/${user-name}/${remote-name}'";
+    postStop = 
+      "${su-c} 'fusermount -u /home/${user-name}/${remote-name}'
+      ${su-c} 'rmdir /home/${user-name}/${remote-name}'";
 
-    restartIfChanged = true;  # doesn't seem to do anything
-    restartTriggers = [ "on-failure" ]; # doesn't seem to work
+    restartIfChanged = true;
     serviceConfig = {
       Type = "simple";
-      # Restart = "on-failure"; 
+      Restart = "on-failure";  # is this working?
+      RestartSec = 10;
     };
   };
 }
