@@ -6,6 +6,8 @@
 let
   device-name = "15TH-TURTLE";
   user-name = "igor";
+  # rclone-config = "/home/${user-name}/.config/rclone/rclone.conf";
+  # rclone-mount-options = "rw,_netdev,allow_other,args2env,vfs-cache-mode=full,allow_non_empty,config=${rclone-config}";
 in
 {
   imports =
@@ -13,15 +15,13 @@ in
       ./devices/${device-name}.nix
       ./disko-config.nix
       (import ./home-manager { user-name = user-name; })
+      # comment in after rclone config
+      (import ./modules/rclone { user-name = user-name; remote-name = "pcloud"; })
+      (import ./modules/rclone { user-name = user-name; remote-name = "onedrive"; })
       ./semi-active-av.nix
     ];
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  # nix.nixPath = 
-  #   # Prepend default nixPath values!
-  #   options.nix.nixPath.default ++  
-  #   ["nixos-config=/home/igor/code/infra-nix-config/configuration.nix"]
-  # ;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -111,12 +111,6 @@ in
   home-manager.users.igor = { pkgs, ... }: {
   # home.packages = [ pkgs.atool pkgs.httpie ];
   # programs.bash.enable = true;
-    # nixpkgs.config.allowUnfree = true;
-    # programs.git = {
-    #   enable = true;
-    #   userName  = "nikolarobottesla";
-    #   userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
-    # };
     programs.vscode = {
       enable = true;
       package = pkgs.vscode.fhs;
@@ -136,7 +130,8 @@ in
     hddtemp
     iotop
     kate
-    partition-manager
+    # partition-manager
+    # rclone # needs to be systemPackage for systemd.mounts
     snapper-gui  # needs services.snapper... to work
     tailscale
     tmux
@@ -172,32 +167,48 @@ in
   services.flatpak.enable = true;
   services.tailscale.enable = true;
 
-  # comment in after rclone config, make sure to name remote 'pcloud'
-  programs.fuse.userAllowOther = true;
-  systemd.services.rcpcloudmount = {
-    enable = true;
-    description = "rclone pcloud mounting service";
-    # after = [ "remote-fs.target" ];  # would probably also work
-    after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
+  # # comment in after rclone config, make sure to name remote 'pcloud'
+  # programs.fuse.userAllowOther = true;
+  # systemd.services.rclonemount = {
+  #   enable = true;
+  #   description = "rclone mounting service";
+  #   # after = [ "remote-fs.target" ];  # would probably also work
+  #   after = [ "network-online.target" ];
+  #   wantedBy = [ "multi-user.target" ];
 
-    # path = [ pkgs.nix pkgs.su pkgs.rclone pkgs.fuse3];
-    path = [ pkgs.su ];
-    preStart = "su igor -c 'mkdir -p /home/igor/rcpcloud'";
-    # script = "rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --config /home/igor/.config/rclone/rclone.conf --allow-other";
-    script = "su igor -c 'rclone mount pcloud: /home/igor/rcpcloud --vfs-cache-mode full --allow-other --allow-non-empty'";
-    preStop = "su igor -c 'fusermount -u /home/igor/rcpcloud'";
-    postStop = "su igor -c 'rmdir /home/igor/rcpcloud'";
+  #   path = [ pkgs.su ];
+  #   preStart = "${su-c} 'mkdir -p /home/${user-name}/rcpcloud'";
+  #   script = "${su-c} 'rclone mount pcloud: /home/${user-name}/rcpcloud --vfs-cache-mode full --allow-other --allow-non-empty'";
+  #   preStop = "${su-c} 'fusermount -u /home/${user-name}/rcpcloud'";
+  #   postStop = "${su-c} 'rmdir /home/${user-name}/rcpcloud'";
 
-    restartIfChanged = true;  # doesn't seem to do anything
-    restartTriggers = [ "on-failure" ]; # doesn't seem to work
-    serviceConfig = {
-      Type = "simple";
-      # Environment = "PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.rclone pkgs.fuse3 ]}";  # didn't seem to work
-      # User = "igor"; # this works to give the user env but then the script had a permissions isssue
-      # Restart = "on-failure"; 
-    };
-  };
+  #   restartIfChanged = true;  # doesn't seem to do anything
+  #   restartTriggers = [ "on-failure" ]; # doesn't seem to work
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     # Environment = "PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.rclone pkgs.fuse3 ]}";  # didn't seem to work
+  #     # User = "igor"; # this works to give the user env but then the script had a permissions isssue
+  #     # Restart = "on-failure"; 
+  #   };
+  # };
+  # couldn't get this to work, user didn't have access
+  # systemd.mounts = [
+  #   {
+  #     description = "rclone ondrive mount";
+  #     what = "onedrive:";
+  #     where = "/home/${user-name}/onedrive";
+  #     type = "rclone";
+  #     options = "${ rclone-mount-options }";
+  #   }
+  # ];
+  # systemd.automounts = [
+  #   {
+  #     description = "rclone onedrive automount";
+  #     where = "/home/${user-name}/onedrive";
+  #     wantedBy = [ "multi-user.target" ];
+  #   }
+  # ];
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -215,7 +226,7 @@ in
     TIMELINE_CREATE = true;
     TIMELINE_CLEANUP = true;
     TIMELINE_MIN_AGE="1800";
-    TIMELINE_LIMIT_HOURLY="0";
+    # TIMELINE_LIMIT_HOURLY="0";
     TIMELINE_LIMIT_DAILY="3";
     TIMELINE_LIMIT_WEEKLY="3";
     TIMELINE_LIMIT_MONTHLY="1";
