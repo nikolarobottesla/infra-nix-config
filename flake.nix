@@ -3,6 +3,7 @@
   inputs = {
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.inputs.darwin.follows = "";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-23.11";
@@ -16,11 +17,15 @@
     nixosConfigurations = {
       "15TH-TURTLE" = nixpkgs.lib.nixosSystem {
         modules = [
-          agenix.nixosModules.default
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.hp-elitebook-830-g6
           ./hosts/15TH-TURTLE
+          # ./default.nix
+          agenix.nixosModules.default
+          {
+            environment.systemPackages = [ agenix.packages.x86_64-linux.default ];
+          }
         ];
       };
       # serverISO = 

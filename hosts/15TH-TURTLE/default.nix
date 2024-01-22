@@ -15,6 +15,7 @@ in
       (import ../../modules/rclone { user-name = user-name; remote-name = "pcloud"; })
       (import ../../modules/rclone { user-name = user-name; remote-name = "onedrive"; })
       ../../semi-active-av.nix
+      # ../../default.nix
     ];
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
