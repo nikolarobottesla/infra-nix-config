@@ -1,10 +1,10 @@
-{user-name, remote-name, ...}: { config, pkgs, ... }:
+{userName, remote-name, ...}: { config, pkgs, ... }:
 let
-  su-c = "su ${user-name} -c";
+  su-c = "su ${userName} -c";
 in
 {
   # install rclone
-  users.users.${user-name}.packages = [ pkgs.rclone ];
+  users.users.${userName}.packages = [ pkgs.rclone ];
 
   # need because running as user 
   programs.fuse.userAllowOther = true;
@@ -17,11 +17,11 @@ in
     wantedBy = [ "multi-user.target" ];
 
     path = [ pkgs.su ];
-    preStart = "${su-c} 'mkdir -p /home/${user-name}/${remote-name}'";
-    script = "${su-c} 'rclone mount ${remote-name}: /home/${user-name}/${remote-name} --vfs-cache-mode full --allow-other --allow-non-empty'";
+    preStart = "${su-c} 'mkdir -p /home/${userName}/${remote-name}'";
+    script = "${su-c} 'rclone mount ${remote-name}: /home/${userName}/${remote-name} --vfs-cache-mode full --allow-other --allow-non-empty'";
     postStop = 
-      "${su-c} 'fusermount -u /home/${user-name}/${remote-name}'
-      ${su-c} 'rmdir /home/${user-name}/${remote-name}'";
+      "${su-c} 'fusermount -u /home/${userName}/${remote-name}'
+      ${su-c} 'rmdir /home/${userName}/${remote-name}'";
 
     restartIfChanged = true;
     serviceConfig = {

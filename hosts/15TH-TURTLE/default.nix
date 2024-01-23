@@ -1,19 +1,17 @@
 { config, lib, pkgs, options, home-manager, ... }:
 let
   device-name = "15TH-TURTLE";
-  user-name = "igor";
-  # rclone-config = "/home/${user-name}/.config/rclone/rclone.conf";
-  # rclone-mount-options = "rw,_netdev,allow_other,args2env,vfs-cache-mode=full,allow_non_empty,config=${rclone-config}";
+  userName = "igor";
 in
 {
   imports =
     [
       ./disko-config.nix
       ./hardware-configuration.nix
-      (import ../../home-manager { user-name = user-name; })
+      (import ../../home-manager { userName = userName; })
       # comment in after rclone config
-      (import ../../modules/rclone { user-name = user-name; remote-name = "pcloud"; })
-      (import ../../modules/rclone { user-name = user-name; remote-name = "onedrive"; })
+      (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
+      (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })
       ../../semi-active-av.nix
       # ../../default.nix
     ];

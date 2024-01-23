@@ -1,9 +1,9 @@
-{user-name, ...}: { config, lib, pkgs, home-manager, ... }:
+{userName, ...}: { config, lib, pkgs, home-manager, ... }:
 {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.users.${user-name} = { pkgs, ... }: {
+  home-manager.users.${userName} = { pkgs, ... }: {
     home.packages = with pkgs; [
       podman-compose
     ];

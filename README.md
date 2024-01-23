@@ -10,15 +10,18 @@ my nixos configurations, setup to use flakes
 ```bash
 # navigate to this folder, then
 sudo nixos-rebuild switch --flake '.#'
+
+# build iso image
+nix build .#image.oak-1
 ```
 
 ### pi
 ```bash
 # build SDimage on a x86 box
-nix build .#images.rpi4
+nix build .#image.rpi4
 
 # on pi, build
-nix build .#builds.rpi4
+nix build .#build.rpi4
 # on pi, build and switch
 sudo nixos-rebuild switch --flake '.#rpi4'
 ```

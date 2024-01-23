@@ -1,91 +1,87 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 { config, lib, pkgs, options, home-manager, ... }:
 let
-  userName = "nixos";
-  device-name = "coconut-2";
+  hostName = "oak-1";
+  userName = "deer";
 in
 {
   imports =
     [
-      # ./devices/${device-name}.nix
-      (import ./home-manager { userName = userName; })
-      # ./semi-active-av.nix
+      ./disko-config.nix
+      ./hardware-configuration.nix
+      (import ../../home-manager { userName = userName; })
+      # ../../semi-active-av.nix
+      # ../../default.nix
     ];
-
-  hardware = {
-    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-    deviceTree = {
-      enable = true;
-      filter = "*rpi-4-*.dtb";
-    };
-  };
-
+  
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  console.enable = false;
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFilesystems = [ "ntfs" ];
 
-  networking.hostName = "${device-name}"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  # enable clamav with services
+  # semi-active-av.enable = true;
+
+  networking.hostName = "${ hostName }"; # Define your hostname.
+  networking.wireless.enable = false;
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
+  i18n.defaultLocale = "en_US.UTF-8";
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
 
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
+  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.permittedInsecurePackages = [
+  #   "electron-25.9.0"  # needed for obsidian on 20240101
+  # ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    # Add ssh authorized key
-    openssh.authorizedKeys.keys = [
-    	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
+    extraGroups = [ "wheel" ]; # wheel enables ‘sudo’ for the user.
+    packages = with pkgs; [
+      # autorestic  # declarative backup
+      # restic
     ];
   };
-
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
 
-  # The state version is required and should stay at the version you
-  # originally installed.
-  home.stateVersion = "23.11";
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "23.11";
   };
+  
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    libraspberrypi
-    raspberrypi-eeprom
+    git
+    htop
+    hddtemp
+    iotop
+    tailscale
+    tmux
+    tree
+    vim
+    wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  programs.mtr.enable = true;
+
+  programs.mtr.enable = true;  # network diagnostic tool combining ping and traceroute
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-    # leaving pinentryFlavor default was causing mismatch dependency error
-    # "curses, tty also caused the same error
-    pinentryFlavor = null;
   };
 
   # List services that you want to enable:
@@ -93,17 +89,9 @@ in
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    # require public key authentication for better security
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    #settings.PermitRootLogin = "yes";
   };
 
-  # enable VScode server support
-  services.vscode-server.enable = true;
-
   services.tailscale.enable = true;
-  # services.tailscale.useRoutingFeatures = ...
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -147,8 +135,7 @@ in
   # even if you've upgraded your system to a new NixOS release.
   #
   # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
+  # so changing it will NOT upgrade your system.
   #
   # This value being lower than the current NixOS release does NOT mean your system is
   # out of date, out of support, or vulnerable.
