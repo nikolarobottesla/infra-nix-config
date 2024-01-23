@@ -12,7 +12,7 @@ my nixos configurations, setup to use flakes
 sudo nixos-rebuild switch --flake '.#'
 
 # build iso image
-nix build .#image.oak-1
+nix build .#image.oak
 ```
 
 ### pi

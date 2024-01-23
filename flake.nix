@@ -28,25 +28,23 @@
           }
         ];
       };
-      "oak-1" = nixpkgs.lib.nixosSystem {
+      "oak" = nixpkgs.lib.nixosSystem {
         modules = [
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-          ./modules/root-ssh-auth
+          (import ./modules/remote-install { hostName = "oak"; })
+          disko.nixosModules.disko
+          {
+            nixpkgs.hostPlatform.system = "x86_64-linux";
+            nixpkgs.buildPlatform.system = "x86_64-linux";
+          }
+        ];
+      };
+      "oak-1" = nixpkgs.lib.nixosSystem {
+        modules = [
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           vscode-server.nixosModules.default
           ./hosts/oak-1
-          {
-            nixpkgs.hostPlatform.system = "x86_64-linux";
-            nixpkgs.buildPlatform.system = "x86_64-linux";
-            
-            # nixpkgs.overlays = [
-            #   (final: super: {
-            #     makeModulesClosure = x:
-            #       super.makeModulesClosure (x // { allowMissing = true; });
-            #   })
-            # ];
-          }
         ];
       };
       rpi4Image = nixpkgs.lib.nixosSystem {
@@ -56,7 +54,7 @@
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
           vscode-server.nixosModules.default
-          ./modules/root-ssh-auth
+          ./modules/remote-install { hostName = "nix-pi"; }
           {
             nixpkgs.config.allowUnsupportedSystem = true;
             nixpkgs.hostPlatform.system = "aarch64-linux";
@@ -85,7 +83,7 @@
     };
     image.rpi4 = nixosConfigurations.rpi4Image.config.system.build.sdImage;
     build.rpi4 = nixosConfigurations.rpi4.config.system.build.toplevel;
-    image.oak-1 = nixosConfigurations.oak-1.config.system.build.isoImage;
+    image.oak = nixosConfigurations.oak.config.system.build.isoImage;
 
   };
 }
