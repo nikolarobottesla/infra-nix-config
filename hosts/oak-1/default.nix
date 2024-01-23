@@ -93,6 +93,10 @@ in
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
+    # require public key authentication for better security
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+    #settings.PermitRootLogin = "yes";
   };
 
   services.tailscale.enable = true;

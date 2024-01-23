@@ -92,6 +92,23 @@
           };
         };
       };
+      a = {
+        type = "disk";
+        device = "/dev/sda";
+        content = {
+          type = "gpt";
+          partitions = {
+            sda1 = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/mnt/secrets";
+              };
+            };
+          };
+        };
+      };
       # a = array-disks.a;
       # b = array-disks.b;
     };
