@@ -41,29 +41,30 @@ in
   boot.initrd.systemd.enable = true;
 
   # when using systemd initrd this should mount the key device in /dev/mapper/
-  boot.initrd.luks.devices."key" = {
-    device = "/dev/disk/by-uuid/${usbid}";
-  };
+  # key device needs to be a luks type? 
+  # boot.initrd.luks.devices."key" = {
+  #   device = "/dev/disk/by-uuid/${usbid}";
+  # };
 
   disko.devices = {
     disk = {
-      # usb = {  # use during initial setup of USB drive only
-      #   type = "disk";
-      #   device = "findfs UUID=${usbid}";
-      #   content = {
-      #     type = "gpt";
-      #     partitions = {
-      #       "${usb}1" = {
-      #         size = "100%";
-      #         content = {
-      #           type = "filesystem";
-      #           format = "ext4";
-      #           mountpoint = "/key";
-      #         };
-      #       };
-      #     };
-      #   };
-      # };
+      usb = {
+        type = "disk";
+        # device = "usb-key";
+        content = {
+          type = "gpt";
+          partitions = {
+            "/dev/disk/by-uuid/${usbid}" = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/key";
+              };
+            };
+          };
+        };
+      };
       os = {
         type = "disk";
         device = "/dev/nvme0n1";
@@ -90,8 +91,8 @@ in
                 # disable settings.keyFile if you want to use interactive password entry
                 settings = {
                   allowDiscards = true;
-                  # askPassword = 1;  # maybe try with regular initrd
-                  keyFile = "/dev/mapper/key/crypted-os.key";  # comment in for build
+                  # fallbackToPassword = true;
+                  keyFile = "/key/crypted-os.key";  # comment in for build
                   keyFileTimeout = 5;
                   # preLVM = false;
                   # preOpenCommands = ''
