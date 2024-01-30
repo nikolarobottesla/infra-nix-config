@@ -13,6 +13,7 @@ in
       # ./devices/${device-name}.nix
       (import ./home-manager { userName = userName; })
       # ./semi-active-av.nix
+      ../default.nix
     ];
 
   hardware = {
@@ -121,18 +122,6 @@ in
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
-  };
-
-  # Auto system update
-  system.autoUpgrade = {
-        enable = true;
-  };
-
-  # Automatic Garbage Collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

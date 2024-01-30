@@ -13,7 +13,7 @@ in
       (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
       (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })
       ../../semi-active-av.nix
-      # ../../default.nix
+      ../default.nix
     ];
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -195,18 +195,6 @@ in
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
-  };
-
-  # Auto system update
-  system.autoUpgrade = {
-        enable = true;
-  };
-
-  # Automatic Garbage Collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
   };
 
   # Copy the NixOS configuration file and link it from the resulting system

@@ -42,29 +42,29 @@ in
 
   # when using systemd initrd this should mount the key device in /dev/mapper/
   # key device needs to be a luks type? 
-  # boot.initrd.luks.devices."key" = {
-  #   device = "/dev/disk/by-uuid/${usbid}";
-  # };
+  boot.initrd.luks.devices."key" = {
+    device = "/dev/disk/by-uuid/${usbid}";
+  };
 
   disko.devices = {
     disk = {
-      usb = {
-        type = "disk";
-        # device = "usb-key";
-        content = {
-          type = "gpt";
-          partitions = {
-            "/dev/disk/by-uuid/${usbid}" = {
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/key";
-              };
-            };
-          };
-        };
-      };
+      # usb = {
+      #   type = "disk";
+      #   # device = "usb-key";
+      #   content = {
+      #     type = "gpt";
+      #     partitions = {
+      #       "/dev/disk/by-uuid/${usbid}" = {
+      #         size = "100%";
+      #         content = {
+      #           type = "filesystem";
+      #           format = "ext4";
+      #           mountpoint = "/key";
+      #         };
+      #       };
+      #     };
+      #   };
+      # };
       os = {
         type = "disk";
         device = "/dev/nvme0n1";

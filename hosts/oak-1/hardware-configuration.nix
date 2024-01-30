@@ -1,5 +1,3 @@
-#TODO regenerate on target machine
-
 { config, lib, pkgs, modulesPath, ... }:
 
 {
@@ -12,6 +10,12 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.kernel.sysctl = { "vm.swappiness" = 10;};
   boot.extraModulePackages = [ ];
+
+  #TODO move to nixos-hardware if it works
+  # Enables ACPI platform profiles
+  boot = lib.mkIf (lib.versionAtLeast pkgs.linux.version "6.1") {
+    kernelModules = [ "hp-wmi" ];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

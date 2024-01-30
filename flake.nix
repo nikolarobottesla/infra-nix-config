@@ -50,7 +50,7 @@
       rpi4Image = nixpkgs.lib.nixosSystem {
         modules = [
           "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          ./pi-config.nix
+          ./hosts/coconut-2/default.nix
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
           vscode-server.nixosModules.default
@@ -73,8 +73,7 @@
       # set user password before applying
       rpi4 = nixpkgs.lib.nixosSystem {
         modules = [
-          ./hosts/coconut-2.nix
-          ./pi-config.nix
+          ./hosts/coconut-2
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
           vscode-server.nixosModules.default

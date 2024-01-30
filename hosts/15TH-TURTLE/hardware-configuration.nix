@@ -11,6 +11,13 @@
   boot.kernel.sysctl = { "vm.swappiness" = 10;};
   boot.extraModulePackages = [ ];
 
+  # TODO: try and then move to nixos-hardware if it is good
+  # boot = {
+  #   # Divides power consumption by two.
+  #   kernelParams = [ "acpi_osi=" ];
+  # };
+
+
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
