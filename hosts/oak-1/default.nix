@@ -72,6 +72,7 @@ in
     htop
     hddtemp
     iotop
+    smartmontools
     tailscale
     tmux
     tree
