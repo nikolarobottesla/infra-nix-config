@@ -55,7 +55,15 @@ in
   # Enable the Plasma 5 Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.displayManager.defaultSession = "plasmawayland";  # doesn't seem to work
+  services.xserver.displayManager.defaultSession = "plasmawayland";  # seems to use wayland no matter what
+  # disable KDE indexer because it's preventing sleep
+  environment = {
+    etc."xdg/baloofilerc".source = (pkgs.formats.ini {}).generate "baloorc" {
+      "Basic Settings" = {
+        "Indexing-Enabled" = false;
+      };
+    };
+  };
 
   # Configure keymap in X11
 #   services.xserver.xkb.layout = "us";
@@ -94,6 +102,7 @@ in
       firefox
       hunspell  # spell check in libreoffice
       hunspellDicts.en_US  # english dict
+      lapce
       libreoffice-qt 
       libsForQt5.kdeconnect-kde
       # obsidian

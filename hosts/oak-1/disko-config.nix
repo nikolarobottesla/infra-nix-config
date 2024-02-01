@@ -2,7 +2,7 @@
 
 let
   usb = "sdd";
-  usbid = "88e2f3bb-980e-46f9-adf5-f5e1064c2040";
+  usbid = "usb-Mass_Storage_Device_121220160204-0:0-part1";
 #   array-disks = lib.genAttrs [ "a" "b" ] (name: {
 #     type = "disk";
 #     device = "/dev/sd${name}";
@@ -43,18 +43,18 @@ in
   # when using systemd initrd this should mount the key device in /dev/mapper/
   # key device needs to be a luks type? 
   boot.initrd.luks.devices."key" = {
-    device = "/dev/disk/by-uuid/${usbid}";
+    device = "/dev/disk/by-id/${usbid}";
   };
 
   disko.devices = {
     disk = {
-      # usb = {
+      # usb = {  # use to generate partition
       #   type = "disk";
-      #   # device = "usb-key";
+      #   device = "${usb}";
       #   content = {
       #     type = "gpt";
       #     partitions = {
-      #       "/dev/disk/by-uuid/${usbid}" = {
+      #       "${usb}1" = {
       #         size = "100%";
       #         content = {
       #           type = "filesystem";
