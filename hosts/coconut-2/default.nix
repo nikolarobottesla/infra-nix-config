@@ -10,8 +10,8 @@ in
 {
   imports =
     [
-      # ./devices/${device-name}.nix
-      (import ./home-manager { userName = userName; })
+      ./hardware-configuration.nix
+      (import ../../home-manager { userName = userName; })
       # ./semi-active-av.nix
       ../default.nix
     ];
@@ -75,6 +75,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     libraspberrypi
+    linux-wifi-hotspot
     raspberrypi-eeprom
   ];
 
@@ -104,7 +105,7 @@ in
   services.vscode-server.enable = true;
 
   services.tailscale.enable = true;
-  # services.tailscale.useRoutingFeatures = ...
+  services.tailscale.useRoutingFeatures = "client";
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
