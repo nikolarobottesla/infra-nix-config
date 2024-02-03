@@ -19,7 +19,7 @@ nixos-rebuild --flake .#oak-1 \
   --target-host deer@oak-1 --fast --use-remote-sudo \
   switch
 
-# remote build and target
+# remote build and target, getting broken pipe error
 NIX_SSHOPTS="-o RequestTTY=force" \
 nixos-rebuild --flake .#coconut-2 \
   --build-host nixos@coconut-2 \

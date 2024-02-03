@@ -31,7 +31,7 @@
           # }
         ];
       };
-      "oak" = nixpkgs.lib.nixosSystem {
+      oakImage = nixpkgs.lib.nixosSystem {
         modules = [
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
           (import ./modules/remote-install { hostName = "oak"; })
@@ -42,7 +42,7 @@
           }
         ];
       };
-      "oak-1" = nixpkgs.lib.nixosSystem {
+      oak-1 = nixpkgs.lib.nixosSystem {
         modules = [
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
@@ -76,15 +76,16 @@
       # set user password before applying
       coconut-2 = nixpkgs.lib.nixosSystem {
         modules = [
-          ./hosts/coconut-2
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
+          sops-nix.nixosModules.sops
           vscode-server.nixosModules.default
+          ./hosts/coconut-2
         ];
       };
     };
     image.rpi4 = nixosConfigurations.rpi4Image.config.system.build.sdImage;
-    image.oak = nixosConfigurations.oak.config.system.build.isoImage;
+    image.oak = nixosConfigurations.oakImage.config.system.build.isoImage;
 
   };
 }
