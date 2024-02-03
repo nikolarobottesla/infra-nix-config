@@ -57,6 +57,7 @@ in
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.displayManager.defaultSession = "plasmawayland";  # seems to use wayland no matter what
   # disable KDE indexer because it's preventing sleep
+  # https://github.com/NixOS/nixpkgs/issues/63489
   environment = {
     etc."xdg/baloofilerc".source = (pkgs.formats.ini {}).generate "baloorc" {
       "Basic Settings" = {

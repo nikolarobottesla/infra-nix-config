@@ -1,31 +1,34 @@
 {
   description = "build nix";
   inputs = {
-    agenix.url = "github:ryantm/agenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
-    agenix.inputs.darwin.follows = "";
+    # agenix.url = "github:ryantm/agenix";
+    # agenix.inputs.nixpkgs.follows = "nixpkgs";
+    # agenix.inputs.darwin.follows = "";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/nikolarobottesla-patch-1";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = { self, agenix, disko, home-manager, nixos-hardware, nixpkgs, vscode-server}: rec {
+  outputs = { self, disko, home-manager, nixos-hardware, nixpkgs, sops-nix, vscode-server}: rec {
     nixosConfigurations = {
       "15TH-TURTLE" = nixpkgs.lib.nixosSystem {
         modules = [
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.hp-elitebook-830-g6
+          sops-nix.nixosModules.sops
           ./hosts/15TH-TURTLE
           # ./default.nix
-          agenix.nixosModules.default
-          {
-            environment.systemPackages = [ agenix.packages.x86_64-linux.default ];
-          }
+          # agenix.nixosModules.default
+          # {
+          #   environment.systemPackages = [ agenix.packages.x86_64-linux.default ];
+          # }
         ];
       };
       "oak" = nixpkgs.lib.nixosSystem {
@@ -71,7 +74,7 @@
         ];
       };
       # set user password before applying
-      rpi4 = nixpkgs.lib.nixosSystem {
+      coconut-2 = nixpkgs.lib.nixosSystem {
         modules = [
           ./hosts/coconut-2
           home-manager.nixosModules.home-manager
@@ -81,7 +84,6 @@
       };
     };
     image.rpi4 = nixosConfigurations.rpi4Image.config.system.build.sdImage;
-    build.rpi4 = nixosConfigurations.rpi4.config.system.build.toplevel;
     image.oak = nixosConfigurations.oak.config.system.build.isoImage;
 
   };
