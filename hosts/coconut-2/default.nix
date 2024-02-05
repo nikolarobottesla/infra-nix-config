@@ -112,12 +112,12 @@ in
   services.tailscale.useRoutingFeatures = "client";
 
   sops.secrets = {
-    create_ap_confg.sopsFile = ./secrets.yaml;
+    create_ap_conf.sopsFile = ./secrets.yaml;
   };
 
   services.create_ap = {
     enable = true;
-    configPath = config.sops.secrets.create_ap_confg.path;
+    configPath = config.sops.secrets.create_ap_conf.path;
   };
 
   # Open ports in the firewall.
