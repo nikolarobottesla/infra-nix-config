@@ -14,6 +14,7 @@ in
       (import ../../home-manager { userName = userName; })
       # ./semi-active-av.nix
       ../default.nix
+      ../create_ap.nix
     ];
 
   hardware = {
@@ -57,12 +58,12 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     # Add ssh authorized key
-    openssh.authorizedKeys.keys = [
-    	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
-    ];
-    # openssh.authorizedKeys.keyFiles = [
-    #   config.sops.secrets.sshpub_igor.path
+    # openssh.authorizedKeys.keys = [
+    # 	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
     # ];
+    openssh.authorizedKeys.keyFiles = [
+      config.sops.secrets.sshpub_igor.path
+    ];
   };
 
   home-manager.users.${userName} = { pkgs, ... }: {
@@ -110,20 +111,12 @@ in
   services.tailscale.useRoutingFeatures = "client";
 
   sops.secrets = {
-    ssid.sopsFile = ./secrets.yaml;
-    passphrase.sopsFile = ./secrets.yaml;
+    create_ap_confg.sopsFile = ./secrets.yaml;
   };
 
-  services.create_ap = {
+  services.create_ap2 = {
     enable = true;
-    settings = {
-      CHANNEL = "default"; 
-      FREQ_BAND = "2.4";
-      INTERNET_IFACE = "tailscale0";
-      WIFI_IFACE = "wlan0";
-      # SSID = config.sops.secrets.ssid;
-      # PASSPHRASE = config.sops.secrets.passphrase;
-    };
+    configPath = config.sops.secrets.create_ap_confg.path;
   };
 
   # Open ports in the firewall.
