@@ -69,16 +69,9 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     e2fsprogs
-    git
-    htop
     hddtemp
     iotop
     smartmontools
-    tailscale
-    tmux
-    tree
-    vim
-    wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
