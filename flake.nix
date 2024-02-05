@@ -83,7 +83,6 @@
           sops-nix.nixosModules.sops
           vscode-server.nixosModules.default
           ./hosts/coconut-2
-          ./modules/create_ap.nix
         ];
       };
     };

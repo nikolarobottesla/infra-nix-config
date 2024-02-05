@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.create_ap2;
+  cfg = config.services.create_ap;
   configFile = cfg.configPath;
 in {
   options = {

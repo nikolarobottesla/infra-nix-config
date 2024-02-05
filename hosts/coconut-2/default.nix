@@ -8,12 +8,14 @@ let
   device-name = "coconut-2";
 in
 {
+  disabledModules = [ "services/networking/create_ap.nix" ];
   imports =
     [
       ./hardware-configuration.nix
       (import ../../home-manager { userName = userName; })
       # ./semi-active-av.nix
       ../default.nix
+      ../../modules/create_ap.nix
     ];
 
   hardware = {
@@ -113,7 +115,7 @@ in
     create_ap_confg.sopsFile = ./secrets.yaml;
   };
 
-  services.create_ap2 = {
+  services.create_ap = {
     enable = true;
     configPath = config.sops.secrets.create_ap_confg.path;
   };
