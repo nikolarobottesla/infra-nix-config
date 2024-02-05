@@ -11,6 +11,7 @@ my nixos configurations, setup to use flakes
 # navigate to this folder, then (assumes host name matches flake)
 sudo nixos-rebuild switch --flake '.#'
 
+sops secrets/coconut-2/ap.yaml 
 
 # untested
 # To switch a remote configuration, use:

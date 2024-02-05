@@ -91,7 +91,6 @@ in
   #   "electron-25.9.0"  # needed for obsidian on 20240101
   # ];
 
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.igor = {
     isNormalUser = true;
@@ -100,7 +99,6 @@ in
       # authy
       # autorestic  # declarative backup
       # clementine
-      firefox
       hunspell  # spell check in libreoffice
       hunspellDicts.en_US  # english dict
       lapce
@@ -116,17 +114,27 @@ in
   home-manager.users.igor = { pkgs, ... }: {
   # home.packages = [ pkgs.atool pkgs.httpie ];
   # programs.bash.enable = true;
+    programs.chromium = {
+      enable = true;
+      package = pkgs.ungoogled-chromium;
+    };
+    programs.firefox.enable = true;
     programs.vscode = {
       enable = true;
       package = pkgs.vscode.fhs;
     };
+
+    # # shared sops config
+    # sops = {
+    #   defaultSopsFile = ../../secrets/default.yaml;
+    #   age.keyFile = "~/.config/sops/age/keys.txt";
+    # };
 
   # The state version is required and should stay at the version you
   # originally installed.
   home.stateVersion = "23.11";
   };
   
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -144,6 +152,14 @@ in
     vim
     wget
   ];
+
+  environment = {
+    variables = {
+      EDITOR = "kate";
+      SYSTEMD_EDITOR = "kate";
+      VISUAL = "kate";
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -170,7 +186,6 @@ in
     user = "igor";
   };
   services.flatpak.enable = true;
-  services.tailscale.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -191,8 +206,8 @@ in
     # TIMELINE_LIMIT_HOURLY="0";
     TIMELINE_LIMIT_DAILY="3";
     TIMELINE_LIMIT_WEEKLY="3";
-    TIMELINE_LIMIT_MONTHLY="1";
-    TIMELINE_LIMIT_YEARLY="0";
+    TIMELINE_LIMIT_MONTHLY="3";
+    TIMELINE_LIMIT_YEARLY="3";
   };
 
   virtualisation = {

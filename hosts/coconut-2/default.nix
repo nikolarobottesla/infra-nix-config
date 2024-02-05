@@ -58,7 +58,7 @@ in
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     # Add ssh authorized key
     openssh.authorizedKeys.keys = [
-    	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
+      config.sops.secrets.sshpub_igor
     ];
   };
 
@@ -104,8 +104,24 @@ in
   # enable VScode server support
   services.vscode-server.enable = true;
 
-  services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "client";
+
+  sops.secrets = {
+    ssid.sopsFile = ./secrets.yaml;
+    passphrase.sopsFile = ./secrets.yaml;
+  };
+
+  services.create_ap = {
+    enable = true;
+    settings = {
+      CHANNEL = "default"; 
+      FREQ_BAND = "2.4";
+      INTERNET_IFACE = "tailscale0";
+      WIFI_IFACE = "wlan0";
+      SSID = config.sops.secrets.ssid;
+      PASSPHRASE = config.sops.secrets.passphrase;
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
