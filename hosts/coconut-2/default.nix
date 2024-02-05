@@ -57,8 +57,8 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     # Add ssh authorized key
-    openssh.authorizedKeys.keys = [
-      config.sops.secrets.sshpub_igor
+    openssh.authorizedKeys.keyFiles = [
+      config.sops.secrets.sshpub_igor.path
     ];
   };
 
@@ -118,8 +118,8 @@ in
       FREQ_BAND = "2.4";
       INTERNET_IFACE = "tailscale0";
       WIFI_IFACE = "wlan0";
-      SSID = config.sops.secrets.ssid;
-      PASSPHRASE = config.sops.secrets.passphrase;
+      # SSID = config.sops.secrets.ssid;
+      # PASSPHRASE = config.sops.secrets.passphrase;
     };
   };
 
