@@ -28,7 +28,7 @@
     # This will generate a new key if the key specified above does not exist
     age.generateKey = true;
     # This is the actual specification of the secrets.
-    secrets.sshpub_igor = {};
+    secrets.sshpub_igor.neededForUsers = true;
   };
   
   # default services
