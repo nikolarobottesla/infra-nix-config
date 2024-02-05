@@ -14,7 +14,6 @@ in
       (import ../../home-manager { userName = userName; })
       # ./semi-active-av.nix
       ../default.nix
-      ../create_ap.nix
     ];
 
   hardware = {
