@@ -36,6 +36,7 @@
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
           (import ./modules/remote-install { hostName = "oak"; })
           disko.nixosModules.disko
+          sops-nix.nixosModules.sops
           {
             nixpkgs.hostPlatform.system = "x86_64-linux";
             nixpkgs.buildPlatform.system = "x86_64-linux";
@@ -47,6 +48,7 @@
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           vscode-server.nixosModules.default
+          sops-nix.nixosModules.sops
           ./hosts/oak-1
         ];
       };
