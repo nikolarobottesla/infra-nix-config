@@ -25,7 +25,7 @@ in {
         };
       };
       configPath = mkOption {
-        type = with types; attrsOf (str);
+        type = types.str;
         default = pkgs.writeText "create_ap.conf" (generators.toKeyValue { } cfg.settings);
         description = lib.mdDoc ''
           Configuration file path for `create_ap`, overrides settings.
