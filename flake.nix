@@ -10,18 +10,20 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/nikolarobottesla-patch-1";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.1.0";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = { self, disko, home-manager, nixos-hardware, nixpkgs, sops-nix, vscode-server}: rec {
+  outputs = { self, disko, home-manager, nixos-hardware, nixpkgs, nix-flatpak, sops-nix, vscode-server}: rec {
     nixosConfigurations = {
       "15TH-TURTLE" = nixpkgs.lib.nixosSystem {
         modules = [
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.hp-elitebook-830-g6
+          nix-flatpak.nixosModules.nix-flatpak
           sops-nix.nixosModules.sops
           ./hosts/15TH-TURTLE
           # ./default.nix
@@ -81,7 +83,7 @@
           home-manager.nixosModules.home-manager
           nixos-hardware.nixosModules.raspberry-pi-4
           sops-nix.nixosModules.sops
-          vscode-server.nixosModules.default
+          # vscode-server.nixosModules.default
           ./hosts/coconut-2
         ];
       };

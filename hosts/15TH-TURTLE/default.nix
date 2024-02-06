@@ -96,21 +96,31 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
-      # authy
       # autorestic  # declarative backup
-      # clementine
       hunspell  # spell check in libreoffice
       hunspellDicts.en_US  # english dict
       lapce
       libreoffice-qt 
       libsForQt5.kdeconnect-kde
-      # obsidian
       rclone
       rpi-imager
       # restic
       # timeshift
+      # vscode
+      # (vscode-with-extensions.override {
+      #   vscodeExtensions = with vscode-extensions; [
+      #   bbenoist.nix
+      #   ms-python.python  # pylance and debugger
+      #   # ms-vscode.remote-explorer # not available
+      #   ms-vscode-remote.remote-containers
+      #   ms-vscode-remote.remote-ssh
+      #   # ms-vscode.remote-server # not available
+      #   yzhang.markdown-all-in-one
+      #   ];
+      # })
     ];
   };
+  
   home-manager.users.igor = { pkgs, ... }: {
   # home.packages = [ pkgs.atool pkgs.httpie ];
   # programs.bash.enable = true;
@@ -121,7 +131,16 @@ in
     programs.firefox.enable = true;
     programs.vscode = {
       enable = true;
-      package = pkgs.vscode.fhs;
+      extensions = with pkgs.vscode-extensions; [
+        bbenoist.nix
+        ms-python.python  # pylance and debugger
+        # ms-vscode.remote-explorer # not available
+        ms-vscode-remote.remote-containers
+        ms-vscode-remote.remote-ssh
+        # ms-vscode.remote-server # not available
+        yzhang.markdown-all-in-one
+      ];
+      # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
     };
 
     # # shared sops config
@@ -138,7 +157,6 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    git
     htop
     hddtemp
     iotop
@@ -147,12 +165,9 @@ in
     # rclone # needs to be systemPackage for systemd.mounts
     snapper-gui  # needs services.snapper... to work
     tailscale
-    tmux
-    tree
-    vim
-    wget
   ];
 
+  # not working
   environment = {
     variables = {
       EDITOR = "kate";
@@ -185,7 +200,25 @@ in
     enable = true;
     user = "igor";
   };
-  services.flatpak.enable = true;
+
+  services.flatpak = {
+    enable = true;
+    packages = [
+      "com.github.tchx84.Flatseal"
+      "md.obsidian.Obsidian"
+      "com.github.zocker_160.SyncThingy"
+      "org.clementine_player.Clementine"
+      "dev.deedles.Trayscale" # not working
+      "com.authy.Authy"
+      "com.calibre_ebook.calibre"
+      "io.freetubeapp.FreeTube"
+      "io.podman_desktop.PodmanDesktop"
+    ];
+    update.auto = {
+      enable = true;
+      onCalendar = "weekly";
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

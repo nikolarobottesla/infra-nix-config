@@ -107,7 +107,8 @@ in
   };
 
   # enable VScode server support
-  services.vscode-server.enable = true;
+  # services.vscode-server.enable = true;
+  # services.vscode-server.enableFHS = true;
 
   services.tailscale.useRoutingFeatures = "client";
 
