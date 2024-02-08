@@ -31,7 +31,7 @@
     secrets.sshpub_igor = {
       neededForUsers = true;
       path = "./sshpub_igor";
-    }
+    };
   };
   
   # default services
