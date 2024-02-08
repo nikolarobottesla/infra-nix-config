@@ -167,12 +167,11 @@ in
     tailscale
   ];
 
-  # not working
   environment = {
     variables = {
-      EDITOR = "kate";
-      SYSTEMD_EDITOR = "kate";
-      VISUAL = "kate";
+      EDITOR = "code --wait";
+      SYSTEMD_EDITOR = "code --wait";
+      VISUAL = "code --wait";
     };
   };
 

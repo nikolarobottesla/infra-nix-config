@@ -4,7 +4,7 @@ keys:
   - &oak-1 age1usrwpke8edazf8ps3lnfd330xn6tnuhdx064lu2u73dxsmp2e3uswlc2l2
   - &coconut-2 age1umfmqwg48nlkkzn5tpemaffjl2cyvspt7kytzut35t2ckhz57dhs3a0qpk
 creation_rules:
-  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: hosts/secrets+\.(yaml|json|env|ini)$
     key_groups:
       - age:
         - *15turtle_igor
