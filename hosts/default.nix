@@ -44,9 +44,9 @@
           lower = "03:00";
           upper = "06:00";
         };
-        flags = {
+        flags = [
           "--impure"
-        };
+        ];
         flake = "github:nikolarobottesla/infra-nix-config";
         dates = "daily";
         randomizedDelaySec = "45min";
