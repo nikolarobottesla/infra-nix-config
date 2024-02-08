@@ -30,7 +30,6 @@
     # This is the actual specification of the secrets.
     secrets.sshpub_igor = {
       neededForUsers = true;
-      path = "./sshpub_igor";
     };
   };
   
@@ -44,6 +43,9 @@
         rebootWindow = {
           lower = "03:00";
           upper = "06:00";
+        };
+        flags = {
+          "--impure"
         };
         flake = "github:nikolarobottesla/infra-nix-config";
         dates = "daily";
