@@ -112,7 +112,7 @@ in
   sops.secrets = {
     create_ap_conf = {
       sopsFile = ./secrets.yaml;
-      path = ./create_ap.conf
+      path = ./create_ap.conf;
     };
   };
 
