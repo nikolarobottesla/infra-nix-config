@@ -110,7 +110,10 @@ in
   services.tailscale.useRoutingFeatures = "client";
 
   sops.secrets = {
-    create_ap_conf.sopsFile = ./secrets.yaml;
+    create_ap_conf = {
+      sopsFile = ./secrets.yaml;
+      path = ./create_ap.conf
+    };
   };
 
   services.create_ap = {
