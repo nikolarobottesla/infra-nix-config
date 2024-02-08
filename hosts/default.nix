@@ -37,7 +37,17 @@
   # Auto system update
   system.autoUpgrade = {
         enable = true;
+        allowReboot = true;
+        rebootWindow = {
+          lower = "03:00";
+          upper = "06:00";
+        };
         flake = "github:nikolarobottesla/infra-nix-config";
+        flags = [
+          "--impure"
+        ];
+        dates = "daily";
+        randomizedDelaySec = "45min";
   };
 
   # Automatic Garbage Collection
