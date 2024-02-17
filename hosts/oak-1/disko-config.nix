@@ -92,7 +92,7 @@ in
                 settings = {
                   allowDiscards = true;
                   # fallbackToPassword = true;
-                  keyFile = "/key/crypted-os.key";  # comment in for build
+                  keyFile = "/dev/mapper/key/crypted-os.key";  # comment in for build
                   keyFileTimeout = 5;
                   # preLVM = false;
                   # preOpenCommands = ''

@@ -252,6 +252,7 @@ in
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
+    waydroid.enable = false;
   };
 
   # Copy the NixOS configuration file and link it from the resulting system
