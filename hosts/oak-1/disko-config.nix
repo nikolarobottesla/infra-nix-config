@@ -45,11 +45,11 @@ in
   # boot.initrd.luks.devices."key" = {
   #   device = "/dev/disk/by-id/${usbid}";
   # };
-  boot.initrd.postDeviceCommands = lib.mkBefore ''
-    mkdir -m 0755 -p /key
-    sleep 2 # To make sure the usb key has been loaded
-    mount -n -t ext4 -o ro /dev/disk/by-id/${usbid} /key
-  '';
+  boot.initrd.systemd.mounts = [{
+    what = "/dev/disk/by-id/${usbid}";
+    where = "/key";
+    type = "ext4";
+  }];
 
   disko.devices = {
     disk = {
@@ -98,7 +98,7 @@ in
                   allowDiscards = true;
                   # fallbackToPassword = true;
                   keyFile = "/key/crypted-os.key";  # comment in for build
-                  keyFileTimeout = 5;
+                  keyFileTimeout = 10;
                   # preLVM = false;
                   # preOpenCommands = ''
                   #   mkdir -m 0755 -p /key
