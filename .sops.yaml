@@ -16,3 +16,8 @@ creation_rules:
       - age:
         - *15turtle_igor
         - *coconut-2
+  - path_regex: hosts/oak-1/secrets+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+        - *15turtle_igor
+        - *oak-1

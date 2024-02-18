@@ -106,18 +106,7 @@ in
       rpi-imager
       # restic
       # timeshift
-      # vscode
-      # (vscode-with-extensions.override {
-      #   vscodeExtensions = with vscode-extensions; [
-      #   bbenoist.nix
-      #   ms-python.python  # pylance and debugger
-      #   # ms-vscode.remote-explorer # not available
-      #   ms-vscode-remote.remote-containers
-      #   ms-vscode-remote.remote-ssh
-      #   # ms-vscode.remote-server # not available
-      #   yzhang.markdown-all-in-one
-      #   ];
-      # })
+      vlc
     ];
   };
   

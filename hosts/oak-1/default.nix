@@ -41,6 +41,21 @@ in
   # nixpkgs.config.permittedInsecurePackages = [
   #   "electron-25.9.0"  # needed for obsidian on 20240101
   # ];
+  sops.secrets = {
+    smb-secrets = {
+      sopsFile = ./secrets.yaml;
+    };
+  };
+
+  fileSystems."/mnt/wochat/media" = {
+    device = "//WOCHAT-NAS/media";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+
+    in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
@@ -51,10 +66,11 @@ in
       # restic
     ];
     # Add ssh authorized key
-    openssh.authorizedKeys.keys = [
-    	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
+    openssh.authorizedKeys.keyFiles = [
+      config.sops.secrets.sshpub_igor.path
     ];
   };
+
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
@@ -68,6 +84,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    cifs-utils  # needed for domain name resolution using cifs(samba)
     e2fsprogs
     hddtemp
     iotop
@@ -84,7 +101,11 @@ in
   };
 
   # List services that you want to enable:
-  services.btrfs.autoScrub.enable = true;
+  services.btrfs.autoScrub ={
+    enable = true;
+    interval = "monthly";
+    fileSystems = [ "/mnt" ];  # only scrub here
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh = {
