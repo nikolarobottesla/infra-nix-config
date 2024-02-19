@@ -2,6 +2,7 @@
 let
   hostName = "oak-1";
   userName = "deer";
+  userSrv = "/home/${userName}/srv";
 in
 {
   imports =
@@ -47,7 +48,7 @@ in
     };
   };
 
-  fileSystems."/mnt/wochat/media" = {
+  fileSystems."${userSrv}/wochat/media" = {
     device = "//WOCHAT-NAS/media";
     fsType = "cifs";
     options = let
@@ -56,7 +57,7 @@ in
 
     in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
   };
-  fileSystems."/mnt/wochat/private" = {
+  fileSystems."${userSrv}/wochat/private" = {
     device = "//WOCHAT-NAS/private";
     fsType = "cifs";
     options = let
@@ -124,6 +125,23 @@ in
     settings.KbdInteractiveAuthentication = false;
     #settings.PermitRootLogin = "yes";
   };
+
+  services.openvscode-server = {
+    enable = true;
+    user = "${userName}";
+    userDataDir = "/home/${userName}/.vscode_server";
+    host = "0.0.0.0";
+    port = 3000;
+    # extraPackages = [ pkgs.sqlite pkgs.nodejs pkgs.nixpkgs-fmt pkgs.nixd pkgs.git ];
+    withoutConnectionToken = true;
+    # extraEnvironment = {
+    #   SSH_AUTH_SOCK = "/home/nathan/.ssh/ssh_auth_sock";
+    # };
+    # extraArguments = [
+    #   "--log=info"
+    # ];
+  };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
