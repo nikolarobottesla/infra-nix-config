@@ -129,7 +129,7 @@ in
       array0 = {
         device = "/dev/disk/by-uuid/${arrayid}";
         fsType = "btrfs";
-        mountpoint = "/mnt/array0";
+        mountpoint = "/srv/array0";
         mountOptions = [ "compress=zstd" "noatime" ];
       };
     };

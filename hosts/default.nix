@@ -7,6 +7,7 @@
   
   # default packages
   environment.systemPackages = with pkgs; [
+    direnv
     git
     htop
     sops

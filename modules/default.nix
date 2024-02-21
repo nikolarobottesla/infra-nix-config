@@ -2,6 +2,6 @@
 
 {
   imports = [
-    ./rclone
+    ./tailscale-tls.nix
   ];
 }

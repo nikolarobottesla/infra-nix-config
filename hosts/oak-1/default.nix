@@ -12,6 +12,7 @@ in
       (import ../../home-manager { userName = userName; })
       # ../../semi-active-av.nix
       ../default.nix
+      ../../modules
     ];
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -66,6 +67,7 @@ in
 
     in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
   };
+
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
@@ -126,6 +128,8 @@ in
     #settings.PermitRootLogin = "yes";
   };
 
+  services-custom.tailscale-tls.enable = true;
+
   services.openvscode-server = {
     enable = true;
     user = "${userName}";
@@ -134,9 +138,9 @@ in
     port = 3000;
     # extraPackages = [ pkgs.sqlite pkgs.nodejs pkgs.nixpkgs-fmt pkgs.nixd pkgs.git ];
     withoutConnectionToken = true;
-    # extraEnvironment = {
-    #   SSH_AUTH_SOCK = "/home/nathan/.ssh/ssh_auth_sock";
-    # };
+    extraEnvironment = {
+      
+    };
     # extraArguments = [
     #   "--log=info"
     # ];
