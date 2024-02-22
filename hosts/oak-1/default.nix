@@ -67,6 +67,11 @@ in
 
     in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
   };
+  
+  # https://www.freedesktop.org/software/systemd/man/tmpfiles.d
+  systemd.tmpfiles.rules = [
+    "z /srv/array0 0750 deer users"
+  ];
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -116,7 +121,7 @@ in
   services.btrfs.autoScrub ={
     enable = true;
     interval = "monthly";
-    fileSystems = [ "/mnt" ];  # only scrub here
+    fileSystems = [ "/srv" ];  # only scrub here
   };
 
   # Enable the OpenSSH daemon.
@@ -145,6 +150,32 @@ in
     #   "--log=info"
     # ];
   };
+
+  sops.secrets = {
+    nextcloud-admin-pass = {
+      sopsFile = ./secrets.yaml;
+      mode = "0400";
+      owner = "nextcloud";
+    };
+  };
+  services.nextcloud = {
+    enable = true;
+    package = pkgs.nextcloud28;
+    home = "/srv/array0/services/nextcloud";
+    hostName = "nextcloud";
+    # https = true;
+    config = {
+      adminpassFile = config.sops.secrets.smb-secrets.path;
+      extraTrustedDomains = [
+        "oak-1"
+        "100.92.38.20"
+      ];
+    };
+  };
+  # services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
+  #   forceSSL = true;
+  #   enableACME = true;
+  # };
 
 
   # Open ports in the firewall.
