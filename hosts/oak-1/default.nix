@@ -70,9 +70,11 @@ in
   
   # https://www.freedesktop.org/software/systemd/man/tmpfiles.d
   systemd.tmpfiles.rules = [
-    "z /srv/array0 0750 deer users"
+    # "z /srv/array0 0750 deer users"
+    # one of these is needed for nextcloud
+    "z /srv/array0 0755 root root"
+    "z /srv/array0/services 0755 root root"
   ];
-
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
@@ -133,8 +135,6 @@ in
     #settings.PermitRootLogin = "yes";
   };
 
-  services-custom.tailscale-tls.enable = true;
-
   services.openvscode-server = {
     enable = true;
     user = "${userName}";
@@ -151,32 +151,20 @@ in
     # ];
   };
 
-  sops.secrets = {
-    nextcloud-admin-pass = {
-      sopsFile = ./secrets.yaml;
-      mode = "0400";
-      owner = "nextcloud";
-    };
-  };
-  services.nextcloud = {
-    enable = true;
-    package = pkgs.nextcloud28;
-    home = "/srv/array0/services/nextcloud";
-    hostName = "nextcloud";
-    # https = true;
-    config = {
-      adminpassFile = config.sops.secrets.smb-secrets.path;
-      extraTrustedDomains = [
-        "oak-1"
-        "100.92.38.20"
-      ];
-    };
-  };
-  # services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
-  #   forceSSL = true;
-  #   enableACME = true;
-  # };
+  my.tailscale-tls.enable = true;
 
+  # sops.secrets = {
+  #   nextcloud-admin-pass = {
+  #     sopsFile = ./secrets.yaml;
+  #     mode = "0440";
+  #     owner = "nextcloud";
+  #     group = "nextcloud";
+  #   };
+  # };
+  # my.nextcloud = {
+  #   enable = true;
+  #   adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
+  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

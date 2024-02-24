@@ -6,16 +6,16 @@
   ...
 }:
 with lib; let
-  cfg = config.services-custom.tailscale-tls;
+  cfg = config.my.tailscale-tls;
   domainExpression =
     if cfg.domain-override != null
     then cfg.domain-override
     else "$(${pkgs.tailscale}/bin/tailscale cert 2>&1 | grep use | cut -d '\"' -f2)";
 in {
-  options.services-custom.tailscale-tls = {
+  options.my.tailscale-tls = {
     enable = mkEnableOption "Automatic Tailscale certificates renewal";
 
-    target = mkOption {
+    certDir = mkOption {
       type = types.str;
       description = "Where to put certificates";
       default = "/var/lib/tailscale-tls";
@@ -59,18 +59,18 @@ in {
           status=$(${pkgs.tailscale}/bin/tailscale status -json | ${pkgs.jq}/bin/jq -r .BackendState)
         done
 
-        mkdir -p "${cfg.target}"
+        mkdir -p "${cfg.certDir}"
 
         DOMAIN=${domainExpression}
 
         ${pkgs.tailscale}/bin/tailscale cert \
-          --cert-file "${cfg.target}/cert.crt" \
-          --key-file "${cfg.target}/key.key" \
+          --cert-file "${cfg.certDir}/cert.crt" \
+          --key-file "${cfg.certDir}/key.key" \
           "$DOMAIN"
 
-        chown -R tailscale-tls:tailscale-tls "${cfg.target}"
+        chown -R tailscale-tls:tailscale-tls "${cfg.certDir}"
 
-        chmod ${cfg.mode} "${cfg.target}/cert.crt" "${cfg.target}/key.key"
+        chmod ${cfg.mode} "${cfg.certDir}/cert.crt" "${cfg.certDir}/key.key"
       '';
     };
 
