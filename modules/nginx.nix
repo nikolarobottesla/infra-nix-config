@@ -52,5 +52,5 @@ in {
       #   # ports needed for dns
       #   allowedTCPPorts = [80 443];
       # };
-  }
+  };
 }

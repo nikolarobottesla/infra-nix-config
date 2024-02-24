@@ -135,34 +135,30 @@ in
     #settings.PermitRootLogin = "yes";
   };
 
-  my.tailscale-tls.enable = true;
-
   services.openvscode-server = {
     enable = true;
     user = "${userName}";
     userDataDir = "/home/${userName}/.vscode_server";
-    # host = "0.0.0.0";
-    host = "oak-1.stork-galaxy.ts.net";
+    host = "0.0.0.0";
+    # host = "oak-1.stork-galaxy.ts.net";
     port = 3000;
     # extraPackages = [ pkgs.sqlite pkgs.nodejs pkgs.nixpkgs-fmt pkgs.nixd pkgs.git ];
     withoutConnectionToken = true;
-    extraEnvironment = {
+    # extraEnvironment = {
       
-    };
+    # };
     # extraArguments = [
     #   "--log=info"
     # ];
   };
 
-  # allow nginx to read tailscale TLS  
-  # users.users.nginx.extraGroups = [config.users.users.tailscale-tls.group];
-
-  services.nginx.virtualHosts.${config.services.openvscode-server.host} = {
-    forceSSL = true;
-    sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
-    sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
-  };
-
+  # get SSL_ERROR_RX_RECORD_TOO_LONG
+  # my.nginx.enable = true;
+  # services.nginx.virtualHosts.${config.services.openvscode-server.host} = {
+  #   forceSSL = true;
+  #   sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
+  #   sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
+  # };
 
   # sops.secrets = {
   #   nextcloud-admin-pass = {
