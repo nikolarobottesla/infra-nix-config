@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ./tailscale-tls.nix
     ./nextcloud.nix
+    ./nginx.nix
+    ./tailscale-tls.nix
   ];
 }
