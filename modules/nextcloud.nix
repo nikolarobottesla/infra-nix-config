@@ -1,3 +1,4 @@
+# https://github.com/EricTheMagician/infrastructure/blob/main/modules/nextcloud.nix
 {
   pkgs,
   lib,

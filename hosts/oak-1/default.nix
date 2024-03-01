@@ -160,18 +160,18 @@ in
   #   sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   # };
 
-  # sops.secrets = {
-  #   nextcloud-admin-pass = {
-  #     sopsFile = ./secrets.yaml;
-  #     mode = "0440";
-  #     owner = "nextcloud";
-  #     group = "nextcloud";
-  #   };
-  # };
-  # my.nextcloud = {
-  #   enable = true;
-  #   adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
-  # };
+  sops.secrets = {
+    nextcloud-admin-pass = {
+      sopsFile = ./secrets.yaml;
+      mode = "0440";
+      owner = "nextcloud";
+      group = "nextcloud";
+    };
+  };
+  my.nextcloud = {
+    enable = true;
+    adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
