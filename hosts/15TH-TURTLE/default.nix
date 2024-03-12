@@ -92,9 +92,9 @@ in
   # ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.igor = {
+  users.users.${userName} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # wheel enables ‘sudo’ for the user.
+    extraGroups = [ "wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # autorestic  # declarative backup
       hunspell  # spell check in libreoffice
@@ -110,7 +110,7 @@ in
     ];
   };
   
-  home-manager.users.igor = { pkgs, ... }: {
+  home-manager.users.${userName} = { pkgs, ... }: {
   # home.packages = [ pkgs.atool pkgs.httpie ];
   # programs.bash.enable = true;
     programs.chromium = {
@@ -166,6 +166,12 @@ in
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
+
+  # android platform tools
+  programs.adb.enable = true;
+  services.udev.packages = [
+    pkgs.android-udev-rules
+  ];
 
   programs.mtr.enable = true;  # network diagnostic tool combining ping and traceroute
   programs.gnupg.agent = {
