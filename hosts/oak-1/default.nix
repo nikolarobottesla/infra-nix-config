@@ -3,6 +3,8 @@ let
   hostName = "oak-1";
   userName = "deer";
   userSrv = "/home/${userName}/srv";
+  arrayMnt = "/srv/array0";
+  serviceData = "${arrayMnt}/services";
 in
 {
   imports =
@@ -72,8 +74,8 @@ in
   systemd.tmpfiles.rules = [
     # "z /srv/array0 0750 deer users"
     # one of these is needed for nextcloud
-    "z /srv/array0 0755 root root"
-    "z /srv/array0/services 0755 root root"
+    "z ${arrayMnt} 0755 root root"
+    "z ${serviceData}  0755 root root"
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -103,7 +105,9 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    arion  # container
     cifs-utils  # needed for domain name resolution using cifs(samba)
+    docker-client  # needed for arion using podman
     e2fsprogs
     hddtemp
     iotop
@@ -173,6 +177,13 @@ in
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
   };
 
+  my.actualbudget = {
+    enable = true;
+    dataDir = "${serviceData}/actualbudget";
+    sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
+    sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
+  };
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -180,6 +191,7 @@ in
   # networking.firewall.enable = false;
 
   virtualisation = {
+    oci-containers.backend = "podman";
     podman = {
       enable = true;
 

@@ -1,9 +1,8 @@
 {
   description = "build nix";
   inputs = {
-    # agenix.url = "github:ryantm/agenix";
-    # agenix.inputs.nixpkgs.follows = "nixpkgs";
-    # agenix.inputs.darwin.follows = "";
+    # arion.url = "github:hercules-ci/arion";
+    # arion.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-23.11";
