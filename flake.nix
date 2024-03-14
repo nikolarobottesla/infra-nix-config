@@ -8,6 +8,8 @@
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/nikolarobottesla-patch-1";
+    nixos-wsl.url = github:nix-community/NixOS-WSL;
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.1.0";
     sops-nix.url = "github:Mic92/sops-nix";
@@ -15,7 +17,7 @@
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = { self, disko, home-manager, nixos-hardware, nixpkgs, nix-flatpak, sops-nix, vscode-server}: rec {
+  outputs = { self, disko, home-manager, nixos-hardware, nixos-wsl, nixpkgs, nix-flatpak, sops-nix, vscode-server}: rec {
     nixosConfigurations = {
       "15TH-TURTLE" = nixpkgs.lib.nixosSystem {
         modules = [
@@ -25,11 +27,6 @@
           nix-flatpak.nixosModules.nix-flatpak
           sops-nix.nixosModules.sops
           ./hosts/15TH-TURTLE
-          # ./default.nix
-          # agenix.nixosModules.default
-          # {
-          #   environment.systemPackages = [ agenix.packages.x86_64-linux.default ];
-          # }
         ];
       };
       oakImage = nixpkgs.lib.nixosSystem {
@@ -84,6 +81,15 @@
           sops-nix.nixosModules.sops
           # vscode-server.nixosModules.default
           ./hosts/coconut-2
+        ];
+      };
+      nixos = nixpkgs.lib.nixosSystem {
+        modules = [
+          home-manager.nixosModules.home-manager
+          nixos-wsl.nixosModules.default
+          sops-nix.nixosModules.sops
+          # vscode-server.nixosModules.default
+          ./hosts/nixos
         ];
       };
     };

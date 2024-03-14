@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # imports = [
@@ -34,8 +34,8 @@
     };
   };
   
-  # default services
-  services.tailscale.enable = true;
+  # default services  
+  services.tailscale.enable = lib.mkDefault true;
 
   # Auto system update
   system.autoUpgrade = {
