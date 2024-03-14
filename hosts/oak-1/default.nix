@@ -105,7 +105,6 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    arion  # container
     cifs-utils  # needed for domain name resolution using cifs(samba)
     docker-client  # needed for arion using podman
     e2fsprogs
@@ -124,12 +123,12 @@ in
   };
 
   # List services that you want to enable:
-  services.btrfs.autoScrub ={
+  services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
     fileSystems = [ "/srv" ];  # only scrub here
   };
-
+  
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
@@ -183,6 +182,8 @@ in
     sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
     sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   };
+
+  my.jellyfin.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

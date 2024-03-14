@@ -1,6 +1,4 @@
-# requires arion pkg
 {
-  arion,
   config,
   lib,
   pkgs,
