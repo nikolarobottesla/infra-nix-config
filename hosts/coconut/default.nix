@@ -10,7 +10,7 @@ in
   imports = [
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ./hardware-configuration.nix
-    (import ../home-manager { userName = userName; })
+    (import ../../home-manager { userName = userName; })
   ];
 
   networking.hostName = "${hostName}"; # Define your hostname.
