@@ -3,11 +3,11 @@
 with lib;
 
 let
-  cfg = config.services.create_ap;
+  cfg = config.my.create_ap;
   configFile = cfg.configPath;
 in {
   options = {
-    services.create_ap = {
+    my.create_ap = {
       enable = mkEnableOption (lib.mdDoc "setting up wifi hotspots using create_ap");
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int bool str ]);

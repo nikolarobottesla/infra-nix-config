@@ -2,57 +2,25 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, options, home-manager, ... }:
+{ hostName, ... }: { config, home-manager, inputs, lib, options, pkgs, ... }:
 let
   userName = "nixos";
-  device-name = "coconut-2";
 in
 {
-  disabledModules = [ "services/networking/create_ap.nix" ];
-  imports =
-    [
-      ./hardware-configuration.nix
-      (import ../../home-manager { userName = userName; })
-      # ./semi-active-av.nix
-      ../default.nix
-      ../../modules/create_ap.nix
-    ];
+  imports = [
+    inputs.nixos-hardware.nixosModules.raspberry-pi-4
+    ./hardware-configuration.nix
+    (import ../home-manager { userName = userName; })
+  ];
 
-  hardware = {
-    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-    deviceTree = {
-      enable = true;
-      filter = "*rpi-4-*.dtb";
-    };
-  };
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  console.enable = false;
-
-  networking.hostName = "${device-name}"; # Define your hostname.
+  networking.hostName = "${hostName}"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  # Set your time zone.
-  time.timeZone = "America/Chicago";
+  my.pi4.enable = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
+  console.enable = false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
@@ -68,17 +36,15 @@ in
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
 
-  # The state version is required and should stay at the version you
-  # originally installed.
-  home.stateVersion = "23.11";
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "23.11";
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    libraspberrypi
     linux-wifi-hotspot
-    raspberrypi-eeprom
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -103,45 +69,16 @@ in
     #settings.PermitRootLogin = "yes";
   };
 
-  # enable VScode server support
-  # services.vscode-server.enable = true;
-  # services.vscode-server.enableFHS = true;
-
-  services.tailscale.useRoutingFeatures = "client";
-
   sops.secrets = {
     create_ap_conf = {
       sopsFile = ./secrets.yaml;
     };
   };
 
-  services.create_ap = {
+  my.create_ap = {
     enable = true;
     configPath = config.sops.secrets.create_ap_conf.path;
   };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # virtualisation = {
-  #   podman = {
-  #     enable = true;
-
-  #     # Create a `docker` alias for podman, to use it as a drop-in replacement
-  #     dockerCompat = true;
-
-  #     # Required for containers under podman-compose to be able to talk to each other.
-  #     defaultNetwork.settings.dns_enabled = true;
-  #   };
-  # };
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
@@ -161,5 +98,4 @@ in
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

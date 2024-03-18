@@ -4,9 +4,9 @@
   home-manager.useUserPackages = true;
 
   home-manager.users.${userName} = { pkgs, ... }: {
-    home.packages = with pkgs; [
-      podman-compose
-    ];
+    # home.packages = with pkgs; [
+    #   podman-compose
+    # ];
     # programs.bash.enable = true;
 
     programs.git = {

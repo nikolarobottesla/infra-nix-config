@@ -7,17 +7,12 @@ let
   serviceData = "${arrayMnt}/services";
 in
 {
-  imports =
-    [
-      ./disko-config.nix
-      ./hardware-configuration.nix
-      (import ../../home-manager { userName = userName; })
-      # ../../semi-active-av.nix
-      ../default.nix
-      ../../modules
-    ];
-  
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  imports = [
+    inputs.disko.nixosModules.disko
+    ./disko-config.nix
+    ./hardware-configuration.nix
+    (import ../../home-manager { userName = userName; })
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -106,10 +101,10 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     cifs-utils  # needed for domain name resolution using cifs(samba)
-    docker-client  # needed for arion using podman
     e2fsprogs
     hddtemp
     iotop
+    podman-compose
     smartmontools
   ];
 

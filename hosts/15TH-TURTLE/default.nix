@@ -1,30 +1,28 @@
-{ config, lib, pkgs, options, home-manager, ... }:
+{ config, home-manager, inputs, lib, pkgs, options,  ... }:
 let
   device-name = "15TH-TURTLE";
   userName = "igor";
 in
 {
-  imports =
-    [
-      ./disko-config.nix
-      ./hardware-configuration.nix
-      (import ../../home-manager { userName = userName; })
-      # comment in after rclone config
-      (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
-      (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })
-      ../../semi-active-av.nix
-      ../default.nix
-    ];
-  
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  imports = [
+    inputs.disko.nixosModules.disko
+    inputs.nixos-hardware.nixosModules.hp-elitebook-830-g6
+    inputs.nix-flatpak.nixosModules.nix-flatpak
+    ./disko-config.nix
+    ./hardware-configuration.nix
+    (import ../../home-manager { userName = userName; })
+    # comment in after rclone config
+    (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
+    (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  # needed to build for pi
-  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];  # not sure if it's needed for flake method
+  # seems to build faster with it commented in
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];  # not sure if it's needed for flake method
 
   # enable clamav with services
   semi-active-av.enable = true;
@@ -150,6 +148,7 @@ in
     hddtemp
     iotop
     kate
+    podman-compose
     # partition-manager
     # rclone # needs to be systemPackage for systemd.mounts
     snapper-gui  # needs services.snapper... to work
@@ -160,7 +159,7 @@ in
     variables = {
       EDITOR = "code --wait";
       SYSTEMD_EDITOR = "code --wait";
-      VISUAL = "code --wait";
+      # VISUAL = "code --wait";
     };
   };
 

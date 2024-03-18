@@ -1,10 +1,20 @@
 { lib, pkgs, ... }:
-
 {
-  # imports = [
-  #   ./rclone
-  # ];
-  
+  imports = [
+    ./actualbudget.nix
+    ./create_ap.nix
+    ./jellyfin.nix
+    ./nextcloud.nix
+    ./nginx.nix
+    ./pi4.nix
+    ./remote-install.nix
+    ./semi-active-av.nix
+    ./tailscale-tls.nix
+  ];
+
+  # enable flakes
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    
   # default packages
   environment.systemPackages = with pkgs; [
     direnv

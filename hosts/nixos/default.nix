@@ -11,14 +11,11 @@ in
   imports =
     [
       (import ../../home-manager { userName = userName; })
-      ../default.nix
     ];
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   wsl.enable = true;
   wsl.defaultUser = "nixos";
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
@@ -42,6 +39,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    podman-compose
     python3
     pipenv
   ];
