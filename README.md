@@ -69,6 +69,15 @@ passwd <user name>
 # build SDimage on a x86 box
 nix build .#image.rpi4
 
+# 1st time setup
+ssh root@device
+passwd nixos
+su nixos
+cd ~
+git clone https://github.com/nikolarobottesla/infra-nix-config.git
+cd infra-nix-config/
+nix build .#
+
 # on pi, build
 nix build .#build.rpi4
 # on pi, build and switch

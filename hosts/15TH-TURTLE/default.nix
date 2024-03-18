@@ -130,12 +130,6 @@ in
       # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
     };
 
-    # # shared sops config
-    # sops = {
-    #   defaultSopsFile = ../../secrets/default.yaml;
-    #   age.keyFile = "~/.config/sops/age/keys.txt";
-    # };
-
   # The state version is required and should stay at the version you
   # originally installed.
   home.stateVersion = "23.11";

@@ -11,6 +11,7 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
+  boot.kernel.sysctl = { "vm.swappiness" = 0;};
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
