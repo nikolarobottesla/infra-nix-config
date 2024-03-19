@@ -22,7 +22,7 @@ in
 
   console.enable = false;
 
-  my.user.userName = userName
+  my.user.userName = userName;
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];

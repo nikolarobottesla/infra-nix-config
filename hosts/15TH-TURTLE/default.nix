@@ -89,7 +89,7 @@ in
   #   "electron-25.9.0"  # needed for obsidian on 20240101
   # ];
 
-  my.user.Username = userName
+  my.user.Username = userName;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {

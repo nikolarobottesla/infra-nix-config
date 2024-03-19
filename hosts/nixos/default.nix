@@ -17,7 +17,7 @@ in
   wsl.enable = true;
   wsl.defaultUser = "nixos";
 
-  my.user.userName = userName
+  my.user.userName = userName;
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
