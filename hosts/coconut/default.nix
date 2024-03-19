@@ -24,11 +24,11 @@ in
 
   sops.secrets = {
     hashedPassFile = {
-      sopsFile = "./secrets-${hostName}.yaml";
+      sopsFile = ./secrets-${hostName}.yaml;
       neededForUsers = true;
     };
     create_ap_conf = {
-      sopsFile = "./secrets-${hostName}.yaml";
+      sopsFile = ./secrets-${hostName}.yaml;
     };
   };
 
