@@ -15,6 +15,12 @@ in {
       default = "nixos";
     };
 
+    hashedPassFile = mkOption {
+      type = types.str;
+      description = "hashed password file";
+      default = null;
+    };
+
   };
 
   config = {
@@ -22,6 +28,7 @@ in {
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.${cfg.userName} = {
       isNormalUser = true;
+      hashedPasswordFile = cfg.hashedPassFile
       extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
       # Add ssh authorized key
       openssh.authorizedKeys.keys = [

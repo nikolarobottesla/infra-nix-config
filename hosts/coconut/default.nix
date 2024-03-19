@@ -22,7 +22,18 @@ in
 
   console.enable = false;
 
+  sops.secrets = {
+    hashedPassFile = {
+      sopsFile = "./secrets-${hostName}.yaml";
+      neededForUsers = true;
+    };
+    create_ap_conf = {
+      sopsFile = "./secrets-${hostName}.yaml";
+    };
+  };
+
   my.user.userName = userName;
+  my.user.hashedPassFile = config.sops.secrets.hashedPassFile.path
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
@@ -41,19 +52,12 @@ in
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
     # leaving pinentryFlavor default was causing mismatch dependency error
     # "curses, tty also caused the same error
     pinentryFlavor = null;
-  };
-
-  sops.secrets = {
-    create_ap_conf = {
-      sopsFile = ./secrets.yaml;
-    };
   };
 
   my.create_ap = {

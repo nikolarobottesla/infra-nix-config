@@ -14,11 +14,15 @@ creation_rules:
         - *oak-1
         - *coconut-2
         - *coconut-3
-  - path_regex: hosts/coconut/secrets+\.(yaml|json|env|ini)$
+  - path_regex: hosts/coconut/secrets-coconut-2+\.(yaml|json|env|ini)$
     key_groups:
       - age:
         - *15turtle_igor
         - *coconut-2
+  - path_regex: hosts/coconut/secrets-coconut-3+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+        - *15turtle_igor
         - *coconut-3
   - path_regex: hosts/oak-1/secrets+\.(yaml|json|env|ini)$
     key_groups:

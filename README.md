@@ -1,9 +1,10 @@
 # infra-nix-config
 my nixos configurations, setup to use flakes
 
-## machine types
-* workstation.nix
-* pi-server.nix
+## hosts
+* desktops: 15TH-TURTLE
+* servers: coconut, oak
+* WSL: nixos
 
 ## usage
 
