@@ -33,7 +33,7 @@ in
   };
 
   my.user.userName = userName;
-  my.user.hashedPassFile = config.sops.secrets.hashedPassFile.path
+  my.user.hashedPassFile = config.sops.secrets.hashedPassFile.path;
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
