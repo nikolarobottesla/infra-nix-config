@@ -89,9 +89,10 @@ in
   #   "electron-25.9.0"  # needed for obsidian on 20240101
   # ];
 
+  my.user.Username = userName
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
-    isNormalUser = true;
     extraGroups = [ "wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # autorestic  # declarative backup

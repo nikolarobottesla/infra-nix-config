@@ -17,23 +17,15 @@ in
   wsl.enable = true;
   wsl.defaultUser = "nixos";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${userName} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    # Add ssh authorized key
-    # openssh.authorizedKeys.keyFiles = [
-    #   config.sops.secrets.sshpub_igor.path
-    # ];
-  };
+  my.user.userName = userName
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
 
-  # The state version is required and should stay at the version you
-  # originally installed.
-  home.stateVersion = "23.11";
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "23.11";
   };
 
   # List packages installed in system profile. To search, run:

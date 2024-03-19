@@ -22,15 +22,7 @@ in
 
   console.enable = false;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${userName} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    # Add ssh authorized key
-    openssh.authorizedKeys.keyFiles = [
-      config.sops.secrets.sshpub_igor.path
-    ];
-  };
+  my.user.userName = userName
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
@@ -56,17 +48,6 @@ in
     # leaving pinentryFlavor default was causing mismatch dependency error
     # "curses, tty also caused the same error
     pinentryFlavor = null;
-  };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    # require public key authentication for better security
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    #settings.PermitRootLogin = "yes";
   };
 
   sops.secrets = {

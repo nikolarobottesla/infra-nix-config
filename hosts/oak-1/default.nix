@@ -73,19 +73,7 @@ in
     "z ${serviceData}  0755 root root"
   ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${userName} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # wheel enables ‘sudo’ for the user.
-    packages = with pkgs; [
-      # autorestic  # declarative backup
-      # restic
-    ];
-    # Add ssh authorized key
-    openssh.authorizedKeys.keyFiles = [
-      config.sops.secrets.sshpub_igor.path
-    ];
-  };
+  my.user.userName = userName;
 
   home-manager.users.${userName} = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
@@ -122,15 +110,6 @@ in
     enable = true;
     interval = "monthly";
     fileSystems = [ "/srv" ];  # only scrub here
-  };
-  
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    # require public key authentication for better security
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    #settings.PermitRootLogin = "yes";
   };
 
   services.openvscode-server = {
