@@ -16,7 +16,7 @@ in {
     };
 
     hashedPassFile = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       description = "hashed password file";
       default = null;
     };

@@ -118,7 +118,6 @@
         nixos = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = defaultModules ++ [
-            nixos-wsl.nixosModules.default
             ./hosts/nixos
           ];
         };

@@ -15,8 +15,6 @@ in {
   
   config =  mkIf cfg.enable {
 
-    my.pi4.enable = true;
-
     console.enable = false;
 
     # Define a user account. Don't forget to set a password with ‘passwd’.

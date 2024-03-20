@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, options, home-manager, ... }:
+{ config, inputs, lib, pkgs, options, home-manager, ... }:
 let
   userName = "nixos";
   device-name = "nixos";
@@ -10,6 +10,8 @@ in
 {
   imports =
     [
+      
+      inputs.nixos-wsl.nixosModules.default
       (import ../../home-manager { userName = userName; })
     ];
 
@@ -31,6 +33,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bun
     podman-compose
     python3
     pipenv
