@@ -67,6 +67,12 @@
             ./hosts/oak-1
           ];
         };
+        oak-2 = nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = defaultModules ++ [
+            ./hosts/oak-2
+          ];
+        };
         rpi4Image = nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = defaultModules ++ [

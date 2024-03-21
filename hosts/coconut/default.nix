@@ -9,6 +9,7 @@ in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
+    ../../modules/nixos/pi4.nix
     ./hardware-configuration.nix
     (import ../../home-manager { userName = userName; })
   ];

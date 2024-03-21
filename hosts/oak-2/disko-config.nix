@@ -1,16 +1,16 @@
 { lib, ... }:
 
 let
-  usb = "sdc";
+  usb = "sdb";
   # ls -l /dev/disk/by-uuid
-  usbid = "88e2f3bb-980e-46f9-adf5-f5e1064c2040";
+  usbid = "056b0f69-da32-49ad-b40b-8007ee01fede";
   arrayid = "6644f36e-54c4-4d92-84f7-4ef2ab3f9a42";
   mountUsb = ''
     mkdir -m 0755 -p /key
     sleep 2 # To make sure the usb key has been loaded
     mount -n -t ext4 -o ro `findfs UUID=${usbid}` /key
   '';
-  array-disks = lib.genAttrs [ "a" "b" ] (name: {
+  array-disks = lib.genAttrs [ "a" ] (name: {
     type = "disk";
     device = "/dev/sd${name}";
     content = {
@@ -48,7 +48,7 @@ in
 
   disko.devices = {
     disk = {
-      # usb = {  # use to generate partition
+      # usb = {  # use to generate partition, then comment out
       #   type = "disk";
       #   device = "/dev/${usb}";
       #   content = {
@@ -124,15 +124,16 @@ in
         };
       };
       a = array-disks.a;
-      b = array-disks.b;
+      # b = array-disks.b;
     };
-    nodev = {
-      array0 = {
-        device = "/dev/disk/by-uuid/${arrayid}";
-        fsType = "btrfs";
-        mountpoint = "/srv/array0";
-        mountOptions = [ "compress=zstd" "noatime" ];
-      };
-    };
+    # comment in after the array is created
+    # nodev = {
+    #   array0 = {
+    #     device = "/dev/disk/by-uuid/${arrayid}";
+    #     fsType = "btrfs";
+    #     mountpoint = "/srv/array0";
+    #     mountOptions = [ "compress=zstd" "noatime" ];
+    #   };
+    # };
   };
 }

@@ -1,6 +1,6 @@
 { config, home-manager, inputs, lib, options, pkgs, ... }:
 let
-  hostName = "oak-1";
+  hostName = "oak-2";
   userName = "deer";
   userSrv = "/home/${userName}/srv";
   arrayMnt = "/srv/array0";
@@ -10,7 +10,7 @@ in
   imports = [
     inputs.disko.nixosModules.disko
     ./disko-config.nix
-    ./hardware-configuration.nix
+    ../oak-1/hardware-configuration.nix
     (import ../../home-manager { userName = userName; })
   ];
 
@@ -37,41 +37,14 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   "electron-25.9.0"  # needed for obsidian on 20240101
+
+  # # https://www.freedesktop.org/software/systemd/man/tmpfiles.d
+  # systemd.tmpfiles.rules = [
+  #   # "z /srv/array0 0750 deer users"
+  #   # one of these is needed for nextcloud
+  #   "z ${arrayMnt} 0755 root root"
+  #   "z ${serviceData}  0755 root root"
   # ];
-  sops.secrets = {
-    smb-secrets = {
-      sopsFile = ./secrets.yaml;
-    };
-  };
-
-  fileSystems."${userSrv}/wochat/media" = {
-    device = "//WOCHAT-NAS/media";
-    fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-    in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
-  };
-  fileSystems."${userSrv}/wochat/private" = {
-    device = "//WOCHAT-NAS/private";
-    fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-    in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
-  };
-  
-  # https://www.freedesktop.org/software/systemd/man/tmpfiles.d
-  systemd.tmpfiles.rules = [
-    # "z /srv/array0 0750 deer users"
-    # one of these is needed for nextcloud
-    "z ${arrayMnt} 0755 root root"
-    "z ${serviceData}  0755 root root"
-  ];
 
   my.user.userName = userName;
 
@@ -88,11 +61,11 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    cifs-utils  # needed for domain name resolution using cifs(samba)
+    # cifs-utils  # needed for domain name resolution using cifs(samba)
     e2fsprogs
     hddtemp
     iotop
-    podman-compose
+    # podman-compose
     smartmontools
   ];
 
@@ -106,6 +79,9 @@ in
   };
 
   # List services that you want to enable:
+
+  services.tailscale.useRoutingFeatures = "both";
+
   services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
@@ -137,46 +113,24 @@ in
   #   sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   # };
 
-  sops.secrets = {
-    nextcloud-admin-pass = {
-      sopsFile = ./secrets.yaml;
-      mode = "0440";
-      owner = "nextcloud";
-      group = "nextcloud";
-    };
-  };
-  my.nextcloud = {
-    enable = true;
-    adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
-  };
-
-  my.actualbudget = {
-    enable = true;
-    dataDir = "${serviceData}/actualbudget";
-    sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
-    sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
-  };
-
-  my.jellyfin.enable = true;
-
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  virtualisation = {
-    oci-containers.backend = "podman";
-    podman = {
-      enable = true;
+  # virtualisation = {
+  #   oci-containers.backend = "podman";
+  #   podman = {
+  #     enable = true;
 
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
+  #     # Create a `docker` alias for podman, to use it as a drop-in replacement
+  #     dockerCompat = true;
 
-      # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-    };
-  };
+  #     # Required for containers under podman-compose to be able to talk to each other.
+  #     defaultNetwork.settings.dns_enabled = true;
+  #   };
+  # };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

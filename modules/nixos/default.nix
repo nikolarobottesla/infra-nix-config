@@ -6,7 +6,6 @@
     ./jellyfin.nix
     ./nextcloud.nix
     ./nginx.nix
-    ./pi4.nix
     ./remote-install.nix
     ./semi-active-av.nix
     ./tailscale-tls.nix
