@@ -123,7 +123,7 @@ in
           };
         };
       };
-      a = array-disks.a;
+      # a = array-disks.a;
       # b = array-disks.b;
     };
     # comment in after the array is created
