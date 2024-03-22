@@ -2,6 +2,7 @@
 {
   imports = [
     ./actualbudget.nix
+    ./auto-update.nix
     ./create_ap.nix
     ./jellyfin.nix
     ./nextcloud.nix
@@ -57,21 +58,7 @@
 
   services.tailscale.enable = lib.mkDefault true;
 
-  # Auto system update
-  system.autoUpgrade = {
-        enable = true;
-        allowReboot = true;
-        rebootWindow = {
-          lower = "03:00";
-          upper = "06:00";
-        };
-        flags = [
-          "--impure"
-        ];
-        flake = "github:nikolarobottesla/infra-nix-config";
-        dates = "daily";
-        randomizedDelaySec = "45min";
-  };
+  my.auto-update = lib.mkDefault true;
 
   # Automatic Garbage Collection
   nix.gc = {

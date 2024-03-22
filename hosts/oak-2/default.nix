@@ -80,6 +80,9 @@ in
 
   # List services that you want to enable:
 
+  #TODO remove after disk-burn in
+  my.auto-update = false;
+
   services.tailscale.useRoutingFeatures = "both";
 
   services.btrfs.autoScrub = {
