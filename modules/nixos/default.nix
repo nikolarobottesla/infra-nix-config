@@ -58,7 +58,7 @@
 
   services.tailscale.enable = lib.mkDefault true;
 
-  my.auto-update = lib.mkDefault true;
+  my.auto-update.enable = lib.mkDefault true;
 
   # Automatic Garbage Collection
   nix.gc = {

@@ -81,7 +81,7 @@ in
   # List services that you want to enable:
 
   #TODO remove after disk-burn in
-  my.auto-update = false;
+  my.auto-update.enable = false;
 
   services.tailscale.useRoutingFeatures = "both";
 
