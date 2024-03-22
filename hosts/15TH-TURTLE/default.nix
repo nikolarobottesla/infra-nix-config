@@ -214,23 +214,10 @@ in
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # enable snapper (btrfs snapshots)
-  # manually create 'sudo btrfs subvolume create /home/.snapshots'
-  services.snapper =  {
-    snapshotInterval = "hourly";
-    cleanupInterval = "1d";
-    configs.home = {
-      SUBVOLUME = "/home";
-      ALLOW_USERS = [ "igor" ];
-      TIMELINE_CREATE = true;
-      TIMELINE_CLEANUP = true;
-      TIMELINE_MIN_AGE="1800";
-      TIMELINE_LIMIT_HOURLY="0";
-      TIMELINE_LIMIT_DAILY="3";
-      TIMELINE_LIMIT_WEEKLY="1";
-      TIMELINE_LIMIT_MONTHLY="1";
-      TIMELINE_LIMIT_YEARLY="1";
-    };
+  # automated home btrfs snapshots
+  my.snapper = {
+    enable = true;
+    subvolume = "home";
   };
 
   virtualisation = {

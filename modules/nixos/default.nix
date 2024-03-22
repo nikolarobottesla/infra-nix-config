@@ -9,6 +9,7 @@
     ./nginx.nix
     ./remote-install.nix
     ./semi-active-av.nix
+    ./snapper.nix
     ./tailscale-tls.nix
     ./user.nix
   ];
