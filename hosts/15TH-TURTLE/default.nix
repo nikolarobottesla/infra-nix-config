@@ -89,7 +89,7 @@ in
   #   "electron-25.9.0"  # needed for obsidian on 20240101
   # ];
 
-  my.user.Username = userName;
+  my.user.userName = userName;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${userName} = {
@@ -110,8 +110,8 @@ in
   };
   
   home-manager.users.${userName} = { pkgs, ... }: {
-  # home.packages = [ pkgs.atool pkgs.httpie ];
-  # programs.bash.enable = true;
+    # home.packages = [ pkgs.atool pkgs.httpie ];
+    # programs.bash.enable = true;
     programs.chromium = {
       enable = true;
       package = pkgs.ungoogled-chromium;
@@ -131,9 +131,9 @@ in
       # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
     };
 
-  # The state version is required and should stay at the version you
-  # originally installed.
-  home.stateVersion = "23.11";
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "23.11";
   };
   
   # List packages installed in system profile. To search, run:
@@ -216,19 +216,21 @@ in
 
   # enable snapper (btrfs snapshots)
   # manually create 'sudo btrfs subvolume create /home/.snapshots'
-  #TODO get working
-  services.snapper.snapshotInterval = "1d";
-  services.snapper.configs.home = {
-    SUBVOLUME = "/home";
-    ALLOW_USERS = [ "igor" ];
-    TIMELINE_CREATE = true;
-    TIMELINE_CLEANUP = true;
-    TIMELINE_MIN_AGE="1800";
-    # TIMELINE_LIMIT_HOURLY="0";
-    TIMELINE_LIMIT_DAILY="3";
-    TIMELINE_LIMIT_WEEKLY="3";
-    TIMELINE_LIMIT_MONTHLY="3";
-    TIMELINE_LIMIT_YEARLY="3";
+  services.snapper =  {
+    snapshotInterval = "hourly";
+    cleanupInterval = "1d";
+    configs.home = {
+      SUBVOLUME = "/home";
+      ALLOW_USERS = [ "igor" ];
+      TIMELINE_CREATE = true;
+      TIMELINE_CLEANUP = true;
+      TIMELINE_MIN_AGE="1800";
+      TIMELINE_LIMIT_HOURLY="0";
+      TIMELINE_LIMIT_DAILY="3";
+      TIMELINE_LIMIT_WEEKLY="1";
+      TIMELINE_LIMIT_MONTHLY="1";
+      TIMELINE_LIMIT_YEARLY="1";
+    };
   };
 
   virtualisation = {

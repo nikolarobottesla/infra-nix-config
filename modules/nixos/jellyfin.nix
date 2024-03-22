@@ -8,7 +8,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-
+    
+    # should use quicksync for transcoding 
+    # https://discourse.nixos.org/t/jellyfin-qsv-config/37717
+    
     boot.kernelParams = [
       "i915.enable_guc=2"
     ];
