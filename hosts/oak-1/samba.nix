@@ -1,3 +1,4 @@
+# more complex example https://github.com/bestlem/nixos-configs/tree/main/hosts/x86_64-linux/meteion/samba
 {
   config,
   lib,
@@ -70,6 +71,7 @@ in {
           ${pkgs.samba}/bin/pdbedit \
             -i smbpasswd:${config.sops.secrets.smb-passwd.path} \
             -e tdbsam:/var/lib/samba/private/passdb.tdb
+          ${pkgs.tailscale}/bin/tailscale serve --bg --tcp 445 tcp://localhost:445
         '';
         deps = [ "setupSecrets" ];
       };
@@ -99,8 +101,11 @@ in {
         # use sendfile = yes
         server min protocol = SMB3
         # server smb encrypt = required
+        # these next 2 are for tailscale
+        interfaces = lo eno1
+        bind interfaces only = yes 
         # note: localhost is the ipv6 localhost ::1
-        hosts allow = 192.168.1.0 127.0.0.1 localhost
+        hosts allow = 192.168.1.0 127.0.0.1 localhost 100.0
         hosts deny = 0.0.0.0/0
         guest account = nobody
         map to guest = bad user
