@@ -12,6 +12,7 @@ in
     ./disko-config.nix
     ./hardware-configuration.nix
     (import ../../home-manager { userName = userName; })
+    ./samba.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -25,6 +26,7 @@ in
   networking.hostName = "${ hostName }"; # Define your hostname.
   networking.wireless.enable = false;
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;  # often fails on rebuild switch
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -70,7 +72,7 @@ in
     # "z /srv/array0 0750 deer users"
     # one of these is needed for nextcloud
     "z ${arrayMnt} 0755 root root"
-    "z ${serviceData}  0755 root root"
+    "z ${serviceData} 0755 root root"
   ];
 
   my.user.userName = userName;
@@ -84,7 +86,6 @@ in
     home.stateVersion = "23.11";
   };
   
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -112,6 +113,28 @@ in
     fileSystems = [ "/srv" ];  # only scrub here
   };
 
+  my.actualbudget = {
+    enable = true;
+    dataDir = "${serviceData}/actualbudget";
+    sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
+    sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
+  };
+
+  my.jellyfin.enable = true;
+
+  sops.secrets = {
+    nextcloud-admin-pass = {
+      sopsFile = ./secrets.yaml;
+      mode = "0440";
+      owner = "nextcloud";
+      group = "nextcloud";
+    };
+  };
+  my.nextcloud = {
+    enable = true;
+    adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
+  };
+
   services.openvscode-server = {
     enable = true;
     user = "${userName}";
@@ -137,27 +160,11 @@ in
   #   sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   # };
 
-  sops.secrets = {
-    nextcloud-admin-pass = {
-      sopsFile = ./secrets.yaml;
-      mode = "0440";
-      owner = "nextcloud";
-      group = "nextcloud";
-    };
-  };
-  my.nextcloud = {
+  # samba
+  my.samba-server = {
     enable = true;
-    adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
+    userName = userName;
   };
-
-  my.actualbudget = {
-    enable = true;
-    dataDir = "${serviceData}/actualbudget";
-    sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
-    sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
-  };
-
-  my.jellyfin.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -4,7 +4,7 @@ with lib; let
   cfg = config.my.jellyfin;
 in {
   options.my.jellyfin = {
-    enable = mkEnableOption "actualbudget server";
+    enable = mkEnableOption "jellyfin server";
   };
 
   config = mkIf cfg.enable {
