@@ -25,6 +25,8 @@ in {
     };
 
     users.users.jellyfin = {
+      # isSystemUser = true;
+      extraGroups = [ "samba-users" ];  # read access to media
       packages = with pkgs; [
         jellyfin
         jellyfin-web

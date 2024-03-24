@@ -101,6 +101,7 @@ in {
         # use sendfile = yes
         server min protocol = SMB3
         # server smb encrypt = required
+        # https://github.com/tailscale/tailscale/issues/6856#issuecomment-1485385748
         # these next 2 are for tailscale
         interfaces = lo eno1
         bind interfaces only = yes 
