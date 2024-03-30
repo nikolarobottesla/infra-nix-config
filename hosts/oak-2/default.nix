@@ -11,7 +11,7 @@ in
     inputs.disko.nixosModules.disko
     ./disko-config.nix
     ../oak-1/hardware-configuration.nix
-    (import ../../home-manager { userName = userName; })
+    ../../home-manager
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -48,7 +48,7 @@ in
 
   my.user.userName = userName;
 
-  home-manager.users.${userName} = { pkgs, ... }: {
+  home-manager.users.main = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
 
@@ -57,7 +57,6 @@ in
     home.stateVersion = "23.11";
   };
   
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -91,30 +90,7 @@ in
     fileSystems = [ "/srv" ];  # only scrub here
   };
 
-  services.openvscode-server = {
-    enable = true;
-    user = "${userName}";
-    userDataDir = "/home/${userName}/.vscode_server";
-    host = "0.0.0.0";
-    # host = "oak-1.stork-galaxy.ts.net";
-    port = 3000;
-    # extraPackages = [ pkgs.sqlite pkgs.nodejs pkgs.nixpkgs-fmt pkgs.nixd pkgs.git ];
-    withoutConnectionToken = true;
-    # extraEnvironment = {
-      
-    # };
-    # extraArguments = [
-    #   "--log=info"
-    # ];
-  };
-
-  # get SSL_ERROR_RX_RECORD_TOO_LONG
-  # my.nginx.enable = true;
-  # services.nginx.virtualHosts.${config.services.openvscode-server.host} = {
-  #   forceSSL = true;
-  #   sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
-  #   sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
-  # };
+  my.openvscode-server.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

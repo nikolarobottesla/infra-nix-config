@@ -10,7 +10,7 @@ in
     inputs.nix-flatpak.nixosModules.nix-flatpak
     ./disko-config.nix
     ./hardware-configuration.nix
-    (import ../../home-manager { userName = userName; })
+    ../../home-manager
     # comment in after rclone config
     (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
     (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })
@@ -79,7 +79,21 @@ in
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable= true;
+  hardware.pulseaudio.package = pkgs.pulseaudioFull;  # more bluetooth codecs
+  hardware.pulseaudio.extraConfig = "
+    load-module module-switch-on-connect
+  ";  # auto switch to BT audio on connect
+
+  # enable bluetooth
+  hardware.bluetooth.settings = {
+    General = {
+      Enable = "Source,Sink,Media,Socket";  # Enabling A2DP Sink
+      Experimental = true;  # Showing battery charge of bluetooth devices
+    };
+  };
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # default Bluetooth controller on boot
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
@@ -92,7 +106,7 @@ in
   my.user.userName = userName;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${userName} = {
+  users.users.main = {
     extraGroups = [ "wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # autorestic  # declarative backup
@@ -109,7 +123,7 @@ in
     ];
   };
   
-  home-manager.users.${userName} = { pkgs, ... }: {
+  home-manager.users.main = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
     programs.chromium = {
@@ -179,34 +193,34 @@ in
 
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-  };
-
   services.duplicati = {
     enable = true;
-    user = "igor";
+    user = userName;
   };
 
   services.flatpak = {
     enable = true;
     packages = [
-      "com.github.tchx84.Flatseal"
-      "md.obsidian.Obsidian"
-      "com.github.zocker_160.SyncThingy"
-      "org.clementine_player.Clementine"
-      "dev.deedles.Trayscale" # not working
-      "com.authy.Authy"
       "com.calibre_ebook.calibre"
+      "org.clementine_player.Clementine"
+      "com.github.tchx84.Flatseal"
       "io.freetubeapp.FreeTube"
+      "com.github.iwalton3.jellyfin-media-player"
+      "md.obsidian.Obsidian"
       "io.podman_desktop.PodmanDesktop"
+      "com.github.zocker_160.SyncThingy"
+      "dev.deedles.Trayscale" # not working
     ];
     update.auto = {
       enable = true;
       onCalendar = "weekly";
     };
   };
+
+  # Enable the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+  }; 
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -11,7 +11,7 @@ in
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ../../modules/nixos/pi4.nix
     ./hardware-configuration.nix
-    (import ../../home-manager { userName = userName; })
+    ../../home-manager
   ];
 
   networking.hostName = "${hostName}"; # Define your hostname.
@@ -36,7 +36,7 @@ in
   my.user.userName = userName;
   my.user.hashedPassFile = config.sops.secrets.hashedPassFile.path;
 
-  home-manager.users.${userName} = { pkgs, ... }: {
+  home-manager.users.main = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
 

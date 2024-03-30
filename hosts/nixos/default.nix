@@ -10,9 +10,8 @@ in
 {
   imports =
     [
-      
       inputs.nixos-wsl.nixosModules.default
-      (import ../../home-manager { userName = userName; })
+      ../../home-manager
     ];
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
@@ -21,7 +20,7 @@ in
 
   my.user.userName = userName;
 
-  home-manager.users.${userName} = { pkgs, ... }: {
+  home-manager.users.main = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
 

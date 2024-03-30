@@ -4,7 +4,7 @@ let
 in
 {
   # install rclone
-  users.users.${userName}.packages = [ pkgs.rclone ];
+  users.users.main.packages = [ pkgs.rclone ];
 
   # need because running as user 
   programs.fuse.userAllowOther = true;
