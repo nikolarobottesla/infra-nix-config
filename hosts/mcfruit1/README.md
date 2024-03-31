@@ -13,3 +13,17 @@ darwin-rebuild switch --flake '.#'
 
 ```
 3. install xcode developer tools when prompted
+
+4. fix brew paths if needed
+https://stackoverflow.com/questions/14527521/brew-doctor-says-warning-usr-local-include-isnt-writable
+
+```zsh
+sudo chown -R $(whoami) $(brew --prefix)/*
+```
+
+5. init and start podman
+https://podman.io/docs/installation
+```zsh
+podman machine init
+podman machine start
+```

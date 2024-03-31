@@ -14,7 +14,6 @@
 in {
   imports = [
     inputs.nix-homebrew.darwinModules.nix-homebrew
-    ./podman-darwin.nix
     ../../modules/home-manager
   ];
 
@@ -43,7 +42,6 @@ in {
     vscode
     # xcodes
     # kate
-    # podman-compose
     # rclone
   ];
 
@@ -71,9 +69,15 @@ in {
   homebrew.enable = true; # enables in nix-darwin, doeasn't install
   homebrew.onActivation.cleanup = "zap";  # uninstall app
   homebrew.onActivation.upgrade = true; # upgrade homebrew on system activation
+  homebrew.brews = [
+    "podman"
+    "podman-compose"
+  ];
   homebrew.casks = [
     "google-chrome"
     "rectangle"
+    "podman-desktop"
+    # "lm-studio"  # requires Arm 64
     # {  not working, keep getting 'try again' popup
     #   name = "wacom-tablet";
     #   greedy = true;
