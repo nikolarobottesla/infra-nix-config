@@ -11,7 +11,6 @@ in
     inputs.disko.nixosModules.disko
     ./disko-config.nix
     ../oak-1/hardware-configuration.nix
-    ../../home-manager
   ];
 
   # Use the systemd-boot EFI boot loader.

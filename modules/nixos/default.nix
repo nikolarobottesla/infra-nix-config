@@ -14,8 +14,12 @@
     ./user.nix
   ];
 
-  # enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+      # Deduplicate and optimize nix store
+    auto-optimise-store = true;
+    # enable flakes
+    experimental-features = [ "nix-command" "flakes" ];
+  };
     
   # default packages
   environment.systemPackages = with pkgs; [

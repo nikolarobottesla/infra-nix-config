@@ -11,7 +11,6 @@ in
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ../../modules/nixos/pi4.nix
     ./hardware-configuration.nix
-    ../../home-manager
   ];
 
   networking.hostName = "${hostName}"; # Define your hostname.

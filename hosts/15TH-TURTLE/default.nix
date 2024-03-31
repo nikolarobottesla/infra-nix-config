@@ -10,7 +10,6 @@ in
     inputs.nix-flatpak.nixosModules.nix-flatpak
     ./disko-config.nix
     ./hardware-configuration.nix
-    ../../home-manager
     # comment in after rclone config
     (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
     (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })

@@ -12,6 +12,10 @@ my nixos configurations, setup to use flakes
 # navigate to this folder, then (assumes host name matches flake)
 sudo nixos-rebuild switch --flake '.#'
 
+# update the flake.lock
+nix flake update
+
+# edit secrets example
 sops hosts/coconut-2/secrets.yaml 
 
 # untested

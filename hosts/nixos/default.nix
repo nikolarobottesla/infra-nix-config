@@ -11,7 +11,6 @@ in
   imports =
     [
       inputs.nixos-wsl.nixosModules.default
-      ../../home-manager
     ];
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
