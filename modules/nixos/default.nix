@@ -7,6 +7,7 @@
     ./jellyfin.nix
     ./nextcloud.nix
     ./nginx.nix
+    ./openvscode-server.nix
     ./remote-install.nix
     ./semi-active-av.nix
     ./snapper.nix

@@ -5,19 +5,24 @@
   ...
 }:
 with lib; let
-  userName = config.users.users.main.name;
   cfg = config.my.openvscode-server;
 in {
   options.my.openvscode-server = {
     enable = mkEnableOption "openvscode-server";
+
+    userName = mkOption {
+      type = types.str;
+      description = "defaults to nixos";
+      default = "openvscode-server";
+    };
   };
 
   config = mkIf cfg.enable {
 
     services.openvscode-server = {
         enable = true;
-        user = "${userName}";
-        userDataDir = "/home/${userName}/.vscode_server";
+        user = cfg.userName;  # this field doesn't respect user.user.<user>.name, it assumes name=<user>
+        userDataDir = "/home/${cfg.userName}/.vscode_server";
         host = "0.0.0.0";
         # host = "oak-1.stork-galaxy.ts.net";
         port = 3000;

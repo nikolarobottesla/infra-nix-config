@@ -47,14 +47,7 @@ in
 
   my.user.userName = userName;
 
-  home-manager.users.main = { pkgs, ... }: {
-    # home.packages = [ pkgs.atool pkgs.httpie ];
-    # programs.bash.enable = true;
-
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "23.11";
-  };
+  home-manager.users."${userName}" = import ../../home.nix;
   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -78,10 +71,7 @@ in
 
   # List services that you want to enable:
 
-  #TODO remove after disk-burn in
-  my.auto-update.enable = false;
-
-  services.tailscale.useRoutingFeatures = "both";
+  services.tailscale.useRoutingFeatures = "client";
 
   services.btrfs.autoScrub = {
     enable = true;
@@ -90,6 +80,7 @@ in
   };
 
   my.openvscode-server.enable = true;
+  my.openvscode-server.userName = userName;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

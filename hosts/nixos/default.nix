@@ -19,14 +19,7 @@ in
 
   my.user.userName = userName;
 
-  home-manager.users.main = { pkgs, ... }: {
-    # home.packages = [ pkgs.atool pkgs.httpie ];
-    # programs.bash.enable = true;
-
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "23.11";
-  };
+  home-manager.users."${userName}" = import ../../home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

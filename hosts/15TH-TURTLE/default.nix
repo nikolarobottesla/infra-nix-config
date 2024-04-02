@@ -105,7 +105,7 @@ in
   my.user.userName = userName;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.main = {
+  users.users."${userName}" = {
     extraGroups = [ "wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # autorestic  # declarative backup
@@ -121,8 +121,10 @@ in
       vlc
     ];
   };
-  
-  home-manager.users.main = { pkgs, ... }: {
+
+  #TODO fix me, this will error
+  home-manager.users."${userName}" = import ../../home.nix;  
+  home-manager.users."${userName}" = { pkgs, ... }: {
     # home.packages = [ pkgs.atool pkgs.httpie ];
     # programs.bash.enable = true;
     programs.chromium = {

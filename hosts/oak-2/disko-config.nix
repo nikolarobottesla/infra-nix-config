@@ -4,7 +4,7 @@ let
   usb = "sdb";
   # ls -l /dev/disk/by-uuid
   usbid = "056b0f69-da32-49ad-b40b-8007ee01fede";
-  arrayid = "6644f36e-54c4-4d92-84f7-4ef2ab3f9a42";
+  arrayid = "e116e8e4-9972-498f-a5a2-627c7900293e";  # dm-1
   mountUsb = ''
     mkdir -m 0755 -p /key
     sleep 2 # To make sure the usb key has been loaded
@@ -123,17 +123,17 @@ in
           };
         };
       };
-      # a = array-disks.a;
+      a = array-disks.a;
       # b = array-disks.b;
     };
     # comment in after the array is created
-    # nodev = {
-    #   array0 = {
-    #     device = "/dev/disk/by-uuid/${arrayid}";
-    #     fsType = "btrfs";
-    #     mountpoint = "/srv/array0";
-    #     mountOptions = [ "compress=zstd" "noatime" ];
-    #   };
-    # };
+    nodev = {
+      array0 = {
+        device = "/dev/disk/by-uuid/${arrayid}";
+        fsType = "btrfs";
+        mountpoint = "/srv/array0";
+        mountOptions = [ "compress=zstd" "noatime" ];
+      };
+    };
   };
 }

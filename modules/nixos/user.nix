@@ -26,8 +26,7 @@ in {
   config = {
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.main = {
-      name = cfg.userName;
+    users.users."${cfg.userName}" = {
       isNormalUser = true;
       hashedPasswordFile = cfg.hashedPassFile;
       extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
