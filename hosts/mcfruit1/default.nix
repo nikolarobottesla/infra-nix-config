@@ -74,8 +74,10 @@ in {
     "podman-compose"
   ];
   homebrew.casks = [
+    "clementine"
     "google-chrome"
     "rectangle"
+    "obsidian"
     "podman-desktop"
     # "lm-studio"  # requires Arm 64
     # {  not working, keep getting 'try again' popup
