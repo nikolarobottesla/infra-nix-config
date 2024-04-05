@@ -17,7 +17,7 @@ in {
     };
 
     flags = mkOption {
-      type = types.str;
+      type = types.listOf types.str;
       description = ''list of flags example:
         [
           "--impure"
