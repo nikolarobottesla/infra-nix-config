@@ -12,6 +12,7 @@ in
     ./disko-config.nix
     ./hardware-configuration.nix
     ./samba.nix
+    ./syncthing.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -112,6 +113,8 @@ in
     sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   };
 
+  my.btrbk-client.enable = true;
+
   my.jellyfin.enable = true;
 
   sops.secrets = {
@@ -135,6 +138,10 @@ in
     enable = true;
     userName = userName;
   };
+
+  # my.syncthing = {
+  #   enable = true;
+  # }
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
