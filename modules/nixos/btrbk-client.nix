@@ -39,11 +39,13 @@ in {
           ssh_user = "btrbk";
           stream_compress = "lz4";
           volume."/srv/array0" = {
-              snapshot_create = "onchange";
-              snapshot_preserve_min = "1d 1w 1m 1y";
-              target = "ssh://${cfg.remoteHost}/srv/array0";
-              target_preserve = "1d 1w 1m 1y";
-              subvolume = "*";
+            snapshot_create = "onchange";
+            snapshot_preserve = "1d 1w 1m 1y";
+            snapshot_preserve_min = "latest";
+            target = "ssh://${cfg.remoteHost}/srv/array0";
+            target_preserve = "1d 1w 1m 1y";
+            target_preserve_min = "latest";
+            subvolume = "*";
           };
         };
       };
