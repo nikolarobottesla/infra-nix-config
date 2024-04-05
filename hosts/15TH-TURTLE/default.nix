@@ -1,9 +1,15 @@
-{ config, home-manager, inputs, lib, pkgs, options,  ... }:
-let
+{
+  config,
+  home-manager,
+  inputs,
+  lib,
+  pkgs,
+  options,
+  ...
+}: let
   device-name = "15TH-TURTLE";
   userName = "igor";
-in
-{
+in {
   imports = [
     inputs.disko.nixosModules.disko
     inputs.nixos-hardware.nixosModules.hp-elitebook-830-g6
@@ -11,17 +17,23 @@ in
     ./disko-config.nix
     ./hardware-configuration.nix
     # comment in after rclone config
-    (import ../../modules/rclone { userName = userName; remote-name = "pcloud"; })
-    (import ../../modules/rclone { userName = userName; remote-name = "onedrive"; })
+    (import ../../modules/rclone {
+      userName = userName;
+      remote-name = "pcloud";
+    })
+    (import ../../modules/rclone {
+      userName = userName;
+      remote-name = "onedrive";
+    })
   ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.supportedFilesystems = ["ntfs"];
 
   # seems to build faster with it commented in
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];  # not sure if it's needed for flake method
+  boot.binfmt.emulatedSystems = ["aarch64-linux"]; # not sure if it's needed for flake method
 
   # enable clamav with services
   semi-active-av.enable = true;
@@ -29,7 +41,7 @@ in
   networking.hostName = "${device-name}"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   services.automatic-timezoned.enable = true;
@@ -43,7 +55,7 @@ in
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-#     useXkbConfig = true; # use xkb.options in tty.
+    #     useXkbConfig = true; # use xkb.options in tty.
   };
 
   # Enable the X11 windowing system.
@@ -52,7 +64,7 @@ in
   # Enable the Plasma 5 Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.displayManager.defaultSession = "plasmawayland";  # seems to use wayland no matter what
+  services.xserver.displayManager.defaultSession = "plasmawayland"; # seems to use wayland no matter what
   # disable KDE indexer because it's preventing sleep
   # https://github.com/NixOS/nixpkgs/issues/63489
   environment = {
@@ -64,7 +76,7 @@ in
   };
 
   # Configure keymap in X11
-#   services.xserver.xkb.layout = "us";
+  #   services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
@@ -78,17 +90,17 @@ in
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable= true;
-  hardware.pulseaudio.package = pkgs.pulseaudioFull;  # more bluetooth codecs
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.package = pkgs.pulseaudioFull; # more bluetooth codecs
   hardware.pulseaudio.extraConfig = "
     load-module module-switch-on-connect
-  ";  # auto switch to BT audio on connect
+  "; # auto switch to BT audio on connect
 
   # enable bluetooth
   hardware.bluetooth.settings = {
     General = {
-      Enable = "Source,Sink,Media,Socket";  # Enabling A2DP Sink
-      Experimental = true;  # Showing battery charge of bluetooth devices
+      Enable = "Source,Sink,Media,Socket"; # Enabling A2DP Sink
+      Experimental = true; # Showing battery charge of bluetooth devices
     };
   };
   hardware.bluetooth.enable = true; # enables support for Bluetooth
@@ -106,13 +118,13 @@ in
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."${userName}" = {
-    extraGroups = [ "wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
+    extraGroups = ["wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # autorestic  # declarative backup
-      hunspell  # spell check in libreoffice
-      hunspellDicts.en_US  # english dict
+      hunspell # spell check in libreoffice
+      hunspellDicts.en_US # english dict
       lapce
-      libreoffice-qt 
+      libreoffice-qt
       libsForQt5.kdeconnect-kde
       rclone
       rpi-imager
@@ -122,35 +134,36 @@ in
     ];
   };
 
-  #TODO fix me, this will error
-  home-manager.users."${userName}" = import ../../home.nix;  
-  home-manager.users."${userName}" = { pkgs, ... }: {
-    # home.packages = [ pkgs.atool pkgs.httpie ];
-    # programs.bash.enable = true;
-    programs.chromium = {
-      enable = true;
-      package = pkgs.ungoogled-chromium;
-    };
-    programs.firefox.enable = true;
-    programs.vscode = {
-      enable = true;
-      extensions = with pkgs.vscode-extensions; [
-        bbenoist.nix
-        ms-python.python  # pylance and debugger
-        # ms-vscode.remote-explorer # not available
-        ms-vscode-remote.remote-containers
-        ms-vscode-remote.remote-ssh
-        # ms-vscode.remote-server # not available
-        yzhang.markdown-all-in-one
-      ];
-      # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
-    };
+  home-manager.users."${userName}" = lib.mkMerge [
+    (import ../../home.nix)
+    {
+      # home.packages = [ pkgs.atool pkgs.httpie ];
+      # programs.bash.enable = true;
+      programs.chromium = {
+        enable = true;
+        package = pkgs.ungoogled-chromium;
+      };
+      programs.firefox.enable = true;
+      programs.vscode = {
+        enable = true;
+        extensions = with pkgs.vscode-extensions; [
+          bbenoist.nix
+          ms-python.python # pylance and debugger
+          # ms-vscode.remote-explorer # not available
+          ms-vscode-remote.remote-containers
+          ms-vscode-remote.remote-ssh
+          # ms-vscode.remote-server # not available
+          yzhang.markdown-all-in-one
+        ];
+        # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
+      };
 
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "23.11";
-  };
-  
+      # The state version is required and should stay at the version you
+      # originally installed.
+      home.stateVersion = "23.11";
+    }
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -161,7 +174,7 @@ in
     podman-compose
     # partition-manager
     # rclone # needs to be systemPackage for systemd.mounts
-    snapper-gui  # needs services.snapper... to work
+    snapper-gui # needs services.snapper... to work
     tailscale
   ];
 
@@ -182,7 +195,7 @@ in
     pkgs.android-udev-rules
   ];
 
-  programs.mtr.enable = true;  # network diagnostic tool combining ping and traceroute
+  programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
@@ -221,7 +234,7 @@ in
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-  }; 
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -270,5 +283,4 @@ in
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
