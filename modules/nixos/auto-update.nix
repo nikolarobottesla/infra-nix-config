@@ -16,6 +16,16 @@ in {
       default = "github:nikolarobottesla/infra-nix-config";
     };
 
+    flags = mkOption {
+      type = types.str;
+      description = ''list of flags example:
+        [
+          "--impure"
+        ];
+      '';
+      default = [];
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -28,9 +38,7 @@ in {
             lower = "03:00";
             upper = "06:00";
         };
-        flags = [
-            "--impure"
-        ];
+        flags = cfg.flags;
         flake = cfg.flake;
         dates = "daily";
         randomizedDelaySec = "45min";
