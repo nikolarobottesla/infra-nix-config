@@ -24,7 +24,7 @@ in {
       }];
  
       extraPackages = [pkgs.lz4];
-    }
+    };
     
     # for transport stream encryption
     # environment.systemPackages = [ pkgs.lz4 ];

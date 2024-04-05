@@ -71,6 +71,8 @@ in
 
   # List services that you want to enable:
 
+  my.btrbk-server.enable = true;
+
   services.tailscale.useRoutingFeatures = "client";
 
   services.btrfs.autoScrub = {

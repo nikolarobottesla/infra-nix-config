@@ -30,6 +30,8 @@ in {
     '';
 
     services.btrbk = {
+      # manual dry run
+      # btrbk -c /etc/btrbk/send_remote.conf --dry-run --progress --verbose run
       instances."send_remote" = {
         onCalendar = "weekly";
         settings = {
@@ -37,8 +39,11 @@ in {
           ssh_user = "btrbk";
           stream_compress = "lz4";
           volume."/srv/array0" = {
+              snapshot_create = "onchange";
+              snapshot_preserve_min = "1d 1w 1m 1y";
               target = "ssh://${cfg.remoteHost}/srv/array0";
-              # subvolume = "nixos";
+              target_preserve = "1d 1w 1m 1y";
+              subvolume = "*";
           };
         };
       };
