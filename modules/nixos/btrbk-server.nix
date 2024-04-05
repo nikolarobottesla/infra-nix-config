@@ -17,9 +17,9 @@ in {
       sshAccess = [{
         key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA6cFQNIsuvhieF64I3ZHKAN6DcH4sBLJJX4d3NxMI6h btrbk";
         roles = [
-          "send"
-          "source"
+          "delete"
           "info"
+          "target"
         ];
       }];
  
