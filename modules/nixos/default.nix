@@ -3,6 +3,8 @@
   imports = [
     ./actualbudget.nix
     ./auto-update.nix
+    ./btrbk-client.nix
+    ./btrbk-server.nix
     ./create_ap.nix
     ./jellyfin.nix
     ./nextcloud.nix
