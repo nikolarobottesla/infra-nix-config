@@ -29,6 +29,7 @@
     direnv
     git
     htop
+    pciutils
     sops
     ssh-to-age
     tmux
