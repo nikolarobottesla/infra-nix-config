@@ -139,9 +139,9 @@ in
     userName = userName;
   };
 
-  # my.syncthing = {
-  #   enable = true;
-  # }
+  my.syncthing = {
+    enable = true;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
