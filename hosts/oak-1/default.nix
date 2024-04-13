@@ -139,8 +139,27 @@ in
     userName = userName;
   };
 
+  sops.secrets = {
+    syncthing-cert = {
+      sopsFile = ./secrets.yaml;
+      mode = "0440";
+      owner = "syncthing";
+      group = "syncthing";
+      # path = /var/lib/syncthing/.config/syncthing/cert.pem;
+      # path = "${config.services.syncthing.configDir}/cert.pem";
+    };
+    syncthing-key = {
+      sopsFile = ./secrets.yaml;
+      mode = "0440";
+      owner = "syncthing";
+      group = "syncthing";
+      # path = "${config.services.syncthing.configDir}/key.pem";
+    };
+  };
   my.syncthing = {
     enable = true;
+    cert = config.sops.secrets.syncthing-cert.path;
+    key = config.sops.secrets.syncthing-key.path;
   };
 
   # Open ports in the firewall.

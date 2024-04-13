@@ -18,11 +18,35 @@ in {
       default = null;
     };
 
+    sslCertificate = mkOption {
+      type = types.str;
+      description = "Where to find ssl certificate";
+      default = "/var/lib/tailscale-tls/cert.crt";
+    };
+
+    sslCertificateKey = mkOption {
+      type = types.str;
+      description = "Where to find ssl key";
+      default = "/var/lib/tailscale-tls/key.key";
+    };
+
   };
 
   config = mkIf cfg.enable {
 
+    users.users.syncthing = {
+      # allow syncthing to read tailscale TLS  
+      extraGroups = [config.users.users.tailscale-tls.group];
+    };
+
     # TODO add tmpfs rules to modify the permissions of syncthing folders or change user/group?
+    systemd.tmpfiles.rules = [
+      # "z /directory/to/change/permissions mode user group"
+      "Z /srv/array0/private/sync 0755 syncthing syncthing"
+      #symlink SSL
+      "C+ ${config.services.syncthing.configDir}/https-cert.pem - - - - ${cfg.sslCertificate}"
+      "C+ ${config.services.syncthing.configDir}/https-key.pem - - - - ${cfg.sslCertificateKey}"
+    ];
 
     services.syncthing = {
       enable = true;
