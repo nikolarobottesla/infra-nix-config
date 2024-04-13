@@ -171,6 +171,7 @@ in {
     hddtemp
     iotop
     kate
+    ntfs3g
     podman-compose
     # partition-manager
     # rclone # needs to be systemPackage for systemd.mounts

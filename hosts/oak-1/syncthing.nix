@@ -7,28 +7,58 @@ in {
     enable = mkEnableOption "syncthing";
 
     key = mkOption {
-      type = types.null or types.str;
+      type = types.nullOr types.str;
       description = "key.pem";
       default = null;
     };
 
     cert = mkOption {
-      type = types.null or types.str;
+      type = types.nullOr types.str;
       description = "cert.pem file";
       default = null;
+    };
+
+    sslCertificate = mkOption {
+      type = types.str;
+      description = "Where to find ssl certificate";
+      default = "/var/lib/tailscale-tls/cert.crt";
+    };
+
+    sslCertificateKey = mkOption {
+      type = types.str;
+      description = "Where to find ssl key";
+      default = "/var/lib/tailscale-tls/key.key";
     };
 
   };
 
   config = mkIf cfg.enable {
 
+    users.users.syncthing = {
+      # allow syncthing to read tailscale TLS  
+      extraGroups = [config.users.users.tailscale-tls.group];
+    };
+
+    # TODO add tmpfs rules to modify the permissions of syncthing folders or change user/group?
+    systemd.tmpfiles.rules = [
+      # "z /directory/to/change/permissions mode user group"
+      "Z /srv/array0/private/sync 0755 syncthing syncthing"
+      #symlink SSL
+      "C+ ${config.services.syncthing.configDir}/https-cert.pem - - - - ${cfg.sslCertificate}"
+      "C+ ${config.services.syncthing.configDir}/https-key.pem - - - - ${cfg.sslCertificateKey}"
+    ];
+
     services.syncthing = {
       enable = true;
+      guiAddress = "0.0.0.0:8384";
       cert = cfg.cert;
       key = cfg.key;
       relay = {
         enable = true;
       };
+      openDefaultPorts = false;
+      overrideDevices = true;
+      overrideFolders = true;
     };
     
     services.syncthing.settings.devices = {
@@ -42,7 +72,58 @@ in {
     };
 
     services.syncthing.settings.folders = {
-
+      "default" = {  # Name of folder in Syncthing, also the default folder ID
+        id = "default";  # needs to be the same for all devices
+        path = "/srv/array0/private/sync";  # Which folder to add to Syncthing
+        devices = [ "15th-turtle" "d-desk" "d-shi" "laptop840" "12th-turtle" ];  # Which devices to share the folder with
+      };
+      # "music" = {
+      #   # TODO , receive only?
+      #   id = "zt4nl-ymozz";
+      #   path = "/srv/array0/media/music";
+      #   devices = [ "15th-turtle" "d-desk" "d-shi" ];
+      #   # type = "receiveonly";
+      # };
+      # "k-cam-p6a" = {
+      #   id = "pixel_6a_3y3s-photos";
+      #   path = "/srv/array0/private/k-cam-p6a";
+      #   devices = [ "k-phone" ];
+      # };
+      # "k-laptop-desktop" = { 
+      #   id = "rehhq-athup";
+      #   path = "/srv/array0/private/k-laptop/desktop";
+      #   devices = [ "laptop840" "12th-turtle" ];
+      # };
+      # "k-laptop-music" = { 
+      #   id = "qrysd-avxft";
+      #   path = "/srv/array0/private/k-laptop/music";
+      #   devices = [ "laptop840" "12th-turtle" "k-phone" ];
+      # };
+      # "k-laptop-pictures" = { 
+      #   id = "rrmn9-ybzyr";
+      #   path = "/srv/array0/private/k-laptop/pictures";
+      #   devices = [ "laptop840" "12th-turtle" ];
+      # };
+      # "k-laptop-videos" = { 
+      #   id = "4tkum-u9ttx";
+      #   path = "/srv/array0/private/k-laptop/videos";
+      #   devices = [ "laptop840" "12th-turtle" ];
+      # };
+      # "c-save" = {
+      #   id = "gdd7v-qhybv";
+      #   path = "/srv/array0/private/c-save";
+      #   devices = [ "d-desk" ];
+      # };
+      # "y-n---uid" = {
+      #   id = "mxrph-92u7u";
+      #   path = "/srv/array0/private/y-n---uid";
+      #   devices = [ "d-desk" ];
+      # };
+      # "y-l" = {
+      #   id = "pvndr-ukxex";
+      #   path = "/srv/array0/private/y-l";
+      #   devices = [ "d-desk" ];
+      # };
     };
   };
 
