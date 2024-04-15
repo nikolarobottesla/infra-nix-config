@@ -120,7 +120,7 @@ in
   sops.secrets = {
     nextcloud-admin-pass = {
       sopsFile = ./secrets.yaml;
-      mode = "0440";
+      mode = "0400";
       owner = "nextcloud";
       group = "nextcloud";
     };
@@ -129,6 +129,8 @@ in
     enable = true;
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
   };
+  # allow nextcloud to read syncthing files
+  users.users.nextcloud.extraGroups = [ config.services.syncthing.group ];
 
   my.openvscode-server.enable = true;
   my.openvscode-server.userName = userName;
@@ -142,7 +144,7 @@ in
   sops.secrets = {
     syncthing-cert = {
       sopsFile = ./secrets.yaml;
-      mode = "0440";
+      mode = "0400";
       owner = "syncthing";
       group = "syncthing";
       # path = /var/lib/syncthing/.config/syncthing/cert.pem;
@@ -150,7 +152,7 @@ in
     };
     syncthing-key = {
       sopsFile = ./secrets.yaml;
-      mode = "0440";
+      mode = "0400";
       owner = "syncthing";
       group = "syncthing";
       # path = "${config.services.syncthing.configDir}/key.pem";
