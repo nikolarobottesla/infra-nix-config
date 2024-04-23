@@ -29,6 +29,7 @@
     direnv
     git
     htop
+    ookla-speedtest
     pciutils
     sops
     ssh-to-age
