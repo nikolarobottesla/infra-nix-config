@@ -10,6 +10,7 @@ my nixos configurations, setup to use flakes
 
 ```bash
 # navigate to this folder, then (assumes host name matches flake)
+# if remote TMUX first!!!
 sudo nixos-rebuild switch --flake '.#'
 
 # update the flake.lock

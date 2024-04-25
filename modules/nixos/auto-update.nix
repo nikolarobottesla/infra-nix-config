@@ -40,7 +40,7 @@ in {
         };
         flags = cfg.flags;
         flake = cfg.flake;
-        dates = "daily";
+        dates = "02:00";
         randomizedDelaySec = "45min";
     };
 

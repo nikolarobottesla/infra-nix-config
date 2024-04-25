@@ -12,7 +12,7 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
-    inputs.nixos-hardware.nixosModules.hp-elitebook-830-g6
+    inputs.nixos-hardware.nixosModules.hp-elitebook-830g6
     inputs.nix-flatpak.nixosModules.nix-flatpak
     ./disko-config.nix
     ./hardware-configuration.nix
@@ -57,7 +57,7 @@ in {
     keyMap = "us";
     #     useXkbConfig = true; # use xkb.options in tty.
   };
-
+  
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
