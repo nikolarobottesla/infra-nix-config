@@ -6,6 +6,7 @@
 }:
 with lib; let
   cfg = config.my.btrbk-client;
+  su-c = "${pkgs.su}/bin/su btrbk -c";
   ssh_identity = "btrbk_key";
   key_path = "/var/lib/btrbk/${ssh_identity}";
 in {
@@ -22,10 +23,11 @@ in {
 
   config = mkIf cfg.enable {
 
+     # NOTE: must be add public ssh key to btrbk-server.nix config
     system.activationScripts.btrbkUserSetup.text = ''
       if [ ! -f "${key_path}" ]; then
         echo "${ssh_identity} file not found, generating SSH key"
-        ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -N "" -C "btrbk" -f "${key_path}"
+        ${su-c} '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -N "" -C "btrbk" -f "${key_path}"'
       fi
     '';
 
