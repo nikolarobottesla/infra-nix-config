@@ -10,7 +10,7 @@
     homebrew-core.flake = false;
     homebrew-cask.url = "github:homebrew/homebrew-cask";
     homebrew-cask.flake = false;
-    nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/nikolarobottesla-patch-1";
+    nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
     nixos-wsl.url = github:nix-community/NixOS-WSL;
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
