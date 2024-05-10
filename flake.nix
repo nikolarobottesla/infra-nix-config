@@ -14,6 +14,7 @@
     nixos-wsl.url = github:nix-community/NixOS-WSL;
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
@@ -32,6 +33,7 @@
     nixos-hardware,
     nixos-wsl,
     nixpkgs,
+    nixpkgs-unstable,
     nix-darwin,
     nix-flatpak,
     nix-homebrew,
@@ -58,9 +60,15 @@
       ./modules/home-manager
     ];
   in rec {
+    # Your custom packages
+    # Accessible through 'nix build', 'nix shell', etc
+    # packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+    # Your custom packages and modifications, exported as overlays
+    overlays = import ./overlays {inherit inputs;};
 
     # Reusable home-manager modules you might want to export
     # These are usually stuff you would upstream into home-manager

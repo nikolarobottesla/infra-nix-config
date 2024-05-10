@@ -1,4 +1,7 @@
-{ lib, pkgs, ... }:
+{ lib,
+  outputs,
+  pkgs,
+  ... }:
 {
   imports = [
     ./actualbudget.nix
@@ -39,6 +42,10 @@
     wget
   ];
 
+  nixpkgs.overlays = [
+    outputs.overlays.unstable-packages
+  ];
+
   sops = {
     # This will add secrets.yml to the nix store
     # You can avoid this by adding a string to the full path instead, i.e.
@@ -68,6 +75,7 @@
   };
 
   services.tailscale.enable = lib.mkDefault true;
+  services.tailscale.package = pkgs.unstable.tailscale;
 
   my.auto-update.enable = lib.mkDefault true;
 

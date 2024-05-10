@@ -147,11 +147,11 @@
     "homebrew-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1715335469,
-        "narHash": "sha256-dgzizqiEt2SoI/ciXti7iVjqWvJIYbfJVpQ+tK2/uo4=",
+        "lastModified": 1715339466,
+        "narHash": "sha256-Kp46ynDyfXnOjLNO/vnMBeGxJEwpoQrwSTQnt1jF0hw=",
         "owner": "homebrew",
         "repo": "homebrew-core",
-        "rev": "02fc1ec19fd2a28cdd69d5a6404ad982294950ee",
+        "rev": "a0db09dc6d6d7188ead73f5aea85434b1979fbbe",
         "type": "github"
       },
       "original": {
@@ -302,6 +302,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1715266358,
+        "narHash": "sha256-doPgfj+7FFe9rfzWo1siAV2mVCasW+Bh8I1cToAXEE4=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "f1010e0469db743d14519a1efd37e23f8513d714",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1688049487,
@@ -346,6 +362,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_3",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix",
         "vscode-server": "vscode-server"
       }
