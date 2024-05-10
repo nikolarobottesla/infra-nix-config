@@ -16,7 +16,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.1.0";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -93,6 +93,40 @@
             ./hosts/15TH-TURTLE
           ];
       };
+      # coconuts: set user password before applying
+      coconut-2 = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            (import ./hosts/coconut {hostName = "coconut-2";})
+            {
+              time.timeZone = "America/Chicago";
+              services.tailscale.useRoutingFeatures = "client";
+            }
+          ];
+      };
+      coconut-3 = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            (import ./hosts/coconut {hostName = "coconut-3";})
+            {
+              time.timeZone = "America/Los_Angeles";
+              services.tailscale.useRoutingFeatures = "both";
+            }
+          ];
+      };
+      # wsl
+      nixos = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            ./hosts/nixos
+          ];
+      };
       oakImage = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules =
@@ -151,38 +185,12 @@
             }
           ];
       };
-      # coconuts: set user password before applying
-      coconut-2 = nixpkgs.lib.nixosSystem {
+      shialt = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules =
           defaultModules
           ++ [
-            (import ./hosts/coconut {hostName = "coconut-2";})
-            {
-              time.timeZone = "America/Chicago";
-              services.tailscale.useRoutingFeatures = "client";
-            }
-          ];
-      };
-      coconut-3 = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        modules =
-          defaultModules
-          ++ [
-            (import ./hosts/coconut {hostName = "coconut-3";})
-            {
-              time.timeZone = "America/Los_Angeles";
-              services.tailscale.useRoutingFeatures = "both";
-            }
-          ];
-      };
-      # wsl
-      nixos = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        modules =
-          defaultModules
-          ++ [
-            ./hosts/nixos
+            ./hosts/shialt
           ];
       };
     };
