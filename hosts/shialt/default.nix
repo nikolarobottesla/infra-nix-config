@@ -43,16 +43,14 @@ in {
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
+  my.dns.enable = true;
+
   # Set your time zone.
   services.automatic-timezoned.enable = true;
 
   # failed to build when rebuilding from nixos-enter and root
   # comment out after booted directly
   # services.logrotate.checkConfig = false;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";

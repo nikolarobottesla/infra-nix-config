@@ -6,6 +6,7 @@
     ./btrbk-client.nix
     ./btrbk-server.nix
     ./create_ap.nix
+    ./dns.nix
     ./jellyfin.nix
     ./nextcloud.nix
     ./nginx.nix
