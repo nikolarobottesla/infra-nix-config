@@ -135,7 +135,7 @@ in {
   };
 
   home-manager.users."${userName}" = lib.mkMerge [
-    (import ../../home.nix)
+    (import ../../home-manager/home.nix)
     {
       # home.packages = [ pkgs.atool pkgs.httpie ];
       # programs.bash.enable = true;

@@ -19,7 +19,7 @@ in
 
   my.user.userName = userName;
 
-  home-manager.users."${userName}" = import ../../home.nix;
+  home-manager.users."${userName}" = import ../../home-manager/home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

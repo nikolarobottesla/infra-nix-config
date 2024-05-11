@@ -35,7 +35,7 @@ in
   my.user.userName = userName;
   my.user.hashedPassFile = config.sops.secrets.hashedPassFile.path;
 
-  home-manager.users."${userName}" = import ../../home.nix;
+  home-manager.users."${userName}" = import ../../home-manager/home.nix;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

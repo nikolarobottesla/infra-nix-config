@@ -26,7 +26,7 @@ in {
   };
 
   # home-manager.extraSpecialArgs = specialArgs;
-  home-manager.users."${userName}" = import ../../home.nix;
+  home-manager.users."${userName}" = import ../../home-manager/home.nix;
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
