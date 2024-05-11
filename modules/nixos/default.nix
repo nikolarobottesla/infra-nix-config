@@ -33,6 +33,7 @@
     direnv
     git
     htop
+    jq
     ookla-speedtest
     pciutils
     sops
