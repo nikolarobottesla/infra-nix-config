@@ -12,6 +12,7 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
+    inputs.lanzaboote.nixosModules.lanzaboote
 #     inputs.nixos-hardware.nixosModules.hp-elitebook-830g6
     inputs.nix-flatpak.nixosModules.nix-flatpak
     ./disko-config.nix
@@ -27,8 +28,19 @@ in {
     # })
   ];
 
+  # Lanzaboote currently replaces the systemd-boot module.
+  # This setting is usually set to true in configuration.nix
+  # generated at installation time. So we force it to false
+  # for now.
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot";
+  };
+
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
+  # boot.loader.systemd-boot.enable = true;  # using lanzaboote
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = ["ntfs"];
 

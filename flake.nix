@@ -10,6 +10,8 @@
     homebrew-core.flake = false;
     homebrew-cask.url = "github:homebrew/homebrew-cask";
     homebrew-cask.flake = false;
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.3.0";
+    lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
     nixos-wsl.url = github:nix-community/NixOS-WSL;
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
@@ -30,6 +32,7 @@
     home-manager,
     homebrew-core,
     homebrew-cask,
+    lanzaboote,
     nixos-hardware,
     nixos-wsl,
     nixpkgs,
