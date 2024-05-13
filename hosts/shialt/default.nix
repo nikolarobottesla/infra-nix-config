@@ -123,6 +123,7 @@ in {
     extraGroups = ["wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
     packages = with pkgs; [
       # autorestic  # declarative backup
+      chromium
       hunspell # spell check in libreoffice
       hunspellDicts.en_US # english dict
       lapce
@@ -150,7 +151,8 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    htop
+    clinfo  # graphics
+    glxinfo  # graphics
     hddtemp
     iotop
     kate
@@ -159,7 +161,10 @@ in {
     # partition-manager
     # rclone # needs to be systemPackage for systemd.mounts
     snapper-gui # needs services.snapper... to work
+    steam-run  # FHS env
     tailscale
+    vulkan-tools  # graphics
+    wayland-utils  # graphics
   ];
 
   environment = {
@@ -178,6 +183,60 @@ in {
   services.udev.packages = [
     pkgs.android-udev-rules
   ];
+
+  programs.chromium = {
+    enable = true;
+    # package = pkgs.ungoogled-chromium;  # home-manager only
+  };
+  programs.chromium.extensions = [
+    "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+    "kcgpggonjhmeaejebeoeomdlohicfhce" # Cookie Remover
+    "eimadpbcbfnmbkopoojfekhnkhdbieeh" # Dark Reader
+    "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
+    # "aapbdbdomjkkjkaonfhkkikfgjllcleb" # Google Translate
+    "fihnjjcciajhdojfnbdddfaoknhalnja" # I don't care about cookies
+    # "cimiefiiaegbelhefglklhhakcgmhkai" # Plasma integration
+    # "hlepfoohegkhhmjieoechaddaejaokhf" # Refined GitHub
+    # "hipekcciheckooncpjeljhnekcoolahp" # Tabliss
+    "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+  ];
+  programs.chromium.extraOpts = {  # 
+    DefaultBrowserSettingEnabled = true;
+
+    # TranslateEnabled = false;
+    # SpellcheckEnabled = false;
+    # SpellCheckServiceEnabled = false;
+    # PrintingEnabled = false;
+    # SearchSuggestEnabled = false;
+    PasswordManagerEnabled = false;
+    # SafeBrowsingEnabled  = false;
+    AutofillAddressEnabled = false;
+    AutofillCreditCardEnabled = false;
+    MetricsReportingEnabled = false;
+    BuiltInDnsClientEnabled = false;
+    # EnableMediaRouter = false;
+    PromotionalTabsEnabled = false;
+    # SyncDisabled = true;
+    # SigninAllowed = false;
+    # AudioCaptureAllowed = false;
+    # VideoCaptureAllowed = false;
+    # SSLErrorOverrideAllowed = false;
+    # AutoplayAllowed = false;
+
+    # 0 = Disable browser sign-in
+    # BrowserSignin = 0;
+
+    #DefaultSearchProviderEnabled = true;
+    #DefaultSearchProviderSearchURL = "https://duckduckgo.com/"
+    #+ "?kae=d&k1=-1&kc=1&kav=1&kd=-1&kh=1&q={searchTerms}";
+
+    # Do not allow any site to show desktop notifications
+    DefaultNotificationsSetting = 2;
+    # Do not allow any site to track the users' physical location
+    DefaultGeolocationSetting = 2;
+    # Block the Flash plugin
+    DefaultPluginsSetting = 2;
+  };
 
   programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
   programs.gnupg.agent = {

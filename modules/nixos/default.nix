@@ -34,6 +34,7 @@
     git
     htop
     jq
+    lshw
     ookla-speedtest
     pciutils
     sops

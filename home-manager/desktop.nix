@@ -4,10 +4,6 @@
   pkgs,
   ... }:
 {
-  programs.chromium = {
-    enable = true;
-    package = pkgs.ungoogled-chromium;
-  };
   programs.firefox.enable = true;
   # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
   programs.firefox.policies = {
@@ -37,6 +33,7 @@
 
     /* ---- PREFERENCES ---- */
     # Set preferences shared by all profiles.
+    # go to about:config to view preferences
     Preferences = {
       "browser.contentblocking.category" = { Value = "strict"; Status = "locked"; };
       "browser.newtabpage.activity-stream.showSearch" = true;
@@ -46,7 +43,11 @@
       "browser.newtabpage.activity-stream.feeds.snippets" = false;
       "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
       "browser.newtabpage.activity-stream.showSponsored" = false;
-      "browser.startup.page" = "previous-session";
+      "browser.shell.checkDefaultBrowser" = false;
+      # Homepage settings
+      # 0 = blank, 1 = home, 2 = last visited page, 3 = resume previous session
+      "browser.startup.page" = 3;
+      # "browser.startup.homepage" = "URL";  # browser.startup.page must be set to 1
       "extensions.formautofill.creditCards.enabled" = false;
       "extensions.pocket.enabled" = false;
       "signon.rememberSignons" = false;
