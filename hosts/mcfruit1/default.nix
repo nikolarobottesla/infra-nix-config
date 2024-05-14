@@ -74,11 +74,13 @@ in {
     "podman-compose"
   ];
   homebrew.casks = [
+    # "avidemux"  # developer cannot be verified
     "clementine"
     "google-chrome"
     "rectangle"
     "obsidian"
     "podman-desktop"
+    "qcad"
     # "lm-studio"  # requires Arm 64
     # {  not working, keep getting 'try again' popup
     #   name = "wacom-tablet";
@@ -93,7 +95,7 @@ in {
   system.defaults.dock.showhidden = true;
   system.defaults.dock.persistent-apps = [
     "/Applications/Microsoft Outlook.app"
-    "/Applications/Microsoft Teams classic.app"
+    "/Applications/Microsoft Teams (work or school).app"
     "/Applications/Microsoft OneNote.app"
     "/Applications/OneDrive.app"
     "/Applications/Microsoft Word.app"
@@ -109,6 +111,8 @@ in {
 
   system.defaults.trackpad.Clicking = true;
   system.defaults.trackpad.TrackpadThreeFingerDrag = true;
+
+  services.tailscale.enable = true;
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
