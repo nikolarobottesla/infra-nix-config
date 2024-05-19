@@ -5,6 +5,21 @@ let
   userSrv = "/home/${userName}/srv";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
+  # script to update podman containers
+  # TODO add service to run this periodically, move this and other podman stuff into a module
+  update-containers = pkgs.writeShellScriptBin "update-containers" ''
+    SUDO=""
+    if [[ $(id -u) -ne 0 ]]; then
+      SUDO="sudo"
+    fi
+
+      images=$($SUDO ${pkgs.podman}/bin/podman ps -a --format="{{.Image}}" | sort -u)
+
+      for image in $images
+      do
+        $SUDO ${pkgs.podman}/bin/podman pull $image
+      done
+  '';
 in
 {
   imports = [
@@ -88,6 +103,7 @@ in
     iotop
     podman-compose
     smartmontools
+    update-containers
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -163,6 +179,8 @@ in
     cert = config.sops.secrets.syncthing-cert.path;
     key = config.sops.secrets.syncthing-key.path;
   };
+
+  services.tailscale.useRoutingFeatures = "server";
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
