@@ -9,6 +9,7 @@
     ./btrbk-client.nix
     ./btrbk-server.nix
     ./create_ap.nix
+    ./desktop.nix
     ./dns.nix
     ./jellyfin.nix
     ./nextcloud.nix
