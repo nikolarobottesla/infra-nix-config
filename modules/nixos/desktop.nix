@@ -47,7 +47,7 @@ in {
     console = {
         font = "Lat2-Terminus16";
         keyMap = "us";
-        #     useXkbConfig = true; # use xkb.options in tty.
+        # useXkbConfig = true; # use xkb.options in tty.
     };
     
     # Enable the X11 windowing system.
@@ -62,7 +62,7 @@ in {
     environment = {
       etc."xdg/baloofilerc".source = (pkgs.formats.ini {}).generate "baloorc" {
         "Basic Settings" = {
-            "Indexing-Enabled" = false;
+          "Indexing-Enabled" = false;
         };
       };
     };
@@ -91,8 +91,8 @@ in {
     # enable bluetooth
     hardware.bluetooth.settings = {
       General = {
-      Enable = "Source,Sink,Media,Socket"; # Enabling A2DP Sink
-      Experimental = true; # Showing battery charge of bluetooth devices
+        Enable = "Source,Sink,Media,Socket"; # Enabling A2DP Sink
+        Experimental = true; # Showing battery charge of bluetooth devices
       };
     };
     hardware.bluetooth.enable = true; # enables support for Bluetooth
@@ -154,9 +154,9 @@ in {
 
     environment = {
       variables = {
-      EDITOR = "code --wait";
-      SYSTEMD_EDITOR = "code --wait";
-      # VISUAL = "code --wait";
+        EDITOR = "code --wait";
+        SYSTEMD_EDITOR = "code --wait";
+        # VISUAL = "code --wait";
       };
     };
 
@@ -226,12 +226,12 @@ in {
 
     programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
     programs.gnupg.agent = {
-        enable = true;
-        enableSSHSupport = true;
+      enable = true;
+      enableSSHSupport = true;
     };
     programs.steam = {
-        enable = true;
-        remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     };
 
     # List services that you want to enable:
@@ -244,19 +244,19 @@ in {
     services.flatpak = {
       enable = true;
       packages = [
-      "com.calibre_ebook.calibre"
-      "org.clementine_player.Clementine"
-      "com.github.tchx84.Flatseal"
-      "io.freetubeapp.FreeTube"
-      "com.github.iwalton3.jellyfin-media-player"
-      "md.obsidian.Obsidian"
-      "io.podman_desktop.PodmanDesktop"
-      "com.github.zocker_160.SyncThingy"
-      "dev.deedles.Trayscale" # not working
+        "com.calibre_ebook.calibre"
+        "org.clementine_player.Clementine"
+        "com.github.tchx84.Flatseal"
+        "io.freetubeapp.FreeTube"
+        "com.github.iwalton3.jellyfin-media-player"
+        "md.obsidian.Obsidian"
+        "io.podman_desktop.PodmanDesktop"
+        "com.github.zocker_160.SyncThingy"
+        "dev.deedles.Trayscale" # not working
       ];
       update.auto = {
-      enable = true;
-      onCalendar = "weekly";
+        enable = true;
+        onCalendar = "weekly";
       };
     };
 
