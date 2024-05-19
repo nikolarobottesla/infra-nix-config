@@ -74,6 +74,6 @@
       "diffEditor.hideUnchangedRegions.enabled" = true;
       "git.autofetch" = true;
       # "remote.SSH.useLocalServer" = false;  had this set but don't know why
-    }
+    };
   };
 }
