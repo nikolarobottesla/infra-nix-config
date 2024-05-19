@@ -27,7 +27,12 @@
     # enable flakes
     experimental-features = [ "nix-command" "flakes" ];
   };
-    
+
+  nixpkgs.config.allowUnfree = lib.mkDefault true;
+  nixpkgs.overlays = [
+    outputs.overlays.unstable-packages
+  ];
+
   # default packages
   environment.systemPackages = with pkgs; [
     direnv
@@ -42,10 +47,6 @@
     tmux
     tree
     wget
-  ];
-
-  nixpkgs.overlays = [
-    outputs.overlays.unstable-packages
   ];
 
   sops = {

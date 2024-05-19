@@ -109,7 +109,6 @@ in {
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
   # nixpkgs.config.permittedInsecurePackages = [
   #   "electron-25.9.0"  # needed for obsidian on 20240101
   # ];
