@@ -58,6 +58,7 @@
   };
   programs.vscode = {
     enable = true;
+    enableUpdateCheck = false;
     extensions = with pkgs.vscode-extensions; [
       bbenoist.nix
       ms-python.python # pylance and debugger
@@ -68,5 +69,11 @@
       yzhang.markdown-all-in-one
     ];
     # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
+    userSettings = {
+      "[nix]"."editor.tabSize" = 2;
+      "diffEditor.hideUnchangedRegions.enabled" = true;
+      "git.autofetch" = true;
+      # "remote.SSH.useLocalServer" = false;  had this set but don't know why
+    };
   };
 }
