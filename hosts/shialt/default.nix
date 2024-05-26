@@ -38,10 +38,14 @@ in {
     pkiBundle = "/etc/secureboot";
   };
 
+  time.hardwareClockInLocalTime = true;
+
   # Use the systemd-boot EFI boot loader.
   # boot.loader.systemd-boot.enable = true;  # using lanzaboote
 
   networking.hostName = device-name; # Define your hostname
+
+  # my.dns.enable = false;
   
   my.desktop.userName = userName;
   my.desktop.enable = true;

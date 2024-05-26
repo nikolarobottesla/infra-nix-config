@@ -33,7 +33,7 @@ in {
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
     networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
-    my.dns.enable = true;
+    my.dns.enable = lib.mkDefault true;
 
     # Set your time zone.
     services.automatic-timezoned.enable = true;

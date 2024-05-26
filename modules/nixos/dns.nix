@@ -21,10 +21,10 @@ in {
         ];
     services.resolved = {
         enable = true;
-        dnssec = "true";
+        dnssec = "false";
         # domains = [ "~." ];
         fallbackDns = [ ];  # when empty a default list is used
-        dnsovertls = "true";
+        dnsovertls = "opportunistic";
     };
   };
 }
