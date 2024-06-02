@@ -114,7 +114,8 @@ in {
         lapce
         libreoffice-qt
         libsForQt5.kdeconnect-kde
-        miraclecast
+        # miraclecast  # CLI Wifi-Display/Miracast implementation
+        nextcloud-client
         rclone
         rpi-imager
         # restic
@@ -142,6 +143,7 @@ in {
       iotop
       kate
       ntfs3g
+      # playonlinux
       podman-compose
       # partition-manager
       # rclone # needs to be systemPackage for systemd.mounts
