@@ -58,6 +58,7 @@
     forAllSystems = nixpkgs.lib.genAttrs systems;
     defaultModules = [
       home-manager.nixosModules.default
+      nix-flatpak.nixosModules.nix-flatpak
       sops-nix.nixosModules.sops
       ./modules/nixos
       ./modules/home-manager
