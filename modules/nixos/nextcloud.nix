@@ -43,11 +43,9 @@ in {
         adminuser = "admin";
         adminpassFile = cfg.adminpassFile;
         dbtype = "pgsql";
+      };
+      settings = {
         defaultPhoneRegion = "US";
-        # extraTrustedDomains = [
-        #   "oak-1"
-        #   "100.92.38.20"
-        # ];
         overwriteProtocol = "https";
       };
       # Let NixOS install and configure the database automatically.

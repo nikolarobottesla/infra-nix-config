@@ -52,7 +52,6 @@ in {
         };
       };
  
-      extraPackages = [pkgs.lz4];
     };
 
   };
