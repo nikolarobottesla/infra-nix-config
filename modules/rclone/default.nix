@@ -13,8 +13,8 @@ in
     enable = true;
     description = "${remote-name} mounting service";
     # after = [ "remote-fs.target" ];  # would probably also work
-    after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
+    wants = [ "network-online.target" ];
+    after = [ "multi-user.target" ];
 
     path = [ pkgs.su ];
     preStart = "${su-c} 'mkdir -p /home/${userName}/${remote-name}'";

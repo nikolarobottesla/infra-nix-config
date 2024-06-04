@@ -23,7 +23,7 @@ in {
         enable = true;
         dnssec = "false";
         # domains = [ "~." ];
-        fallbackDns = [ ];  # when empty a default list is used
+        fallbackDns = null;  # when null a default list is used
         dnsovertls = "opportunistic";
     };
   };

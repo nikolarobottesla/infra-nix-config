@@ -54,9 +54,9 @@ in {
     services.xserver.enable = true;
 
     # Enable the Plasma 5 Desktop Environment.
-    services.xserver.displayManager.sddm.enable = true;
+    services.displayManager.sddm.enable = true;
     services.xserver.desktopManager.plasma5.enable = true;
-    services.xserver.displayManager.defaultSession = "plasmawayland"; # seems to use wayland no matter what
+    services.displayManager.defaultSession = "plasmawayland"; # seems to use wayland no matter what
     # disable KDE indexer because it's preventing sleep
     # https://github.com/NixOS/nixpkgs/issues/63489
     environment = {
@@ -76,7 +76,7 @@ in {
     # Enable autodiscovery of network printers
     services.avahi = {
       enable = true;
-      nssmdns = true;
+      nssmdns4 = true;
       openFirewall = true;
     };
 
@@ -99,7 +99,7 @@ in {
     hardware.bluetooth.powerOnBoot = true; # default Bluetooth controller on boot
 
     # Enable touchpad support (enabled default in most desktopManager).
-    services.xserver.libinput.enable = true;
+    services.libinput.enable = true;
 
     my.user.userName = cfg.userName;
 
@@ -114,6 +114,7 @@ in {
         lapce
         libreoffice-qt
         libsForQt5.kdeconnect-kde
+        logseq
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
         rclone
@@ -146,6 +147,7 @@ in {
       # playonlinux
       podman-compose
       # partition-manager
+      quickemu
       # rclone # needs to be systemPackage for systemd.mounts
       snapper-gui # needs services.snapper... to work
       steam-run  # FHS env
