@@ -148,8 +148,8 @@ in
   # allow nextcloud to read syncthing files
   users.users.nextcloud.extraGroups = [ config.services.syncthing.group ];
 
-  my.openvscode-server.enable = true;
-  my.openvscode-server.userName = userName;
+  my.code-server.enable = true;
+  my.code-server.userName = userName;
   
   # samba
   my.samba-server = {

@@ -81,8 +81,8 @@ in
     fileSystems = [ "/srv" ];  # only scrub here
   };
 
-  my.openvscode-server.enable = true;
-  my.openvscode-server.userName = userName;
+  my.code-server.enable = true;
+  my.code-server.userName = userName;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
