@@ -34,18 +34,15 @@ in {
       # extraEnvironment = {
       
       # };
-      # extraArguments = [
-      #   "--log=info"
-      # ];
+      extraArguments = [
+        "--cert=${config.my.tailscale-tls.certDir}/cert.crt"
+        "--cert-key=${config.my.tailscale-tls.certDir}/key.key"
+        # "--log=info"
+      ];
     };
 
-    # get SSL_ERROR_RX_RECORD_TOO_LONG
-    # my.nginx.enable = true;
-    # services.nginx.virtualHosts.${config.services.openvscode-server.host} = {
-    #   forceSSL = true;
-    #   sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
-    #   sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
-    # };
+    # allow code-server user to read tailscale TLS
+    users.users.${cfg.userName}.extraGroups = [config.users.users.tailscale-tls.group];
 
   };
 }

@@ -81,6 +81,11 @@ in
     fileSystems = [ "/srv" ];  # only scrub here
   };
 
+  my.nginx = {
+    enable = true;
+    domain = "oak-1.stork-galaxy.ts.net";
+  };
+
   my.code-server.enable = true;
   my.code-server.userName = userName;
 

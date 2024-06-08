@@ -23,7 +23,7 @@ in {
         ];
       }];
  
-      extraPackages = [pkgs.lz4];
+      # extraPackages = [pkgs.lz4];  not needed anymore?
     }; 
 
   };

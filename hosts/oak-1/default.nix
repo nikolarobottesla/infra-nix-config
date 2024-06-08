@@ -144,9 +144,15 @@ in
   my.nextcloud = {
     enable = true;
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
+    domain = "oak-1.stork-galaxy.ts.net";
   };
   # allow nextcloud to read syncthing files
   users.users.nextcloud.extraGroups = [ config.services.syncthing.group ];
+  
+  my.nginx = {
+    enable = true;
+    domain = "oak-1.stork-galaxy.ts.net";
+  };
 
   my.code-server.enable = true;
   my.code-server.userName = userName;

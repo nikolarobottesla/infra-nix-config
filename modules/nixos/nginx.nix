@@ -15,11 +15,13 @@ in {
       type = types.bool;
       default = false;
     };
+    domain = mkOption {
+      type = types.str;
+      default = "oak-1.stork-galaxy.ts.net";
+    };
   };
   config =
     mkIf config.my.nginx.enable {
-
-      my.tailscale-tls.enable = true;
 
       users.users.nginx = {
         # allow nginx to read tailscale TLS  
@@ -34,7 +36,7 @@ in {
         # package = nginx_package;
         # recommendedBrotliSettings = true;
         # recommendedGzipSettings = true;
-        # recommendedOptimisation = true;
+        recommendedOptimisation = true;
         # recommendedProxySettings = true;
         # recommendedTlsSettings = true;
         # recommendedZstdSettings = true;
@@ -45,6 +47,14 @@ in {
         #     return = "444";
         #   };
         # };
+      };
+
+      my.tailscale-tls.enable = true;
+
+      services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
+        forceSSL = true;
+        sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
+        sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
       };
 
       # tailscale only

@@ -29,6 +29,8 @@ in {
   };
   config = mkIf cfg.enable {
 
+    # make sure an nginx Vhost is configured for the domain
+
     services.nextcloud = {
       enable = true;
       appstoreEnable = true;
@@ -53,16 +55,6 @@ in {
 
       package = nextcloud_package;
     };
-
-    my.tailscale-tls.enable = true;
-
-    services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
-      forceSSL = true;
-      sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
-      sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
-    };
-    # allow nginx to read tailscale TLS
-    users.users.nginx.extraGroups = [config.users.users.tailscale-tls.group];
 
   };
 }
