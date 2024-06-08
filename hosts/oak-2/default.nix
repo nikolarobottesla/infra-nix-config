@@ -83,7 +83,7 @@ in
 
   my.nginx = {
     enable = true;
-    domain = "oak-1.stork-galaxy.ts.net";
+    domain = "oak-2.stork-galaxy.ts.net";
   };
 
   my.code-server.enable = true;

@@ -51,7 +51,7 @@ in {
 
       my.tailscale-tls.enable = true;
 
-      services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
+      services.nginx.virtualHosts.${cfg.domain} = {
         forceSSL = true;
         sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
         sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
