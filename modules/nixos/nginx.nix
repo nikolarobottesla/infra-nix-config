@@ -17,7 +17,7 @@ in {
     };
     domain = mkOption {
       type = types.str;
-      default = "oak-1.stork-galaxy.ts.net";
+      default = "$(${pkgs.tailscale}/bin/tailscale cert 2>&1 | grep use | cut -d '\"' -f2)";
     };
   };
   config =
@@ -50,6 +50,15 @@ in {
       };
 
       my.tailscale-tls.enable = true;
+
+      # don't know how to use, need to find an example
+      # services.nginx.tailscaleAuth = {
+      #   enable = true;
+      #   expectedTailnet = "stork-galaxy.ts.net";
+      #   virtualHosts = [
+
+      #   ];
+      # };
 
       services.nginx.virtualHosts.${cfg.domain} = {
         forceSSL = true;

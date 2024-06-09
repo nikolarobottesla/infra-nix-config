@@ -54,10 +54,13 @@ in {
         # https://actualbudget.github.io/docs/Installing/Configuration
         ACTUAL_HTTPS_CERT = "/data/cert.crt";
         ACTUAL_HTTPS_KEY = "/data/key.key";
+        # ACTUAL_HOSTNAME = "<ts domain>";  # didn't do what I want
         # ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB = 20;
         # ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB = 50;
         # ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB = 20;
       };
+
+      # hostname = "<ts domain>";  # didn't do what I want
       image = "ghcr.io/actualbudget/actual-server:latest";
       ports = ["5006:5006"];
       volumes = ["${cfg.dataDir}/:/data"];

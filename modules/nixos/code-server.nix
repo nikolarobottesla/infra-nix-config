@@ -15,6 +15,12 @@ in {
       description = "defaults to code-server";
       default = "code-server";
     };
+
+    host = mkOption {
+      type = types.str;
+      description = "defaults to 0.0.0.0";
+      default = "0.0.0.0";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -26,8 +32,7 @@ in {
       enable = true;
       user = cfg.userName;
       userDataDir = "/home/${cfg.userName}/.code_server_data";
-      host = "0.0.0.0";
-      # host = "oak-1.stork-galaxy.ts.net";
+      host = cfg.host;
       port = 3000;
       # extraPackages = [ pkgs.sqlite pkgs.nodejs pkgs.nixpkgs-fmt pkgs.nixd pkgs.git ];
 

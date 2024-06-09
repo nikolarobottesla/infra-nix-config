@@ -2,6 +2,7 @@
 let
   hostName = "oak-1";
   userName = "deer";
+  domain = "${hostName}.stork-galaxy.ts.net";
   userSrv = "/home/${userName}/srv";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
@@ -63,24 +64,15 @@ in
     };
   };
 
-  fileSystems."${userSrv}/wochat/media" = {
-    device = "//WOCHAT-NAS/media";
-    fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+  # fileSystems."${userSrv}/<server host name>/media" = {
+  #   device = "//<server host name>/media";
+  #   fsType = "cifs";
+  #   options = let
+  #     # this line prevents hanging on network split
+  #     automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-    in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
-  };
-  fileSystems."${userSrv}/wochat/private" = {
-    device = "//WOCHAT-NAS/private";
-    fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-    in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
-  };
+  #   in ["${automount_opts},credentials=${config.sops.secrets.smb-secrets.path}"];
+  # };
   
   # https://www.freedesktop.org/software/systemd/man/tmpfiles.d
   systemd.tmpfiles.rules = [
@@ -144,18 +136,21 @@ in
   my.nextcloud = {
     enable = true;
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
-    domain = "oak-1.stork-galaxy.ts.net";
+    domain = domain;
   };
   # allow nextcloud to read syncthing files
   users.users.nextcloud.extraGroups = [ config.services.syncthing.group ];
   
   my.nginx = {
     enable = true;
-    domain = "oak-1.stork-galaxy.ts.net";
+    domain = domain;
   };
 
-  my.code-server.enable = true;
-  my.code-server.userName = userName;
+  my.code-server = {
+    enable = true;
+    userName = userName;
+    host = domain;
+  };
   
   # samba
   my.samba-server = {

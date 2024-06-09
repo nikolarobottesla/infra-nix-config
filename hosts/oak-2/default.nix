@@ -2,6 +2,7 @@
 let
   hostName = "oak-2";
   userName = "deer";
+  domain = "${hostName}.stork-galaxy.ts.net";
   userSrv = "/home/${userName}/srv";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
@@ -83,11 +84,14 @@ in
 
   my.nginx = {
     enable = true;
-    domain = "oak-2.stork-galaxy.ts.net";
+    domain = domain;
   };
 
-  my.code-server.enable = true;
-  my.code-server.userName = userName;
+  my.code-server = {
+    enable = true;
+    userName = userName;
+    host = domain;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
