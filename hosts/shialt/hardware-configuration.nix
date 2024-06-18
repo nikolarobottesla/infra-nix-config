@@ -32,6 +32,14 @@
   # This will save you money and possibly your life!
   services.thermald.enable = lib.mkDefault true;
 
+  # thunderbolt package for plasma
+  environment.systemPackages = with pkgs; [
+    kdePackages.plasma-thunderbolt
+  ];
+
+  # thunderbolt dock service
+  services.hardware.bolt.enable = true;
+
   # Enable OpenGL
   hardware.opengl = {
     enable = true;  # Should be enabled by wayland
