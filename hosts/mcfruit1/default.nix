@@ -77,10 +77,12 @@ in {
     # "avidemux"  # developer cannot be verified
     "clementine"
     "google-chrome"
+    "nextcloud"
     "rectangle"
     "obsidian"
-    "podman-desktop"
+    # "podman-desktop"
     "qcad"
+    "freecad"
     # "lm-studio"  # requires Arm 64
     # {  not working, keep getting 'try again' popup
     #   name = "wacom-tablet";
@@ -95,7 +97,7 @@ in {
   system.defaults.dock.showhidden = true;
   system.defaults.dock.persistent-apps = [
     "/Applications/Microsoft Outlook.app"
-    "/Applications/Microsoft Teams (work or school).app"
+    "/Applications/Microsoft Teams.app"
     "/Applications/Microsoft OneNote.app"
     "/Applications/OneDrive.app"
     "/Applications/Microsoft Word.app"
