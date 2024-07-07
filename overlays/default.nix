@@ -10,6 +10,7 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+    qemu = prev.qemu.override { smbdSupport = true; };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

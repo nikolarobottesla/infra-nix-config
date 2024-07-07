@@ -105,7 +105,7 @@ in {
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
-      extraGroups = ["wheel" "adbusers"]; # wheel enables ‘sudo’ for the user.
+      extraGroups = ["wheel" "adbusers" "libvirtd" ]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         # autorestic  # declarative backup
         chromium
@@ -146,8 +146,12 @@ in {
       ntfs3g
       # playonlinux
       podman-compose
+      powershell
       # partition-manager
-      quickemu
+      # quickemu
+      quickgui
+      qemu_full
+      (quickemu.override { qemu = qemu_full; })
       # rclone # needs to be systemPackage for systemd.mounts
       snapper-gui # needs services.snapper... to work
       steam-run  # FHS env
@@ -269,6 +273,9 @@ in {
       enable = true;
     };
 
+    # used for quickemu file sharing
+    services.samba.enable = true;
+
     # Open ports in the firewall.
     # networking.firewall.allowedTCPPorts = [ ... ];
     # networking.firewall.allowedUDPPorts = [ ... ];
@@ -280,6 +287,12 @@ in {
       enable = true;
       subvolume = "home";
     };
+
+    # enable libvirt and virt-manager
+    virtualisation.libvirtd.enable = true;
+    programs.virt-manager.enable = true;
+    # for networking have to run `sudo virsh net-autostart default' once
+    # https://nixos.wiki/wiki/Virt-manager
 
     virtualisation = {
       podman = {

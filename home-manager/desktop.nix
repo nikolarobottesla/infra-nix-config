@@ -1,9 +1,19 @@
+# sources: https://github.com/GGG-KILLER/nixos-configs/blob/6c3d1a71890c246e42f268767a5a4d9d8c8a0263/hosts/sora/users/ggg/vscode.nix#L67 - powershell stuff
+
 {
   lib,
   config,
   pkgs,
-  ... }:
-{
+  ... }: let
+  inherit (lib) getExe;
+in {
+  # something for qemu
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
+  };
   programs.firefox.enable = true;
   # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
   programs.firefox.policies = {
@@ -65,11 +75,21 @@
       # ms-vscode.remote-explorer # not available
       ms-vscode-remote.remote-containers
       ms-vscode-remote.remote-ssh
+      ms-vscode.powershell
       # ms-vscode.remote-server # not available
       yzhang.markdown-all-in-one
     ];
     # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
     userSettings = {
+      "powershell.powerShellAdditionalExePaths" = {
+        "PowerShell Core 7 (x64)" = getExe pkgs.powershell;
+      };
+      "powershell.promptToUpdatePowerShell" = false;
+
+      "extensions.autoCheckUpdates" = false;
+      "extensions.autoUpdate" = false;
+      "update.mode" = "none";
+
       "[nix]"."editor.tabSize" = 2;
       "diffEditor.hideUnchangedRegions.enabled" = true;
       "git.autofetch" = true;
