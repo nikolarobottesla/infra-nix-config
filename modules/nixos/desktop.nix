@@ -53,10 +53,11 @@ in {
     # Enable the X11 windowing system.
     services.xserver.enable = true;
 
-    # Enable the Plasma 5 Desktop Environment.
+    # Enable the Plasma 6 Desktop Environment.
     services.displayManager.sddm.enable = true;
-    services.xserver.desktopManager.plasma5.enable = true;
-    services.displayManager.defaultSession = "plasmawayland"; # seems to use wayland no matter what
+    # services.displayManager.sddm.wayland.enable  # experimental
+    services.desktopManager.plasma6.enable = true;
+    services.displayManager.defaultSession = "plasma"; # uses wayland
     # disable KDE indexer because it's preventing sleep
     # https://github.com/NixOS/nixpkgs/issues/63489
     environment = {
@@ -112,8 +113,8 @@ in {
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
-        libreoffice-qt
-        libsForQt5.kdeconnect-kde
+        libreoffice-fresh
+        kdePackages.kdeconnect-kde
         logseq
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
@@ -142,16 +143,16 @@ in {
       glxinfo  # graphics
       hddtemp
       iotop
-      kate
+      kdePackages.kate
       ntfs3g
       # playonlinux
       podman-compose
       powershell
       # partition-manager
-      # quickemu
-      quickgui
+      quickemu
+      # quickgui
       qemu_full
-      (quickemu.override { qemu = qemu_full; })
+      # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
       # rclone # needs to be systemPackage for systemd.mounts
       snapper-gui # needs services.snapper... to work
       steam-run  # FHS env
@@ -267,6 +268,8 @@ in {
         onCalendar = "weekly";
       };
     };
+
+    services.ollama.enable = true;
 
     # Enable the OpenSSH daemon.
     services.openssh = {
