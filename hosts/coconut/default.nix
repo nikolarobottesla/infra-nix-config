@@ -48,9 +48,9 @@ in
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-    # leaving pinentryFlavor default was causing mismatch dependency error
+    # leaving pinentryPackage default was causing mismatch dependency error
     # "curses, tty also caused the same error
-    pinentryFlavor = null;
+    pinentryPackage = null;
   };
 
   my.create_ap = {
