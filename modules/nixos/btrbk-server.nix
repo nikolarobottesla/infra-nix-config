@@ -23,8 +23,12 @@ in {
         ];
       }];
  
-      extraPackages = [pkgs.lz4];  # still needed on the server, got error lz4 command not found
-    }; 
+    };
+
+    environment.systemPackages = with pkgs; [
+      # xz
+      lz4
+    ];
 
   };
 }

@@ -54,5 +54,10 @@ in {
  
     };
 
+    environment.systemPackages = with pkgs; [
+      # xz
+      lz4  # faster
+    ];
+
   };
 }
