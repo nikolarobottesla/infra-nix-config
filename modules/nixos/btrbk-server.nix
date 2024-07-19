@@ -23,7 +23,7 @@ in {
         ];
       }];
  
-      # extraPackages = [pkgs.lz4];  not needed anymore?
+      extraPackages = [pkgs.lz4];  # still needed on the server, got error lz4 command not found
     }; 
 
   };
