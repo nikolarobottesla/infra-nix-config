@@ -16,6 +16,12 @@ in {
       default = "nixos";
     };
 
+    homeStateVersion = mkOption {
+      type = types.str;
+      description = "defaults to 23.11";
+      default = "23.11";
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -132,7 +138,7 @@ in {
       {
         # The state version is required and should stay at the version you
         # originally installed.
-        home.stateVersion = "23.11";
+        home.stateVersion = cfg.homeStateVersion;
       }
     ];
 

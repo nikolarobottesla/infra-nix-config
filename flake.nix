@@ -130,6 +130,14 @@
             }
           ];
       };
+      dark-desk = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            ./hosts/dark-desk
+          ];
+      };
       # wsl
       nixos = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
