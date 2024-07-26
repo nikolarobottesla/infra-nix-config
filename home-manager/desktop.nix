@@ -71,6 +71,7 @@ in {
     enableUpdateCheck = false;
     extensions = with pkgs.vscode-extensions; [
       bbenoist.nix
+      danielsanmedium.dscodegpt
       ms-python.python # pylance and debugger
       # ms-vscode.remote-explorer # not available
       ms-vscode-remote.remote-containers
@@ -81,6 +82,7 @@ in {
     ];
     # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
     userSettings = {
+      "CodeGPT.apiKey" = "Ollama";
       "powershell.powerShellAdditionalExePaths" = {
         "PowerShell Core 7 (x64)" = getExe pkgs.powershell;
       };

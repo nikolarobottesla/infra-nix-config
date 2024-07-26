@@ -1,9 +1,9 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ... }:
-
 with lib; let
   cfg = config.my.desktop;
 in {
@@ -130,6 +130,7 @@ in {
         # restic
         # timeshift
         vlc
+        xboxdrv
       ];
     };
 
@@ -265,6 +266,7 @@ in {
         "org.clementine_player.Clementine"
         "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
+        "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
@@ -276,8 +278,6 @@ in {
         onCalendar = "weekly";
       };
     };
-
-    services.ollama.enable = true;
 
     # Enable the OpenSSH daemon.
     services.openssh = {

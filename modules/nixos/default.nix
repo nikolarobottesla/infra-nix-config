@@ -12,10 +12,12 @@
     ./desktop.nix
     ./dns.nix
     ./jellyfin.nix
+    ./llm-server.nix
     ./nextcloud.nix
     ./nginx.nix
     ./code-server.nix
     ./remote-install.nix
+    ./secureboot.nix
     ./semi-active-av.nix
     ./snapper.nix
     ./tailscale-tls.nix

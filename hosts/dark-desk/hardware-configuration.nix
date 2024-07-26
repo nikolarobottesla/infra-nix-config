@@ -35,6 +35,9 @@
     driSupport32Bit = true;  # default is false, only supported by nvidia/mesa
   };
 
+  # xbox one wireless controller
+  hardware.xpadneo.enable = true;
+
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
 
