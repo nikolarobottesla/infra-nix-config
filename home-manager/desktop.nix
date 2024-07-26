@@ -96,4 +96,21 @@ in {
       # "remote.SSH.useLocalServer" = false;  had this set but don't know why
     };
   };
+
+  # https://github.com/iynaix/dotfiles/blob/96e7056e9ab284731aef4fa278648aed8ecab346/nixos/plasma.nix#L20
+  # set dark theme, adapted from plasma-manager
+  xdg.configFile."autostart/plasma-dark-mode.desktop".text =
+    let
+      plasmaDarkMode = pkgs.writeShellScriptBin "plasma-dark-mode" ''
+        plasma-apply-lookandfeel -a org.kde.breezedark.desktop
+        plasma-apply-desktoptheme breeze-dark
+      '';
+    in
+    ''
+      [Desktop Entry]
+      Type=Application
+      Name=Plasma Dark Mode
+      Exec=${lib.getExe plasmaDarkMode}
+      X-KDE-autostart-condition=ksmserver
+    '';
 }

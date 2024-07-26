@@ -124,6 +124,7 @@ in {
         logseq
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
+        protonup-qt
         rclone
         rpi-imager
         # restic
@@ -247,6 +248,7 @@ in {
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      gamescopeSession.enable = true;
     };
 
     # List services that you want to enable:

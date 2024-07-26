@@ -35,6 +35,17 @@ nixos-rebuild --flake .#coconut-2 \
 
 ```
 
+### setup local
+1. boot nixos
+2. setup disk using disko (setup remote step 3)
+3. install nixos, skip setting a root password
+```bash
+sudo nixos-install --flake --no-root-passwd .#dark-desk
+```
+4. enter-nixos and set user password
+5. make sure any repo changes persist
+6. reboot
+
 ### setup remote
 1. build iso image with root ssh access
 ```bash

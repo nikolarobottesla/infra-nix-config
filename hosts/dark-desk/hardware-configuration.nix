@@ -25,8 +25,8 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.enableAllFirmware = lib.mkDefault true;
 
-  # This will save you money and possibly your life!
-  services.thermald.enable = lib.mkDefault true;
+  # This will save you money and possibly your life! - check CPU support, also it's a desktop so....
+  # services.thermald.enable = lib.mkDefault true;
 
   # Enable OpenGL
   hardware.opengl = {
@@ -49,7 +49,7 @@
     # Enable this if you have graphical corruption issues or application crashes after waking
     # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
     # of just the bare essentials.
-    powerManagement.enable = true;  # when true seems to play in game videos better
+    powerManagement.enable = false;  # when true, floodland game kept re-enumerating display, wouldn't show game after load
 
     # Fine-grained power management. Turns off GPU when not in use.
     # Experimental and only works on modern Nvidia GPUs (Turing or newer).
