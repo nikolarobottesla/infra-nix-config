@@ -36,7 +36,8 @@
   };
 
   # xbox one wireless controller
-  hardware.xpadneo.enable = true;
+  hardware.xone.enable = true; # microsoft wireless dongle
+  # hardware.xpadneo.enable = true; # bluetooth
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
