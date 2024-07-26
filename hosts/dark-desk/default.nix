@@ -30,17 +30,17 @@ in {
   # This setting is usually set to true in configuration.nix
   # generated at installation time. So we force it to false
   # for now.
-  boot.loader.systemd-boot.enable = lib.mkForce false;
-
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
-  };
+#   boot.loader.systemd-boot.enable = lib.mkForce false;
+#
+#   boot.lanzaboote = {
+#     enable = true;
+#     pkiBundle = "/etc/secureboot";
+#   };
 
   time.hardwareClockInLocalTime = true;
 
   # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;  # using lanzaboote
+  boot.loader.systemd-boot.enable = true;  # comment out when using lanzaboote
 
   networking.hostName = device-name; # Define your hostname
 
