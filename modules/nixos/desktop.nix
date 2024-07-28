@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ... }:
@@ -130,7 +129,7 @@ in {
         # restic
         # timeshift
         vlc
-        xboxdrv
+        # xboxdrv # original xbox/xbox360 userspace driver
       ];
     };
 

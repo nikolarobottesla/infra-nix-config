@@ -7,9 +7,10 @@
 with lib; let
   cfg = config.my.llm-server;
 in {
-imports = [
-  "${inputs.nixpkgs-unstable}/nixos/modules/services/misc/open-webui.nix"
-];
+  imports = [
+    "${inputs.nixpkgs-unstable}/nixos/modules/services/misc/open-webui.nix"
+  ];
+  
   options.my.llm-server = {
     enable = mkEnableOption "enable llm-server";
 

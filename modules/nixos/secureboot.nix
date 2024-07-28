@@ -1,14 +1,19 @@
 {
-  lib,
   config,
+  inputs,
+  lib,
   pkgs,
   ... }:
 
 with lib; let
-  cfg = config.my.dns;
+  cfg = config.my.secureboot;
 in {
+  imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
+  ];
+  
   options.my.secureboot = {
-    enable = mkEnableOption "use my dns settings";
+    enable = mkEnableOption "use secureboot";
   };
 
   config = mkIf cfg.enable {

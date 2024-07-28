@@ -11,7 +11,6 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
-    inputs.lanzaboote.nixosModules.lanzaboote
 #     inputs.nixos-hardware.nixosModules.hp-elitebook-830g6
     ./disko-config.nix
     ./hardware-configuration.nix
