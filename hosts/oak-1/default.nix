@@ -55,15 +55,14 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   "electron-25.9.0"  # needed for obsidian on 20240101
-  # ];
+
   sops.secrets = {
     smb-secrets = {
       sopsFile = ./secrets.yaml;
     };
   };
 
+  # for mounting previous server share
   # fileSystems."${userSrv}/<server host name>/media" = {
   #   device = "//<server host name>/media";
   #   fsType = "cifs";
