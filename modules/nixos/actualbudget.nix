@@ -65,7 +65,7 @@ in {
         # ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB = 20;
       };
       # hostname = "<ts domain>";
-      image = "ghcr.io/actualbudget/actual-server:latest";
+      image = "ghcr.io/actualbudget/actual-server:edge";
       ports = ["5006:5006"];
       user = "992:989";
       volumes = ["${cfg.dataDir}/:/data"];
