@@ -23,11 +23,13 @@ in {
       acceleration = false;  # takes a long time to compile
       package = pkgs.unstable.ollama;
     };
-  
-    services.open-webui = {
-      enable = true;
-      package = pkgs.unstable.open-webui;
-    };
+
+    # https://github.com/NixOS/nixpkgs/issues/331056
+    # currently build failing
+    # services.open-webui = {
+    #   enable = true;
+    #   package = pkgs.unstable.open-webui;
+    # };
 
   };
 }

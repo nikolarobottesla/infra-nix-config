@@ -2,8 +2,9 @@
 my nixos configurations, setup to use flakes
 
 ## hosts
-* desktops: 15TH-TURTLE
-* servers: coconut, oak
+* desktops: 15TH-TURTLE, dark-desk, shialt
+* darwin: mcfruit1
+* servers: coconut, oak*
 * WSL: nixos
 
 ## usage
