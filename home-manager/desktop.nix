@@ -27,6 +27,7 @@ in {
       };
       in listToAttrs [
         (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
+        (extension "fakespot-fake-reviews-amazon" "{44df5123-f715-9146-bfaa-c6e8d4461d44}")
         (extension "privacy-badger" "jid1-MnnxcxisBPnSXQ@jetpack")
         (extension "ublock-origin" "uBlock0@raymondhill.net")
         # (extension "tree-style-tab" "treestyletab@piro.sakura.ne.jp")

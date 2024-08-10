@@ -151,6 +151,7 @@ in {
       hddtemp
       iotop
       kdePackages.kate
+      mangohud # add 'mangohud %command%' to steam launch option
       ntfs3g
       # playonlinux
       podman-compose
