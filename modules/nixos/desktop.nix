@@ -129,6 +129,7 @@ in {
         # restic
         # timeshift
         vlc
+        yubioath-flutter
         # xboxdrv # original xbox/xbox360 userspace driver
       ];
     };
@@ -182,9 +183,6 @@ in {
 
     # android platform tools
     programs.adb.enable = true;
-    services.udev.packages = [
-      pkgs.android-udev-rules
-    ];
 
     programs.chromium = {
       enable = true;
@@ -284,6 +282,9 @@ in {
       enable = true;
     };
 
+    # needed for yubikey
+    services.pcscd.enable = true;
+
     # used for quickemu file sharing
     services.samba.enable = true;
 
@@ -298,6 +299,11 @@ in {
       enable = true;
       subvolume = "home";
     };
+
+    services.udev.packages = [
+      pkgs.android-udev-rules
+      pkgs.yubikey-personalization
+    ];
 
     # enable libvirt and virt-manager
     virtualisation.libvirtd.enable = true;
