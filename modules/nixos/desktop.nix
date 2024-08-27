@@ -103,6 +103,10 @@ in {
     };
     hardware.bluetooth.enable = true; # enables support for Bluetooth
     hardware.bluetooth.powerOnBoot = true; # default Bluetooth controller on boot
+    
+    #logitech wireless peripherals
+    hardware.logitech.wireless.enable = true;
+    hardware.logitech.wireless.enableGraphical = true;
 
     # Enable touchpad support (enabled default in most desktopManager).
     services.libinput.enable = true;
