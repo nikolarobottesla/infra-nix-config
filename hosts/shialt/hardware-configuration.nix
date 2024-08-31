@@ -11,6 +11,12 @@
   boot.kernel.sysctl = { "vm.swappiness" = 10;};
   boot.extraModulePackages = [ ];
 
+  # TODO remove once on a new kernel
+  # audio fix for kernel 6.6.46
+  boot.extraModprobeConfig =''
+    options snd-hda-intel dmic_detect=0
+  '';
+
   # TODO: try and then move to nixos-hardware if it is good
   # boot = {
   #   # Divides power consumption by two.
