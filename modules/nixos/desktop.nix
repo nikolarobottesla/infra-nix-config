@@ -119,12 +119,13 @@ in {
       packages = with pkgs; [
         # autorestic  # declarative backup
         chromium
+        gimp-with-plugins
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
         libreoffice-fresh
         kdePackages.kdeconnect-kde
-        logseq
+        # logseq  # 20240906 - uses EOL electron version
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
         protonup-qt
@@ -272,6 +273,7 @@ in {
         "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
+        "com.spotify.Client"
         "com.github.zocker_160.SyncThingy"
         "dev.deedles.Trayscale" # not working
       ];
