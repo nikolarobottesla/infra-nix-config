@@ -134,6 +134,7 @@ in {
         # restic
         # timeshift
         vlc
+        yubikey-manager-qt
         yubioath-flutter
         # xboxdrv # original xbox/xbox360 userspace driver
       ];
