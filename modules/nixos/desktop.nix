@@ -125,6 +125,7 @@ in {
         lapce
         libreoffice-fresh
         kdePackages.kdeconnect-kde
+        kdePackages.partitionmanager
         # logseq  # 20240906 - uses EOL electron version
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
