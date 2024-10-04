@@ -125,7 +125,6 @@ in {
         lapce
         libreoffice-fresh
         kdePackages.kdeconnect-kde
-        kdePackages.partitionmanager
         # logseq  # 20240906 - uses EOL electron version
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
@@ -251,6 +250,7 @@ in {
       enable = true;
       enableSSHSupport = true;
     };
+    programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
