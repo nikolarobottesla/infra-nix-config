@@ -70,6 +70,7 @@ in {
       "15th-turtle" = { id = "4ZHN65B-XEZS64F-GW4JTWO-GBDBZIC-SMNABCN-ASAPGRZ-5XUKLUO-ZMPFJQG"; };
       "d-desk" = { id = "PJLY4GA-KIOBTGV-WDYMTJV-UJKE6NG-CP5DWMI-R3XTDRQ-LEBHRY6-7ICXLAG"; };
       "d-shi" = { id = "PAKP3VS-KF7CEEL-GR44ZIO-IH7TXRC-BUKEXNY-RTBTEM4-NOFX5EF-TSVYOAB"; };
+      "m-phone" = { id = "EN5PJ54-II3PR5J-4O3HFU5-XSTPOUN-4AISVTI-FBPRULF-S2NYIJL-KC23RAN"; };
       "k-phone" = { id = "XXCT5MM-HAPGZUX-KNOL4C4-2Q6IWUR-3R6STHN-IC5OL6C-AYZHM5Z-A23XBA6"; };
       "laptop840" = { id = "Q4MJJUY-A6ILQNI-GF2YZYA-ITQFNMM-EOW4QIZ-HGGG6MJ-E7CZH5G-LQ755AD"; };
       "12th-turtle" = { id = "EKFW33Y-WMNY6H5-CMKS4UU-F7NTXGT-RPN5YEO-JLBBDJM-QYB3UK7-6OEW5A4"; };
@@ -85,7 +86,7 @@ in {
       "music" = {
         id = "zt4nl-ymozz";
         path = "/srv/array0/media/music";
-        devices = [ "15th-turtle" "d-desk" "d-shi" ];
+        devices = [ "15th-turtle" "d-desk" "d-shi" "m-phone"];
         type = "receiveonly";
       };
       "k-cam-p6a" = {
