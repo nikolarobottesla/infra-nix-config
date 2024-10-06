@@ -119,6 +119,7 @@ in {
       packages = with pkgs; [
         # autorestic  # declarative backup
         chromium
+        clementine
         gimp-with-plugins
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
@@ -132,6 +133,7 @@ in {
         rclone
         rpi-imager
         # restic
+        strawberry
         # timeshift
         vlc
         yubikey-manager-qt
@@ -268,14 +270,12 @@ in {
       enable = true;
       packages = [
         "com.calibre_ebook.calibre"
-        "org.clementine_player.Clementine"
         "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
         "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
-        "com.spotify.Client"
         "com.github.zocker_160.SyncThingy"
         "dev.deedles.Trayscale" # not working
       ];
