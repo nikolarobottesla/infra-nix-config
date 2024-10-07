@@ -117,6 +117,7 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["wheel" "adbusers" "libvirtd" ]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
+        _7zz  # 7zip
         # autorestic  # declarative backup
         chromium
         clementine
