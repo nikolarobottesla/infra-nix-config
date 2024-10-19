@@ -82,6 +82,7 @@ in {
       # "z /srv/array0 0750 deer users"
       # "Z ${cfg.arrayMnt}/media 0775 ${cfg.userName} samba-users"  # ran once in the beginning
       # "Z ${cfg.arrayMnt}/private 0755 ${parent.userName} samba-users"
+      # "Z ${cfg.arrayMnt}/private/duplicati 0755 igor samba-users"  # used to allow samba igor to write
     ];
       
     # https://gist.github.com/vy-let/a030c1079f09ecae4135aebf1e121ea6
