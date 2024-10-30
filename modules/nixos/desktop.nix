@@ -134,6 +134,7 @@ in {
         rclone
         rpi-imager
         # restic
+        # simplex-chat-desktop
         strawberry
         # timeshift
         vlc
