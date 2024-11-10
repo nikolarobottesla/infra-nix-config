@@ -33,6 +33,14 @@ in {
   my.desktop.userName = userName;
   my.desktop.enable = true;
 
+  services.tailscale.useRoutingFeatures = "client";
+  services.tailscale.extraSetFlags = [
+    "--accept-routes"
+  ];
+
+  # disable this service, it fails and thus nixos-rebuild switch takes longer
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
