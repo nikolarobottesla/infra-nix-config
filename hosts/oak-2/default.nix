@@ -75,6 +75,12 @@ in
   my.btrbk-server.enable = true;
 
   services.tailscale.useRoutingFeatures = "client";
+  services.tailscale.extraSetFlags = [
+      "--exit-node=oak-1"
+      "--exit-node-allow-lan-access=true"
+      "--snat-subnet-routes=false"
+      "--advertise-routes=192.168.2.0/24"
+    ];
 
   services.btrfs.autoScrub = {
     enable = true;
@@ -92,6 +98,8 @@ in
     userName = userName;
     host = domain;
   };
+
+  my.dns.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
