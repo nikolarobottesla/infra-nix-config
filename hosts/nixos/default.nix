@@ -8,10 +8,12 @@ let
   device-name = "nixos";
 in
 {
-  imports =
-    [
-      inputs.nixos-wsl.nixosModules.default
-    ];
+  imports = [
+    inputs.nixos-wsl.nixosModules.default
+  ];
+
+  # makes the rebuild work without specifying the cert file
+  security.pki.certificateFiles = [ /mnt/c/ProgramData/tls-ca-bundle.pem ]; # path to your corporate CA bundle
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   wsl.enable = true;
@@ -25,6 +27,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     bun
+    conda
     podman-compose
     python3
     pipenv
