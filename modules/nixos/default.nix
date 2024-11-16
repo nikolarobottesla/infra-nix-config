@@ -23,7 +23,6 @@
     ./tailscale-tls.nix
     ./user.nix
   ];
-
   nix.settings = {
       # Deduplicate and optimize nix store
     auto-optimise-store = true;
@@ -70,6 +69,9 @@
   };
   
   # default services
+
+  # disable this service, it fails and thus nixos-rebuild switch takes longer
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
   # Enable the OpenSSH daemon.
   services.openssh = {
