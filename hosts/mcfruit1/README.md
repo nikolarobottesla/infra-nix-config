@@ -2,6 +2,10 @@
 
 ## setup
 1. install nix using https://github.com/DeterminateSystems/nix-installer
+1. (optional) initialize a flake to check for new defaults including system.stateVersion
+```bash
+nix flake init -t nix-darwin
+```
 2. install nix-darwin, might need to run again after developer tools are installed
 
 ```bash

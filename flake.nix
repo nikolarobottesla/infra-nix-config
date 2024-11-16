@@ -88,6 +88,13 @@
           ./hosts/mcfruit1
         ];
       };
+      "cinnamon-ice" = nix-darwin.lib.darwinSystem {
+        inherit specialArgs;
+        modules = [
+          home-manager.darwinModules.home-manager
+          ./hosts/cinnamon-ice
+        ];
+      };
     };
     nixosConfigurations = let
       # defaultModules = [
