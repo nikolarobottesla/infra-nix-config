@@ -86,16 +86,15 @@ in {
   # ];
   homebrew.casks = [
     # "avidemux"  # developer cannot be verified
+    "bitwarden"
     # "clementine"
     "firefox"
     "google-chrome"
     "libreoffice"
     # "nextcloud"
-    # "rectangle"
-    # "obsidian"
     # "podman-desktop"
-    # "qcad"
-    # "freecad"
+    # "rectangle"
+    "spotify"
     # "lm-studio"  # requires Arm 64
     # {  not working, keep getting 'try again' popup
     #   name = "wacom-tablet";
@@ -107,22 +106,24 @@ in {
   system.defaults.dock.minimize-to-application = true;
   system.defaults.dock.mru-spaces = false;
   # system.defaults.dock.orientation = "left";
-  system.defaults.dock.showhidden = true;
   system.defaults.dock.persistent-apps = [
     # "/Applications/OneDrive.app"
     # "/Applications/Nix Apps/Firefox.app"
     # "/System/Applications/Utilities/Terminal.app"
     "/Applications/Firefox.app"
+    "/Applications/Spotify.app"
     "/Applications/Google Chrome.app"
     "/Applications/Safari.app"
     "/Applications/LibreOffice.app"
     "/System/Applications/System Settings.app"
   ];
+  system.defaults.dock.showhidden = true;
+  system.defaults.dock.tilesize = 50;
 
   system.defaults.SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
   
   system.defaults.NSGlobalDomain."com.apple.trackpad.trackpadCornerClickBehavior" = 1;  # enable right click with trackpad
-  system.defaults.trackpad.Clicking = true;
+  system.defaults.trackpad.Clicking = true;  # doesn't seem to work Sequoia 15.1 Macbook Air M3
   system.defaults.trackpad.TrackpadThreeFingerDrag = true;
   
   services.tailscale.enable = true;
