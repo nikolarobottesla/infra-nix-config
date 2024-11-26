@@ -74,6 +74,7 @@ in {
       "k-phone" = { id = "XXCT5MM-HAPGZUX-KNOL4C4-2Q6IWUR-3R6STHN-IC5OL6C-AYZHM5Z-A23XBA6"; };
       "laptop840" = { id = "Q4MJJUY-A6ILQNI-GF2YZYA-ITQFNMM-EOW4QIZ-HGGG6MJ-E7CZH5G-LQ755AD"; };
       "12th-turtle" = { id = "EKFW33Y-WMNY6H5-CMKS4UU-F7NTXGT-RPN5YEO-JLBBDJM-QYB3UK7-6OEW5A4"; };
+      "cinnamon-ice" = { id = "OAEXK4I-LXC3XUF-4Y57RI7-B3Q7BKO-RBVZWXQ-AGV5CD3-W5MVPXV-EY5Z6QE"; };
       # "device" = { id = "DEVICE-ID-GOES-HERE"; };
     };
 
@@ -98,7 +99,7 @@ in {
       "k-laptop-desktop" = { 
         id = "rehhq-athup";
         path = "/srv/array0/private/k-laptop/desktop";
-        devices = [ "laptop840" "12th-turtle" ];
+        devices = [ "laptop840" "12th-turtle" "cinnamon-ice"] ;
         type = "receiveonly";
       };
       "k-laptop-music" = { 

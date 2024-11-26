@@ -81,8 +81,8 @@ in {
   homebrew.onActivation.cleanup = "zap";  # uninstall app
   homebrew.onActivation.upgrade = true; # upgrade homebrew on system activation
   # homebrew.brews = [
-  #   "podman"
-  #   "podman-compose"
+    # "podman"
+    # "podman-compose"
   # ];
   homebrew.casks = [
     # "avidemux"  # developer cannot be verified
@@ -95,6 +95,9 @@ in {
     # "podman-desktop"
     # "rectangle"
     "spotify"
+    "syncthing"
+    "tailscale"
+    "vlc"
     # "lm-studio"  # requires Arm 64
     # {  not working, keep getting 'try again' popup
     #   name = "wacom-tablet";
@@ -126,7 +129,8 @@ in {
   system.defaults.trackpad.Clicking = true;  # doesn't seem to work Sequoia 15.1 Macbook Air M3
   system.defaults.trackpad.TrackpadThreeFingerDrag = true;
   
-  services.tailscale.enable = true;
+  # using GUI cask instead
+  # services.tailscale.enable = true;
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
