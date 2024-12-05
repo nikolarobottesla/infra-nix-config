@@ -86,13 +86,25 @@ in {
       openFirewall = true;
     };
 
-    # Enable sound.
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
-    hardware.pulseaudio.package = pkgs.pulseaudioFull; # more bluetooth codecs
-    hardware.pulseaudio.extraConfig = "
-      load-module module-switch-on-connect
-    "; # auto switch to BT audio on connect
+
+    # Enable sound
+    # rtkit is optional but recommended
+    # security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+    };
+
+    # old pulse audio stuff
+    # hardware.pulseaudio.enable = true;
+    # hardware.pulseaudio.package = pkgs.pulseaudioFull; # more bluetooth codecs
+    # hardware.pulseaudio.extraConfig = "
+    #   load-module module-switch-on-connect
+    # "; # auto switch to BT audio on connect
 
     # enable bluetooth
     hardware.bluetooth.settings = {

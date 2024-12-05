@@ -32,7 +32,6 @@
   # hardware.graphics = # TODO replace hardware.opengl with this in 24.11
   hardware.opengl = {
     enable = true;  # Should be enabled by wayland
-    driSupport = true; # true by default
     driSupport32Bit = true;  # default is false, only supported by nvidia/mesa
   };
 
