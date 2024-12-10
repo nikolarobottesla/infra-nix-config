@@ -90,6 +90,7 @@ in {
     # "clementine"
     "firefox"
     "google-chrome"
+    "karabiner-elements"
     "libreoffice"
     # "nextcloud"
     # "podman-desktop"
