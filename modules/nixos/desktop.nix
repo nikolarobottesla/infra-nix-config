@@ -59,8 +59,9 @@ in {
     services.xserver.enable = true;
 
     # Enable the Plasma 6 Desktop Environment.
-    services.displayManager.sddm.enable = true;
-    # services.displayManager.sddm.wayland.enable  # experimental
+    # https://github.com/NixOS/nixpkgs/issues/363797#issuecomment-2558384445
+    # services.displayManager.sddm.enable = true;
+    services.displayManager.sddm.wayland.enable = true; # fix plasma login freeze, see above
     services.desktopManager.plasma6.enable = true;
     services.displayManager.defaultSession = "plasma"; # uses wayland
     # disable KDE indexer because it's preventing sleep
@@ -134,6 +135,13 @@ in {
         chromium
         clementine
         gimp-with-plugins
+        heroic
+        (heroic.override {
+          extraPkgs = pkgs: [
+            pkgs.gamescope
+            pkgs.gamemode
+          ];
+        })
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
@@ -261,17 +269,26 @@ in {
       DefaultPluginsSetting = 2;
     };
 
-    programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
     programs.gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
     };
+
+    programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
+
     programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       gamescopeSession.enable = true;
     };
+
+    # To make sure Steam starts a game with GameMode, right click the game, 
+    # select Properties..., then Launch Options and enter:
+    # gamemoderun %command%
+
+    programs.gamescope.enable = true;
+    programs.gamemode.enable = true;
 
     # List services that you want to enable:
 
