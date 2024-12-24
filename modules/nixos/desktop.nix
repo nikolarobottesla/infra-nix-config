@@ -60,7 +60,7 @@ in {
 
     # Enable the Plasma 6 Desktop Environment.
     # https://github.com/NixOS/nixpkgs/issues/363797#issuecomment-2558384445
-    # services.displayManager.sddm.enable = true;
+    services.displayManager.sddm.enable = true;  # needed or else login screen is just nix icon and you have to type blind
     services.displayManager.sddm.wayland.enable = true; # fix plasma login freeze, see above
     services.desktopManager.plasma6.enable = true;
     services.displayManager.defaultSession = "plasma"; # uses wayland
