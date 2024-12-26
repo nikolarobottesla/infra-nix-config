@@ -19,7 +19,8 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.5.1";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    nix-gaming.url = "github:fufexan/nix-gaming";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +40,7 @@
     nixpkgs-unstable,
     nix-darwin,
     nix-flatpak,
+    nix-gaming,
     nix-homebrew,
     sops-nix,
     vscode-server,

@@ -29,10 +29,9 @@
   # services.thermald.enable = lib.mkDefault true;
 
   # Enable OpenGL
-  # hardware.graphics = # TODO replace hardware.opengl with this in 24.11
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;  # Should be enabled by wayland
-    driSupport32Bit = true;  # default is false, only supported by nvidia/mesa
+    enable32Bit = true;  # default is false, only supported by nvidia/mesa
   };
 
   # xbox one wireless controller

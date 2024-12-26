@@ -276,6 +276,12 @@ in {
 
     programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
 
+    # nix-gaming cache
+    nix.settings = {
+      substituters = ["https://nix-gaming.cachix.org"];
+      trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
+    };
+
     programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
     programs.steam = {
       enable = true;
@@ -307,6 +313,7 @@ in {
         "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
+        "com.github.Matoking.protontricks"
         "com.github.zocker_160.SyncThingy"
         "dev.deedles.Trayscale" # not working
       ];
