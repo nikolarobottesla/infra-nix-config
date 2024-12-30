@@ -128,7 +128,7 @@ in {
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
-      extraGroups = ["wheel" "adbusers" "libvirtd" ]; # wheel enables ‘sudo’ for the user.
+      extraGroups = ["wheel" "adbusers" "libvirtd" "gamemode"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
         # autorestic  # declarative backup
@@ -289,12 +289,18 @@ in {
       gamescopeSession.enable = true;
     };
 
+    programs.gamescope.enable = true;
+
     # To make sure Steam starts a game with GameMode, right click the game, 
     # select Properties..., then Launch Options and enter:
     # gamemoderun %command%
-
-    programs.gamescope.enable = true;
-    programs.gamemode.enable = true;
+    programs.gamemode = {
+      enable = true;
+      settings.custom = {
+        start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
+        end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+      };
+    };
 
     # List services that you want to enable:
 
