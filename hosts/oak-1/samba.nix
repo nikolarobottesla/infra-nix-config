@@ -92,31 +92,31 @@ in {
       # Required for samba to register mDNS records for auto discovery 
       # See https://github.com/NixOS/nixpkgs/blob/592047fc9e4f7b74a4dc85d1b9f5243dfe4899e3/pkgs/top-level/all-packages.nix#L27268
       enable = true;
-      securityType = "user";
       openFirewall = true;
-      extraConfig = ''
-        browsable = yes
-        workgroup = WORKGROUP
-        server string = ${config.networking.hostName}
-        netbios name = ${config.networking.hostName}
-        # use sendfile = yes
-        server min protocol = SMB3
-        # server smb encrypt = required
-        # https://github.com/tailscale/tailscale/issues/6856#issuecomment-1485385748
-        # these next 2 are for tailscale
-        interfaces = lo eno1
-        bind interfaces only = yes 
-        # note: localhost is the ipv6 localhost ::1
-        hosts allow = 192.168.1.0 127.0.0.1 localhost 100.0
-        hosts deny = 0.0.0.0/0
-        guest account = nobody
-        map to guest = bad user
-        read only = no
-        guest ok = no
-        create mask = 0644
-        directory mask = 0755
-      '';
-      shares = {
+      settings = {
+        global = {
+          browsable = "yes";
+          workgroup = "WORKGROUP";
+          security = "user";
+          "server string" = config.networking.hostName;
+          "netbios name" = config.networking.hostName;
+          # "use sendfile" = "yes";
+          "server min protocol" = "SMB3";
+          # "server smb encrypt" = "required";
+          # https://github.com/tailscale/tailscale/issues/6856#issuecomment-1485385748
+          # these next 2 are for tailscale
+          interfaces = "lo eno1";
+          # "bind interfaces only" = "yes"; # doesn't seem to be an available option anymore 20241200
+          # note: localhost is the ipv6 localhost ::1
+          "hosts allow" = "192.168.1.0 127.0.0.1 localhost 100.0";
+          "hosts deny" = "0.0.0.0/0";
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
+          "read only" = "no";
+          "guest ok" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+        };
         media = {
           path = "${cfg.arrayMnt}/media";
           "read only" = "yes";
