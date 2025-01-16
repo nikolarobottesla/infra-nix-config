@@ -71,16 +71,17 @@ in
   };
 
   # List services that you want to enable:
-
+  
   my.btrbk-server.enable = true;
 
-  services.tailscale.useRoutingFeatures = "client";
-  services.tailscale.extraSetFlags = [
-      "--exit-node=oak-1"
-      "--exit-node-allow-lan-access=true"
-      "--snat-subnet-routes=false"
-      "--advertise-routes=192.168.2.0/24"
-    ];
+  # maybe broke networking, test in person with time
+  # services.tailscale.useRoutingFeatures = "client";
+  # services.tailscale.extraSetFlags = [
+  #     "--exit-node=100.92.38.20"
+  #     "--exit-node-allow-lan-access=true"
+  #     "--snat-subnet-routes=false"
+  #     "--advertise-routes=192.168.2.0/24"
+  #   ];
 
   services.btrfs.autoScrub = {
     enable = true;
