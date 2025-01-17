@@ -75,6 +75,7 @@ in
   my.btrbk-server.enable = true;
 
   # maybe broke networking, test in person with time
+  # nevermind, it was probably my.dns
   # services.tailscale.useRoutingFeatures = "client";
   # services.tailscale.extraSetFlags = [
   #     "--exit-node=100.92.38.20"
@@ -100,7 +101,7 @@ in
     host = domain;
   };
 
-  my.dns.enable = true;
+  # my.dns.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -56,8 +56,9 @@ nix build .#image.oak
 3. use disko to format and mount
 ```bash
 # https://github.com/nix-community/disko/blob/master/docs/quickstart.md
+# fresh install (disks overwrite)
 nano /tmp/disko-config.nix  # paste config
-nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /tmp/disko-config.nix
+nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode destroy,format,mount /tmp/disko-config.nix
 ```
 4. comment in/modify disko-config as necessary e.g. USB disk location and keyFile usage
 5. run nix config, check hardware-configuration.nix and update your build config if necessary
