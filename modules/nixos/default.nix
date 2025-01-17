@@ -71,8 +71,9 @@
   # default services
 
   # disable this service, it fails and thus nixos-rebuild switch takes longer
-  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
-
+  # might be working now 1/17/25, code-server can start too quickly and fails its 5 tries before network is up
+  # systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+  
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
