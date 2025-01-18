@@ -88,11 +88,11 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    cifs-utils  # needed for domain name resolution using cifs(samba)
     e2fsprogs
     hddtemp
     iotop
     podman-compose
+    podman-tui
     smartmontools
     update-containers
   ];

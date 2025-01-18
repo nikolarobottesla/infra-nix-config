@@ -154,5 +154,9 @@ in {
     };
 
     networking.firewall.enable = lib.mkDefault true;
+
+    environment.systemPackages = with pkgs; [
+      cifs-utils  # needed for domain name resolution using cifs(samba)
+    ];
   };
 }
