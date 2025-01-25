@@ -42,7 +42,6 @@ in
   networking.hostName = "${ hostName }"; # Define your hostname.
   networking.wireless.enable = false;
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;  # often fails on rebuild switch
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
