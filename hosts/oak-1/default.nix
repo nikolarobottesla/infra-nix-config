@@ -20,6 +20,8 @@ let
       do
         $SUDO ${pkgs.podman}/bin/podman pull $image
       done
+
+      $SUDO ${pkgs.podman}/bin/podman restart --all
   '';
 in
 {
@@ -197,6 +199,12 @@ in
 
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
+
+      # remove unused images 
+      autoPrune = {
+        enable = true;
+        flags = [ "--all" ];
+      };
     };
   };
 
