@@ -1,5 +1,6 @@
 # generate key: cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age
 keys:
+  - &infra-nix-sops age1etaq0gmq42u7ad43ht9taapaw6vr9td7g0fs7pustcuv0zptv9vqrgqcck
   - &15turtle_igor age1nda42499l5x33lcw896zvlk0szfpsx6t8jdwgkckttvefx2cpduqzly5p6
   - &15turtle age1edh29afu25qh4qph0usphz360tewyw3n4z5jn5vqle29m4xl7umsf4my5c
   - &oak-1 age1usrwpke8edazf8ps3lnfd330xn6tnuhdx064lu2u73dxsmp2e3uswlc2l2
@@ -9,6 +10,7 @@ creation_rules:
   - path_regex: modules/nixos/secrets+\.(yaml|json|env|ini)$
     key_groups:
       - age:
+        - *infra-nix-sops 
         - *15turtle_igor
         - *15turtle
         - *oak-1
@@ -17,15 +19,18 @@ creation_rules:
   - path_regex: hosts/coconut/secrets-coconut-2+\.(yaml|json|env|ini)$
     key_groups:
       - age:
+        - *infra-nix-sops 
         - *15turtle_igor
         - *coconut-2
   - path_regex: hosts/coconut/secrets-coconut-3+\.(yaml|json|env|ini)$
     key_groups:
       - age:
+        - *infra-nix-sops 
         - *15turtle_igor
         - *coconut-3
   - path_regex: hosts/oak-1/secrets+\.(yaml|json|env|ini)$
     key_groups:
       - age:
+        - *infra-nix-sops 
         - *15turtle_igor
         - *oak-1
