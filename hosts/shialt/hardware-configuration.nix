@@ -47,9 +47,9 @@
   services.hardware.bolt.enable = true;
 
   # Enable OpenGL
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;  # Should be enabled by wayland
-    driSupport32Bit = true;  # default is false, only supported by nvidia/mesa
+    enable32Bit = true;  # default is false, only supported by nvidia/mesa
   };
 
   # Load nvidia driver for Xorg and Wayland
