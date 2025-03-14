@@ -62,10 +62,16 @@ in {
         mkdir -p "${cfg.certDir}"
 
         DOMAIN=${domainExpression}
+        CERT_FILE="${cfg.certDir}/cert.crt"
+        KEY_FILE="${cfg.certDir}/key.key"
+
+        # saved cert and key files don't seem to get updated when expired so removing the files
+        rm -f "$CERT_FILE"
+        rm -f "$KEY_FILE"
 
         ${pkgs.tailscale}/bin/tailscale cert \
-          --cert-file "${cfg.certDir}/cert.crt" \
-          --key-file "${cfg.certDir}/key.key" \
+          --cert-file "$CERT_FILE" \
+          --key-file "$KEY_FILE" \
           "$DOMAIN"
 
         chown -R tailscale-tls:tailscale-tls "${cfg.certDir}"
@@ -84,7 +90,7 @@ in {
       timerConfig = {
         OnCalendar = "weekly";
         Persistent = "true";
-        Unit = "schedule-test.service";
+        Unit = "tailscale-tls.service";
       };
     };
   };
