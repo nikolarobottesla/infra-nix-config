@@ -11,6 +11,7 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
+    inputs.nix-gaming.nixosModules.platformOptimizations
 #     inputs.nixos-hardware.nixosModules.hp-elitebook-830g6
     ./disko-config.nix
     ./hardware-configuration.nix
@@ -39,6 +40,9 @@ in {
   
   my.desktop.userName = userName;
   my.desktop.enable = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
+  programs.steam.platformOptimizations.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
