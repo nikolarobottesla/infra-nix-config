@@ -46,10 +46,6 @@ in {
     systemd.tmpfiles.rules = [
       # "d /directory/to/create mode user group"
       "d ${cfg.dataDir} 0755 actualbudget actualbudget"
-      #copy cert, symlinks are a challenge in mounted host directories
-      # https://stackoverflow.com/questions/38485607/mount-host-directory-with-a-symbolic-link-inside-in-docker-container#40322275
-      "C+ ${cfg.dataDir}/cert.crt 0640 actualbudget actualbudget - ${cfg.sslCertificate}"
-      "C+ ${cfg.dataDir}/key.key 0640 actualbudget actualbudget - ${cfg.sslCertificateKey}"
     ];
 
     virtualisation.oci-containers.containers.actualbudget = {
@@ -76,5 +72,38 @@ in {
     #   # forceSSL = true;
     #   # useACMEHost = "stork-galaxy.ts.net";
     # };
+
+    systemd.services.actual-tls = {
+      description = "Copy Tailsscale tls into Actual Budget volume folder";
+      #copy cert, symlinks are a challenge in mounted host directories5006
+      # https://stackoverflow.com/questions/38485607/mount-host-directory-with-a-symbolic-link-inside-in-docker-container#40322275
+
+      # not sure if it starts after or during
+      after = ["tailscale-tls.service"];
+      wantedBy = ["tailscale-tls.service"];
+
+      serviceConfig.Type = "oneshot";
+      script = ''
+        DIRECTORY="${cfg.dataDir}"
+        if [ ! -d "$DIRECTORY" ]; then
+          echo "$DIRECTORY does not exist."
+          mkdir "$DIRECTORY"
+          chmod 0755 "$DIRECTORY"
+          echo "$DIRECTORY created"
+        fi
+
+        CERT_FILE="$DIRECTORY/cert.crt"
+        KEY_FILE="$DIRECTORY/key.key"
+
+        rm -f "$CERT_FILE"
+        rm -f "$KEY_FILE"
+
+        cp "${cfg.sslCertificate}" "$CERT_FILE"
+        cp "${cfg.sslCertificateKey}" "$KEY_FILE"
+
+        chown actualbudget:actualbudget "$CERT_FILE" "$KEY_FILE"
+        chmod 0640 "$CERT_FILE" "$KEY_FILE"
+      '';
+    };
   };
 }
