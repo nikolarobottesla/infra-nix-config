@@ -15,21 +15,12 @@ in {
       default = "nixos";
     };
 
-    homeStateVersion = mkOption {
-      type = types.str;
-      description = "defaults to 23.11";
-      default = "23.11";
-    };
-
   };
 
   config = mkIf cfg.enable {
 
     boot.loader.efi.canTouchEfiVariables = true;
     boot.supportedFilesystems = ["ntfs"];
-
-    # seems to build faster with it commented in
-    boot.binfmt.emulatedSystems = ["aarch64-linux"]; # not sure if it's needed for flake method
 
     # enable clamav with services
     semi-active-av.enable = true;
@@ -74,10 +65,6 @@ in {
       };
     };
 
-    # Configure keymap in X11
-    #   services.xserver.xkb.layout = "us";
-    # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
     # Enable CUPS to print documents.
     services.printing.enable = true;
     # Enable autodiscovery of network printers
@@ -86,7 +73,6 @@ in {
       nssmdns4 = true;
       openFirewall = true;
     };
-
 
     # Enable sound
     # rtkit is optional but recommended
@@ -99,13 +85,6 @@ in {
       # If you want to use JACK applications, uncomment this
       #jack.enable = true;
     };
-
-    # old pulse audio stuff
-    # hardware.pulseaudio.enable = true;
-    # hardware.pulseaudio.package = pkgs.pulseaudioFull; # more bluetooth codecs
-    # hardware.pulseaudio.extraConfig = "
-    #   load-module module-switch-on-connect
-    # "; # auto switch to BT audio on connect
 
     # enable bluetooth
     hardware.bluetooth.settings = {
@@ -135,14 +114,13 @@ in {
         chromium
         clementine
         gimp-with-plugins
-        # 20250521 using EOL electron
-        # heroic
-        # (heroic.override {
-        #   extraPkgs = pkgs: [
-        #     pkgs.gamescope
-        #     pkgs.gamemode
-        #   ];
-        # })
+        heroic
+        (heroic.override {
+          extraPkgs = pkgs: [
+            pkgs.gamescope
+            pkgs.gamemode
+          ];
+        })
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
@@ -165,16 +143,6 @@ in {
       ];
     };
 
-    home-manager.users."${cfg.userName}" = lib.mkMerge [
-      (import ../../home-manager/home.nix)
-      (import ../../home-manager/desktop.nix)
-      {
-        # The state version is required and should stay at the version you
-        # originally installed.
-        home.stateVersion = cfg.homeStateVersion;
-      }
-    ];
-
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [
@@ -194,7 +162,7 @@ in {
       qemu_full
       # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
       # rclone # needs to be systemPackage for systemd.mounts
-      # unstable.rkdeveloptool-pine64
+      unstable.rkdeveloptool-pine64
       snapper-gui # needs services.snapper... to work
       steam-run  # FHS env
       tailscale
