@@ -28,8 +28,8 @@ in {
     boot.loader.efi.canTouchEfiVariables = true;
     boot.supportedFilesystems = ["ntfs"];
 
-    # seems to build faster with it commented in
-    boot.binfmt.emulatedSystems = ["aarch64-linux"]; # not sure if it's needed for flake method
+    # seems to build for arm faster from x86 with it commented in
+    # boot.binfmt.emulatedSystems = ["aarch64-linux"]; # not sure if it's needed for flake method
 
     # enable clamav with services
     semi-active-av.enable = true;
@@ -128,21 +128,13 @@ in {
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
-      extraGroups = ["wheel" "adbusers" "libvirtd" "gamemode"]; # wheel enables ‘sudo’ for the user.
+      extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
         # autorestic  # declarative backup
         chromium
-        clementine
+        # clementine
         gimp-with-plugins
-        # 20250521 using EOL electron
-        # heroic
-        # (heroic.override {
-        #   extraPkgs = pkgs: [
-        #     pkgs.gamescope
-        #     pkgs.gamemode
-        #   ];
-        # })
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
@@ -151,7 +143,6 @@ in {
         # logseq  # 20240906 - uses EOL electron version
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
-        protonup-qt
         rclone
         rpi-imager
         # restic
@@ -161,7 +152,6 @@ in {
         vlc
         yubikey-manager-qt
         yubioath-flutter
-        # xboxdrv # original xbox/xbox360 userspace driver
       ];
     };
 
@@ -183,9 +173,7 @@ in {
       hddtemp
       iotop
       kdePackages.kate
-      mangohud # add 'mangohud %command%' to steam launch option
       ntfs3g
-      # playonlinux
       podman-compose
       powershell
       # partition-manager
@@ -196,7 +184,6 @@ in {
       # rclone # needs to be systemPackage for systemd.mounts
       # unstable.rkdeveloptool-pine64
       snapper-gui # needs services.snapper... to work
-      steam-run  # FHS env
       tailscale
       vulkan-tools  # graphics
       wayland-utils  # graphics
@@ -278,31 +265,7 @@ in {
 
     programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
 
-    # nix-gaming cache
-    nix.settings = {
-      substituters = ["https://nix-gaming.cachix.org"];
-      trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
-    };
-
     programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
-    programs.steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      gamescopeSession.enable = true;
-    };
-
-    programs.gamescope.enable = true;
-
-    # To make sure Steam starts a game with GameMode, right click the game, 
-    # select Properties..., then Launch Options and enter:
-    # gamemoderun %command%
-    programs.gamemode = {
-      enable = true;
-      settings.custom = {
-        start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-        end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
-      };
-    };
 
     # List services that you want to enable:
 
@@ -317,11 +280,11 @@ in {
         "com.calibre_ebook.calibre"
         "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
+        # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
-        "com.github.Matoking.protontricks"
         "com.github.zocker_160.SyncThingy"
         "dev.deedles.Trayscale" # not working
       ];
