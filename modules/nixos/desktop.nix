@@ -132,7 +132,8 @@ in {
       packages = with pkgs; [
         _7zz  # 7zip
         # autorestic  # declarative backup
-        chromium
+        brave
+        # chromium
         # clementine
         gimp-with-plugins
         hunspell # spell check in libreoffice
