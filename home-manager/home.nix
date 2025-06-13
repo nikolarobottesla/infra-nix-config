@@ -62,6 +62,17 @@
     userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
   };
 
+  # configure a .condarc file in .conda folder
+  home.file.".conda/.condarc".text =
+    ''
+      channels:
+        - conda-forge
+      envs_dirs:
+        - /home/${config.home.username}/.conda/envs
+      pkgs_dirs:
+        - /home/${config.home.username}/.conda/pkgs
+    '';
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 

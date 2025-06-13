@@ -26,22 +26,22 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    unstable.brave
     bun
-    conda
+    unstable.mamba-cpp
     podman-compose
-    python3
-    pipenv
+    # python3
+    # pipenv
+    unstable.vscode-fhs
+    unstable.zellij
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  #   # leaving pinentryPackage default was causing mismatch dependency error
-  #   # "curses, tty also caused the same error
-  #   pinentryPackage = null;
-  # };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # List services that you want to enable:
   services.tailscale.enable = false;
