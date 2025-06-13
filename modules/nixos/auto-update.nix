@@ -34,14 +34,16 @@ in {
     system.autoUpgrade = {
         enable = true;
         allowReboot = true;
-        rebootWindow = {
-            lower = "03:00";
-            upper = "06:00";
-        };
+        dates = "02:00";  # every day at 2AM
         flags = cfg.flags;
         flake = cfg.flake;
-        dates = "02:00";
+        operation = "boot";
         randomizedDelaySec = "45min";
+        # rebuild needs to complete within the reboot window to reboot
+        rebootWindow = {
+            lower = "02:00";
+            upper = "06:00";
+        };
     };
 
   };

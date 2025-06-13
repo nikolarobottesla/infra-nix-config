@@ -23,7 +23,8 @@ in {
       extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     };
 
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    # # already in default.nix
+    # nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
     networking.hostName = "${ cfg.hostName }"; # Define your hostname.
 
@@ -31,7 +32,7 @@ in {
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOC+HHp89/1OdTo5dEiBxE3knDSCs9WDg6qIXPitBC83 15TH-TURTLE"
     ];
 
-    # # using default instead
+    # # already in default.nix
     # environment.systemPackages = with pkgs; [
     #   git
     #   htop
@@ -42,13 +43,14 @@ in {
     #   wget
     # ];
 
-    # Enable the OpenSSH daemon.
-    services.openssh = {
-      enable = true;
-      # require public key authentication for better security
-      settings.PasswordAuthentication = false;
-      settings.KbdInteractiveAuthentication = false;
-      #settings.PermitRootLogin = "yes";
-    };
+    # # enabled in default.nix
+    # # Enable the OpenSSH daemon.
+    # services.openssh = {
+    #   enable = true;
+    #   # require public key authentication for better security
+    #   settings.PasswordAuthentication = false;
+    #   settings.KbdInteractiveAuthentication = false;
+    #   #settings.PermitRootLogin = "yes";
+    # };
   };
 }

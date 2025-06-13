@@ -10,6 +10,7 @@
     ./btrbk-server.nix
     ./create_ap.nix
     ./desktop.nix
+    ./gaming.nix
     ./dns.nix
     ./jellyfin.nix
     ./llm-server.nix

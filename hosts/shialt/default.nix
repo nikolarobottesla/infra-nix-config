@@ -40,10 +40,12 @@ in {
   
   my.desktop.userName = userName;
   my.desktop.enable = true;
+  my.gaming.userName = userName;
+  my.gaming.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
   programs.steam.platformOptimizations.enable = true;
-
+  
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.

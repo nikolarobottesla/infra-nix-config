@@ -15,21 +15,12 @@ in {
       default = "nixos";
     };
 
-    homeStateVersion = mkOption {
-      type = types.str;
-      description = "defaults to 23.11";
-      default = "23.11";
-    };
-
   };
 
   config = mkIf cfg.enable {
 
     boot.loader.efi.canTouchEfiVariables = true;
     boot.supportedFilesystems = ["ntfs"];
-
-    # seems to build for arm faster from x86 with it commented in
-    # boot.binfmt.emulatedSystems = ["aarch64-linux"]; # not sure if it's needed for flake method
 
     # enable clamav with services
     semi-active-av.enable = true;
@@ -74,10 +65,6 @@ in {
       };
     };
 
-    # Configure keymap in X11
-    #   services.xserver.xkb.layout = "us";
-    # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
     # Enable CUPS to print documents.
     services.printing.enable = true;
     # Enable autodiscovery of network printers
@@ -86,7 +73,6 @@ in {
       nssmdns4 = true;
       openFirewall = true;
     };
-
 
     # Enable sound
     # rtkit is optional but recommended
@@ -99,13 +85,6 @@ in {
       # If you want to use JACK applications, uncomment this
       #jack.enable = true;
     };
-
-    # old pulse audio stuff
-    # hardware.pulseaudio.enable = true;
-    # hardware.pulseaudio.package = pkgs.pulseaudioFull; # more bluetooth codecs
-    # hardware.pulseaudio.extraConfig = "
-    #   load-module module-switch-on-connect
-    # "; # auto switch to BT audio on connect
 
     # enable bluetooth
     hardware.bluetooth.settings = {
@@ -128,14 +107,20 @@ in {
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
-      extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
+      extraGroups = ["wheel" "adbusers" "libvirtd" "gamemode"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
         # autorestic  # declarative backup
-        brave
-        # chromium
-        # clementine
+        chromium
+        clementine
         gimp-with-plugins
+        heroic
+        (heroic.override {
+          extraPkgs = pkgs: [
+            pkgs.gamescope
+            pkgs.gamemode
+          ];
+        })
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
@@ -144,6 +129,7 @@ in {
         # logseq  # 20240906 - uses EOL electron version
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
+        protonup-qt
         rclone
         rpi-imager
         # restic
@@ -153,18 +139,9 @@ in {
         vlc
         yubikey-manager-qt
         yubioath-flutter
+        # xboxdrv # original xbox/xbox360 userspace driver
       ];
     };
-
-    home-manager.users."${cfg.userName}" = lib.mkMerge [
-      (import ../../home-manager/home.nix)
-      (import ../../home-manager/desktop.nix)
-      {
-        # The state version is required and should stay at the version you
-        # originally installed.
-        home.stateVersion = cfg.homeStateVersion;
-      }
-    ];
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
@@ -174,7 +151,9 @@ in {
       hddtemp
       iotop
       kdePackages.kate
+      mangohud # add 'mangohud %command%' to steam launch option
       ntfs3g
+      # playonlinux
       podman-compose
       powershell
       # partition-manager
@@ -183,8 +162,9 @@ in {
       qemu_full
       # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
       # rclone # needs to be systemPackage for systemd.mounts
-      # unstable.rkdeveloptool-pine64
+      unstable.rkdeveloptool-pine64
       snapper-gui # needs services.snapper... to work
+      steam-run  # FHS env
       tailscale
       vulkan-tools  # graphics
       wayland-utils  # graphics
@@ -266,7 +246,31 @@ in {
 
     programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
 
+    # nix-gaming cache
+    nix.settings = {
+      substituters = ["https://nix-gaming.cachix.org"];
+      trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
+    };
+
     programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
+    programs.steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      gamescopeSession.enable = true;
+    };
+
+    programs.gamescope.enable = true;
+
+    # To make sure Steam starts a game with GameMode, right click the game, 
+    # select Properties..., then Launch Options and enter:
+    # gamemoderun %command%
+    programs.gamemode = {
+      enable = true;
+      settings.custom = {
+        start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
+        end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+      };
+    };
 
     # List services that you want to enable:
 
@@ -281,11 +285,11 @@ in {
         "com.calibre_ebook.calibre"
         "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
-        # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
+        "com.github.Matoking.protontricks"
         "com.github.zocker_160.SyncThingy"
         "dev.deedles.Trayscale" # not working
       ];
