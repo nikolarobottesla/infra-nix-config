@@ -1,8 +1,13 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ config, inputs, lib, pkgs, options, home-manager, ... }:
+# configuration for WSL 
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  options,
+  home-manager,
+  ... 
+}:
 let
   userName = "nixos";
   device-name = "nixos";
@@ -10,10 +15,17 @@ in
 {
   imports = [
     inputs.nixos-wsl.nixosModules.default
+    # inputs.vscode-server.nixosModules.default
   ];
 
   # makes the rebuild work without specifying the cert file
   security.pki.certificateFiles = [ /mnt/c/ProgramData/tls-ca-bundle.pem ]; # path to your corporate CA bundle
+  
+  # set environment variables
+  environment.variables = {
+    # set the bundle path for python/requests
+    REQUESTS_CA_BUNDLE = "/mnt/c/ProgramData/tls-ca-bundle.pem";  # without qoutes the file is copied to the nix store
+  };
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   wsl.enable = true;
@@ -34,6 +46,7 @@ in
     # pipenv
     unstable.vscode-fhs
     unstable.zellij
+    wslu
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -42,6 +55,9 @@ in
     enable = true;
     enableSSHSupport = true;
   };
+
+  # Run unpatched dynamic binaries on NixOS, e.g. vscode server
+  programs.nix-ld.enable = true;
 
   # List services that you want to enable:
   services.tailscale.enable = false;
@@ -55,7 +71,8 @@ in
   #   #settings.PermitRootLogin = "yes";
   # };
 
-  # enable VScode server support
+  # # enable VScode server support - 20250616 couldn't get working so went with nix-ld
+  # # https://nixos.wiki/wiki/Visual_Studio_Code, 1st time setup is needed on client and host
   # services.vscode-server.enable = true;
   # services.vscode-server.enableFHS = true;
 
