@@ -107,7 +107,7 @@ in {
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
-      extraGroups = ["wheel" "adbusers" "libvirtd" "gamemode"]; # wheel enables ‘sudo’ for the user.
+      extraGroups = ["wheel"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
         # autorestic  # declarative backup
@@ -177,12 +177,6 @@ in {
         # VISUAL = "code --wait";
       };
     };
-
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-
-    # android platform tools
-    programs.adb.enable = true;
 
     programs.chromium = {
       enable = true;
@@ -304,9 +298,6 @@ in {
       enable = true;
     };
 
-    # needed for yubikey
-    services.pcscd.enable = true;
-
     # used for quickemu file sharing
     services.samba.enable = true;
 
@@ -323,28 +314,8 @@ in {
     };
 
     services.udev.packages = [
-      pkgs.android-udev-rules
       pkgs.yubikey-personalization
     ];
-
-    # enable libvirt and virt-manager
-    virtualisation.libvirtd.enable = true;
-    programs.virt-manager.enable = true;
-    # for networking have to run `sudo virsh net-autostart default' once
-    # https://nixos.wiki/wiki/Virt-manager
-
-    virtualisation = {
-      podman = {
-      enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
-
-      # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-      };
-      waydroid.enable = false;
-    };
 
   };
 }
