@@ -135,6 +135,8 @@ in {
         brave
         # chromium
         # clementine
+        devenv
+        gh # github cli
         gimp-with-plugins
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
@@ -151,7 +153,6 @@ in {
         strawberry
         # timeshift
         vlc
-        yubikey-manager-qt
         yubioath-flutter
       ];
     };

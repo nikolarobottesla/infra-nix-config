@@ -72,8 +72,8 @@ in {
   };
   programs.vscode = {
     enable = true;
-    enableUpdateCheck = false;
-    extensions = with pkgs.vscode-extensions; [
+    profiles.default.enableUpdateCheck = false;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
       bbenoist.nix
       danielsanmedium.dscodegpt
       ms-python.python # pylance and debugger
@@ -85,7 +85,7 @@ in {
       yzhang.markdown-all-in-one
     ];
     # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
-    userSettings = {
+    profiles.default.userSettings = {
       "CodeGPT.apiKey" = "Ollama";
       "powershell.powerShellAdditionalExePaths" = {
         "PowerShell Core 7 (x64)" = getExe pkgs.powershell;

@@ -45,6 +45,14 @@ in {
 
   boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
   programs.steam.platformOptimizations.enable = true;
+
+  # programs.appimage = {
+  #   enable = true;
+  #   binfmt = true;
+  # };
+
+  # programs.java.enable = true;
+  # programs.java.binfmt = true;
   
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
