@@ -16,11 +16,14 @@ in
     wants = [ "network-online.target" ];
     after = [ "multi-user.target" ];
 
-    path = [ pkgs.su ];
-    preStart = "${su-c} 'mkdir -p /home/${userName}/${remote-name}'";
+    path = [ pkgs.su pkgs.coreutils];
+
+    preStart = "${su-c} 'fusermount -u /home/${userName}/${remote-name} | cat'
+      ${su-c} 'rm -r /home/${userName}/${remote-name}'
+      ${su-c} 'mkdir -p /home/${userName}/${remote-name}'";
     script = "${su-c} 'rclone mount ${remote-name}: /home/${userName}/${remote-name} --vfs-cache-mode full --allow-other --allow-non-empty'";
     postStop = 
-      "${su-c} 'fusermount -u /home/${userName}/${remote-name}'
+      "${su-c} 'fusermount -u /home/${userName}/${remote-name} | cat'
       ${su-c} 'rmdir /home/${userName}/${remote-name}'";
 
     restartIfChanged = true;

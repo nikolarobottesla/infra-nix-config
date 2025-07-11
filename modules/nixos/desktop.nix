@@ -138,12 +138,12 @@ in {
         devenv
         gh # github cli
         gimp-with-plugins
+        discord
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         lapce
         libreoffice-fresh
         kdePackages.kdeconnect-kde
-        # logseq  # 20240906 - uses EOL electron version
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
         rclone
