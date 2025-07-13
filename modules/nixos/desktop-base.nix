@@ -4,10 +4,10 @@
   pkgs,
   ... }:
 with lib; let
-  cfg = config.my.desktop;
+  cfg = config.my.desktop-base;
 in {
-  options.my.desktop = {
-    enable = mkEnableOption "enable desktop";
+  options.my.desktop-base = {
+    enable = mkEnableOption "enable desktop-base";
 
     userName = mkOption {
       type = types.str;
@@ -110,71 +110,24 @@ in {
       extraGroups = ["wheel"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
-        # autorestic  # declarative backup
-        chromium
-        clementine
-        gimp-with-plugins
-        heroic
-        (heroic.override {
-          extraPkgs = pkgs: [
-            pkgs.gamescope
-            pkgs.gamemode
-          ];
-        })
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
-        lapce
         libreoffice-fresh
         kdePackages.kdeconnect-kde
-        # logseq  # 20240906 - uses EOL electron version
-        # miraclecast  # CLI Wifi-Display/Miracast implementation
         nextcloud-client
-        protonup-qt
         rclone
-        rpi-imager
-        # restic
-        # simplex-chat-desktop
-        strawberry
-        # timeshift
         vlc
-        # xboxdrv # original xbox/xbox360 userspace driver
       ];
     };
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [
-      clinfo  # graphics
-      glxinfo  # graphics
-      hddtemp
-      iotop
       kdePackages.kate
-      mangohud # add 'mangohud %command%' to steam launch option
       ntfs3g
-      # playonlinux
-      podman-compose
-      powershell
-      # partition-manager
-      quickemu
-      # quickgui
-      qemu_full
-      # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
-      # rclone # needs to be systemPackage for systemd.mounts
-      unstable.rkdeveloptool-pine64
       snapper-gui # needs services.snapper... to work
-      steam-run  # FHS env
       tailscale
-      vulkan-tools  # graphics
-      wayland-utils  # graphics
     ];
-
-    environment = {
-      variables = {
-        EDITOR = "code --wait";
-        SYSTEMD_EDITOR = "code --wait";
-        # VISUAL = "code --wait";
-      };
-    };
 
     programs.chromium = {
       enable = true;
@@ -183,14 +136,7 @@ in {
     };
     programs.chromium.extensions = [
       "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
-      "kcgpggonjhmeaejebeoeomdlohicfhce" # Cookie Remover
-      "eimadpbcbfnmbkopoojfekhnkhdbieeh" # Dark Reader
       "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
-      # "aapbdbdomjkkjkaonfhkkikfgjllcleb" # Google Translate
-      "fihnjjcciajhdojfnbdddfaoknhalnja" # I don't care about cookies
-      # "cimiefiiaegbelhefglklhhakcgmhkai" # Plasma integration
-      # "hlepfoohegkhhmjieoechaddaejaokhf" # Refined GitHub
-      # "hipekcciheckooncpjeljhnekcoolahp" # Tabliss
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
     ];
     programs.chromium.extraOpts = {  # 
@@ -236,34 +182,6 @@ in {
       enableSSHSupport = true;
     };
 
-    programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
-
-    # nix-gaming cache
-    nix.settings = {
-      substituters = ["https://nix-gaming.cachix.org"];
-      trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
-    };
-
-    programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
-    programs.steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      gamescopeSession.enable = true;
-    };
-
-    programs.gamescope.enable = true;
-
-    # To make sure Steam starts a game with GameMode, right click the game, 
-    # select Properties..., then Launch Options and enter:
-    # gamemoderun %command%
-    programs.gamemode = {
-      enable = true;
-      settings.custom = {
-        start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-        end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
-      };
-    };
-
     # List services that you want to enable:
 
     services.duplicati = {
@@ -274,16 +192,9 @@ in {
     services.flatpak = {
       enable = true;
       packages = [
-        "com.calibre_ebook.calibre"
         "com.github.tchx84.Flatseal"
-        "io.freetubeapp.FreeTube"
-        "io.gpt4all.gpt4all"
-        "com.github.iwalton3.jellyfin-media-player"
         "md.obsidian.Obsidian"
-        "io.podman_desktop.PodmanDesktop"
-        "com.github.Matoking.protontricks"
         "com.github.zocker_160.SyncThingy"
-        "dev.deedles.Trayscale" # not working
       ];
       update.auto = {
         enable = true;
@@ -296,24 +207,11 @@ in {
       enable = true;
     };
 
-    # used for quickemu file sharing
-    services.samba.enable = true;
-
-    # Open ports in the firewall.
-    # networking.firewall.allowedTCPPorts = [ ... ];
-    # networking.firewall.allowedUDPPorts = [ ... ];
-    # Or disable the firewall altogether.
-    # networking.firewall.enable = false;
-
     # automated home btrfs snapshots
     my.snapper = {
       enable = true;
       subvolume = "home";
     };
-
-    services.udev.packages = [
-      pkgs.yubikey-personalization
-    ];
 
   };
 }

@@ -9,6 +9,8 @@
     ./btrbk-client.nix
     ./btrbk-server.nix
     ./create_ap.nix
+    ./desktop-base.nix
+    ./desktop-dev.nix
     ./desktop.nix
     ./gaming.nix
     ./dns.nix
