@@ -13,7 +13,8 @@ in
     enable = true;
     description = "${remote-name} mounting service";
     # after = [ "remote-fs.target" ];  # would probably also work
-    wants = [ "network-online.target" ];
+    requires = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ]; 
     after = [ "multi-user.target" ];
 
     path = [ pkgs.su pkgs.coreutils];

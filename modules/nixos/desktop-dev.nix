@@ -4,9 +4,9 @@
   pkgs,
   ... }:
 with lib; let
-  cfg = config.my.desktop;
+  cfg = config.my.desktop-dev;
 in {
-  options.my.desktop = {
+  options.my.desktop-dev = {
     enable = mkEnableOption "enable desktop";
 
     userName = mkOption {
