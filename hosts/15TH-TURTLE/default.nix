@@ -30,8 +30,10 @@ in {
 
   networking.hostName = device-name; # Define your hostname
   
-  my.desktop.userName = userName;
-  my.desktop.enable = true;
+  my.desktop-base.userName = userName;
+  my.desktop-dev.userName = userName;
+  my.desktop-base.enable = true;
+  my.desktop-dev.enable = true;
 
   services.tailscale.useRoutingFeatures = "client";
   services.tailscale.extraSetFlags = [

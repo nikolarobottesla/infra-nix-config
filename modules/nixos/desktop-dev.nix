@@ -25,8 +25,6 @@ in {
 
   config = mkIf cfg.enable {
 
-    my.user.userName = cfg.userName;
-
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
       extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
@@ -93,65 +91,15 @@ in {
     # android platform tools
     programs.adb.enable = true;
 
-    programs.chromium = {
-      enable = true;
-      # package = pkgs.ungoogled-chromium;  # home-manager only
-      # also ungoogled-chromium doesn't seem to work with programs.chromium
-    };
     programs.chromium.extensions = [
-      "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
       "kcgpggonjhmeaejebeoeomdlohicfhce" # Cookie Remover
       "eimadpbcbfnmbkopoojfekhnkhdbieeh" # Dark Reader
-      "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
       # "aapbdbdomjkkjkaonfhkkikfgjllcleb" # Google Translate
       "fihnjjcciajhdojfnbdddfaoknhalnja" # I don't care about cookies
       # "cimiefiiaegbelhefglklhhakcgmhkai" # Plasma integration
       # "hlepfoohegkhhmjieoechaddaejaokhf" # Refined GitHub
       # "hipekcciheckooncpjeljhnekcoolahp" # Tabliss
-      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
     ];
-    programs.chromium.extraOpts = {  # 
-      DefaultBrowserSettingEnabled = true;
-
-      # TranslateEnabled = false;
-      # SpellcheckEnabled = false;
-      # SpellCheckServiceEnabled = false;
-      # PrintingEnabled = false;
-      # SearchSuggestEnabled = false;
-      PasswordManagerEnabled = false;
-      # SafeBrowsingEnabled  = false;
-      AutofillAddressEnabled = false;
-      AutofillCreditCardEnabled = false;
-      MetricsReportingEnabled = false;
-      BuiltInDnsClientEnabled = false;
-      # EnableMediaRouter = false;
-      PromotionalTabsEnabled = false;
-      # SyncDisabled = true;
-      # SigninAllowed = false;
-      # AudioCaptureAllowed = false;
-      # VideoCaptureAllowed = false;
-      # SSLErrorOverrideAllowed = false;
-      # AutoplayAllowed = false;
-
-      # 0 = Disable browser sign-in
-      # BrowserSignin = 0;
-
-      #DefaultSearchProviderEnabled = true;
-      #DefaultSearchProviderSearchURL = "https://duckduckgo.com/"
-      #+ "?kae=d&k1=-1&kc=1&kav=1&kd=-1&kh=1&q={searchTerms}";
-
-      # Do not allow any site to show desktop notifications
-      DefaultNotificationsSetting = 2;
-      # Do not allow any site to track the users' physical location
-      DefaultGeolocationSetting = 2;
-      # Block the Flash plugin
-      DefaultPluginsSetting = 2;
-    };
-
-    programs.gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
 
     programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
 
@@ -159,34 +107,15 @@ in {
 
     # List services that you want to enable:
 
-    services.duplicati = {
-      enable = true;
-      user = cfg.userName;
-    };
-
     services.flatpak = {
-      enable = true;
       packages = [
         "com.calibre_ebook.calibre"
-        "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
         # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
-        "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
-        "com.github.zocker_160.SyncThingy"
-        "dev.deedles.Trayscale" # not working
       ];
-      update.auto = {
-        enable = true;
-        onCalendar = "weekly";
-      };
-    };
-
-    # Enable the OpenSSH daemon.
-    services.openssh = {
-      enable = true;
     };
 
     # needed for yubikey
@@ -200,12 +129,6 @@ in {
     # networking.firewall.allowedUDPPorts = [ ... ];
     # Or disable the firewall altogether.
     # networking.firewall.enable = false;
-
-    # automated home btrfs snapshots
-    my.snapper = {
-      enable = true;
-      subvolume = "home";
-    };
 
     services.udev.packages = [
       pkgs.android-udev-rules

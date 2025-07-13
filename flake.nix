@@ -6,10 +6,10 @@
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # Declarative tap management
-    homebrew-core.url = "github:homebrew/homebrew-core";
-    homebrew-core.flake = false;
-    homebrew-cask.url = "github:homebrew/homebrew-cask";
-    homebrew-cask.flake = false;
+    # homebrew-core.url = "github:homebrew/homebrew-core";
+    # homebrew-core.flake = false;
+    # homebrew-cask.url = "github:homebrew/homebrew-cask";
+    # homebrew-cask.flake = false;
     lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
@@ -17,11 +17,11 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # nix-darwin.url = "github:LnL7/nix-darwin";
+    # nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nix-gaming.url = "github:fufexan/nix-gaming";
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    # nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
@@ -31,17 +31,17 @@
     self,
     disko,
     home-manager,
-    homebrew-core,
-    homebrew-cask,
+    # homebrew-core,
+    # homebrew-cask,
     lanzaboote,
     nixos-hardware,
     nixos-wsl,
     nixpkgs,
     nixpkgs-unstable,
-    nix-darwin,
+    # nix-darwin,
     nix-flatpak,
     nix-gaming,
-    nix-homebrew,
+    # nix-homebrew,
     sops-nix,
     vscode-server,
     ...
@@ -52,8 +52,8 @@
       "aarch64-linux"
       "i686-linux"
       "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
+      # "aarch64-darwin"
+      # "x86_64-darwin"
     ];
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
@@ -80,24 +80,24 @@
     # These are usually stuff you would upstream into home-manager
     # homeManagerModules = import ./modules/home-manager;
 
-    darwinConfigurations = let
-      specialArgs = {inherit inputs outputs defaultModules;};
-    in {
-      "3MC02CM4GNMD6N" = nix-darwin.lib.darwinSystem {
-        inherit specialArgs;
-        modules = [
-          home-manager.darwinModules.home-manager
-          ./hosts/mcfruit1
-        ];
-      };
-      "cinnamon-ice" = nix-darwin.lib.darwinSystem {
-        inherit specialArgs;
-        modules = [
-          home-manager.darwinModules.home-manager
-          ./hosts/cinnamon-ice
-        ];
-      };
-    };
+    # darwinConfigurations = let
+    #   specialArgs = {inherit inputs outputs defaultModules;};
+    # in {
+    #   "3MC02CM4GNMD6N" = nix-darwin.lib.darwinSystem {
+    #     inherit specialArgs;
+    #     modules = [
+    #       home-manager.darwinModules.home-manager
+    #       ./hosts/mcfruit1
+    #     ];
+    #   };
+    #   "cinnamon-ice" = nix-darwin.lib.darwinSystem {
+    #     inherit specialArgs;
+    #     modules = [
+    #       home-manager.darwinModules.home-manager
+    #       ./hosts/cinnamon-ice
+    #     ];
+    #   };
+    # };
     nixosConfigurations = let
       # defaultModules = [
       #   ./modules/nixos
