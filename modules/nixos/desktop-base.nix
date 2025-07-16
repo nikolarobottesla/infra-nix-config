@@ -55,6 +55,10 @@ in {
     services.displayManager.sddm.wayland.enable = true; # fix plasma login freeze, see above
     services.desktopManager.plasma6.enable = true;
     services.displayManager.defaultSession = "plasma"; # uses wayland
+    services.displayManager = {
+      autoLogin.enable = true;
+      autoLogin.user = cfg.userName;
+    };
     # disable KDE indexer because it's preventing sleep
     # https://github.com/NixOS/nixpkgs/issues/63489
     environment = {
