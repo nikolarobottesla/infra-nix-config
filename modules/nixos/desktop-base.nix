@@ -110,7 +110,7 @@ in {
       extraGroups = ["wheel"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
-        chromium
+        brave
         gh # github cli
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
@@ -194,8 +194,8 @@ in {
     services.flatpak = {
       enable = true;
       packages = [
-        "com.github.tchx84.Flatseal"
-        "md.obsidian.Obsidian"
+        "com.google.Chrome"
+        "org.mozilla.firefox"
         "com.github.zocker_160.SyncThingy"
       ];
       update.auto = {
@@ -208,7 +208,7 @@ in {
     services.openssh = {
       enable = true;
     };
-
+f
     # automated home btrfs snapshots
     my.snapper = {
       enable = true;

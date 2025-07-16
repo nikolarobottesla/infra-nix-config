@@ -110,10 +110,12 @@ in {
     services.flatpak = {
       packages = [
         "com.calibre_ebook.calibre"
+        "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
         # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
+        "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
       ];
     };

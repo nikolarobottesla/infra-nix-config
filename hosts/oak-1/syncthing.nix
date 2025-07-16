@@ -73,7 +73,7 @@ in {
       "m-phone" = { id = "EN5PJ54-II3PR5J-4O3HFU5-XSTPOUN-4AISVTI-FBPRULF-S2NYIJL-KC23RAN"; };
       "k-phone" = { id = "XXCT5MM-HAPGZUX-KNOL4C4-2Q6IWUR-3R6STHN-IC5OL6C-AYZHM5Z-A23XBA6"; };
       "laptop840" = { id = "Q4MJJUY-A6ILQNI-GF2YZYA-ITQFNMM-EOW4QIZ-HGGG6MJ-E7CZH5G-LQ755AD"; };
-      "12th-turtle" = { id = "EKFW33Y-WMNY6H5-CMKS4UU-F7NTXGT-RPN5YEO-JLBBDJM-QYB3UK7-6OEW5A4"; };
+      "12th-turtle" = { id = "65XCMJ3-72TNTUL-P66NMZP-DEOYSXU-IRXBLPC-OXUMWXF-REI2J56-DZHMIA7"; };
       "cinnamon-ice" = { id = "OAEXK4I-LXC3XUF-4Y57RI7-B3Q7BKO-RBVZWXQ-AGV5CD3-W5MVPXV-EY5Z6QE"; };
       # "device" = { id = "DEVICE-ID-GOES-HERE"; };
     };
@@ -83,6 +83,7 @@ in {
         id = "default";  # needs to be the same for all devices
         path = "/srv/array0/private/sync";  # Which folder to add to Syncthing
         devices = [ "15th-turtle" "d-desk" "d-shi" "laptop840" "12th-turtle" ];  # Which devices to share the folder with
+        type = "receiveonly";
       };
       "music" = {
         id = "zt4nl-ymozz";
