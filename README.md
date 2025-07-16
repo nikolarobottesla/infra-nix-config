@@ -39,14 +39,20 @@ nixos-rebuild --flake .#coconut-2 \
 
 ### setup local
 1. boot nixos
-2. setup disk using disko (setup remote step 3)
-3. install nixos, skip setting a root password
+1. setup disk using disko (setup remote step 3)
+1. generate hardware config (setup remote step 5)
+1. install nixos, skip setting a root password
+* with flakes alraedy enables
 ```bash
-sudo nixos-install --flake --no-root-passwd .#dark-desk
+sudo nixos-install --no-root-passwd --flake .#configname
 ```
-4. enter-nixos and set user password
-5. make sure any repo changes persist
-6. reboot
+* regular iso
+```bash
+sudo nixos-install --option extra-experimental-features 'nix-command flakes' --no-root-passwd --flake .#12TH-TURTLE
+```
+1. nixos-enter and set user password
+1. make sure any repo changes persist
+1. reboot
 
 ### setup remote
 1. build iso image with root ssh access
@@ -62,10 +68,12 @@ nano /tmp/disko-config.nix  # paste config
 nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode destroy,format,mount /tmp/disko-config.nix
 ```
 4. comment in/modify disko-config as necessary e.g. USB disk location and keyFile usage
-5. run nix config, check hardware-configuration.nix and update your build config if necessary
+5. run nix config, check configuration.nix and hardware-configuration.nix and update your build config if necessary
 ```bash
-nixos-generate-config --no-filesystems --root /mnt
+sudo nixos-generate-config --no-filesystems --root /mnt --show-hardware-config  # just look at the hardware
+sudo nixos-generate-config --no-filesystems --root /mnt
 cat /mnt/etc/nixos/hardware-configuration.nix
+cat /mnt/etc/nixos/configuration.nix
 ```
 6. build config for remote, copy it over and install
 ```bash

@@ -110,6 +110,8 @@ in {
       extraGroups = ["wheel"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
+        chromium
+        gh # github cli
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
         libreoffice-fresh

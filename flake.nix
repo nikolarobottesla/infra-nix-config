@@ -106,6 +106,14 @@
       # ];
       specialArgs = {inherit inputs outputs defaultModules;};
     in {
+      "12TH-TURTLE" = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            ./hosts/12TH-TURTLE
+          ];
+      };
       "15TH-TURTLE" = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules =
