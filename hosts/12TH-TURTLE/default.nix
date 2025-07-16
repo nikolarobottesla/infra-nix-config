@@ -14,10 +14,10 @@ in {
     ./disko-config.nix
     ./hardware-configuration.nix
     # comment in after rclone config
-    # (import ../../modules/rclone {
-    #   userName = userName;
-    #   remote-name = "onedrive";
-    # })
+    (import ../../modules/rclone {
+      userName = userName;
+      remote-name = "onedrive";
+    })
   ];
 
   # Use the systemd-boot EFI boot loader.
