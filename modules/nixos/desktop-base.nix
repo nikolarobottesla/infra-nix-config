@@ -208,7 +208,7 @@ in {
     services.openssh = {
       enable = true;
     };
-f
+
     # automated home btrfs snapshots
     my.snapper = {
       enable = true;
