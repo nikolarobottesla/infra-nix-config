@@ -40,6 +40,9 @@ in
   environment.systemPackages = with pkgs; [
     unstable.brave
     bun
+    conda
+    devenv
+    gh
     unstable.mamba-cpp
     podman-compose
     # python3

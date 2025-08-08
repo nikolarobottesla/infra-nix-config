@@ -27,4 +27,7 @@ wsl.defaultUser = "nixos";
 ```bash
 export SSL_CERT_FILE=/mnt/c/ProgramData/tls-ca-bundle.pem
 export NIX_SSL_CERT_FILE=/mnt/c/ProgramData/tls-ca-bundle.pem
+
+# conda/python
+export REQUESTS_CA_BUNDLE=/mnt/c/ProgramData/tls-ca-bundle.pem
 ```
