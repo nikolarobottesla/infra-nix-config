@@ -25,7 +25,7 @@ in {
 
   # must do some manual setup
   # see quickstart on github prior to enabling
-#   my.secureboot.enable = true;
+  my.secureboot.enable = true;
 
   networking.hostName = device-name; # Define your hostname
 
