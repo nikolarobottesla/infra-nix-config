@@ -16,6 +16,11 @@ in {
       default = "home";
     };
 
+    user = mkOption {
+      type = types.str;
+      description = "username";
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -45,7 +50,7 @@ in {
       cleanupInterval = "1d";
       configs."${cfg.subvolume}" = {
         SUBVOLUME = "/${cfg.subvolume}";
-        ALLOW_USERS = [ "igor" ];
+        ALLOW_USERS = [ cfg.user ];
         TIMELINE_CREATE = true;
         TIMELINE_CLEANUP = true;
         TIMELINE_MIN_AGE="1800";

@@ -11,7 +11,6 @@
     ./create_ap.nix
     ./desktop-base.nix
     ./desktop-dev.nix
-    ./desktop.nix
     ./gaming.nix
     ./dns.nix
     ./jellyfin.nix
@@ -77,6 +76,8 @@
   # might be working now 1/17/25, code-server can start too quickly and fails its 5 tries before network is up
   # systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   
+  services.fwupd.enable = true;
+
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;

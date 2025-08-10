@@ -214,6 +214,7 @@ in {
     my.snapper = {
       enable = true;
       subvolume = "home";
+      user = cfg.userName;
     };
 
   };
