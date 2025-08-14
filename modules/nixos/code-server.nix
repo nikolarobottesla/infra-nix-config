@@ -22,27 +22,22 @@ in {
       default = "0.0.0.0";
     };
 
-    hostName = mkOption {
+    hashedPassword = mkOption {
       type = types.str;
-      description = "host name";
-      default = "";
+      description = ''
+          Create the password with: {command}`echo -n 'thisismypassword' | nix run nixpkgs#libargon2 -- "$(head -c 20 /dev/random | base64)" -e`
+        '';
     };
   };
 
   config = mkIf cfg.enable {
-
-    sops.secrets = {
-      code-server-hashed-pass = {
-        sopsFile = ".../${hostName}/secrets.yaml";
-      };
-    };
 
     services.code-server = {
       auth = "password";
       disableTelemetry = true;
       disableUpdateCheck = true;
       enable = true;
-      hashedPassword = builtins.readFile config.sops.secrets.code-server-hashed-pass.path;
+      hashedPassword = hashedPassword;
       user = cfg.userName;
       userDataDir = "/home/${cfg.userName}/.code_server_data";
       host = cfg.host;

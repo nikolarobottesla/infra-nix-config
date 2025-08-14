@@ -151,7 +151,7 @@ in
     enable = true;
     userName = userName;
     host = domain;
-    hostName = hostName;
+    hashedPassword = "$argon2i$v=19$m=4096,t=3,p=1$TU1ySTRTZWRvL3dTaHdsclp1Zm9TZlNVUzhBPQ$s4DNlVzUU0o+TWY84mc9WcFF356mUep1IaQuL0e6f8k";
   };
   
   # samba

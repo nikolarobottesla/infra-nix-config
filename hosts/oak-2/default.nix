@@ -105,7 +105,7 @@ in
     enable = true;
     userName = userName;
     host = domain;
-    hostName = 
+    hashedPassword = "$argon2i$v=19$m=4096,t=3,p=1$SHZwWDdHQWErZ3RjUVpQempVZ2FsWno1dFdnPQ$pGssM4ZiFedwNQivpMamUw6kz/4+wfm8vjxp8MuSy8I";
   };
 
   # my.dns.enable = true;
