@@ -99,6 +99,7 @@ in
     enable = true;
     userName = userName;
     host = domain;
+    hashedPassword = builtins.readFile config.sops.secrets.code-server-hashed-pass.path;
   };
 
   # my.dns.enable = true;

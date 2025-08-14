@@ -4,6 +4,7 @@ keys:
   - &15turtle_igor age1nda42499l5x33lcw896zvlk0szfpsx6t8jdwgkckttvefx2cpduqzly5p6
   - &15turtle age1edh29afu25qh4qph0usphz360tewyw3n4z5jn5vqle29m4xl7umsf4my5c
   - &oak-1 age1usrwpke8edazf8ps3lnfd330xn6tnuhdx064lu2u73dxsmp2e3uswlc2l2
+  - &oak-2 age178d3xvf6s3rgjnrd4qtnxsg6k5y397d6wvxuqa5wa2c6f45tevyqa5n84g
   - &coconut-2 age1umfmqwg48nlkkzn5tpemaffjl2cyvspt7kytzut35t2ckhz57dhs3a0qpk
   - &coconut-3 age1fgt40flf26plzjkrqlak2j03qsa2u6lax9x0z02ekz57c5rjzyss80769v
 creation_rules:
@@ -14,6 +15,7 @@ creation_rules:
         - *15turtle_igor
         - *15turtle
         - *oak-1
+        - *oak-2
         - *coconut-2
         - *coconut-3
   - path_regex: hosts/coconut/secrets-coconut-2+\.(yaml|json|env|ini)$
@@ -34,3 +36,9 @@ creation_rules:
         - *infra-nix-sops 
         - *15turtle_igor
         - *oak-1
+  - path_regex: hosts/oak-2/secrets+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+        - *infra-nix-sops 
+        - *15turtle_igor
+        - *oak-2

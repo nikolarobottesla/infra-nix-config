@@ -21,15 +21,22 @@ in {
       description = "defaults to 0.0.0.0";
       default = "0.0.0.0";
     };
+
+    hashedPassword = mkOption {
+      type = types.str;
+      description = "hashed password for code-server";
+      default = "";
+    };
   };
 
   config = mkIf cfg.enable {
 
     services.code-server = {
-      auth = "none";
+      auth = "password";
       disableTelemetry = true;
       disableUpdateCheck = true;
       enable = true;
+      hashedPassword = cfg.hashedPassword;
       user = cfg.userName;
       userDataDir = "/home/${cfg.userName}/.code_server_data";
       host = cfg.host;
