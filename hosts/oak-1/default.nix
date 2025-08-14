@@ -133,6 +133,7 @@ in
       group = "nextcloud";
     };
   };
+
   my.nextcloud = {
     enable = true;
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
@@ -150,7 +151,7 @@ in
     enable = true;
     userName = userName;
     host = domain;
-    hashedPassword = builtins.readFile config.sops.secrets.code-server-hashed-pass.path;
+    hostName = hostName;
   };
   
   # samba

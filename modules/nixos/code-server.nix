@@ -22,21 +22,27 @@ in {
       default = "0.0.0.0";
     };
 
-    hashedPassword = mkOption {
+    hostName = mkOption {
       type = types.str;
-      description = "hashed password for code-server";
+      description = "host name";
       default = "";
     };
   };
 
   config = mkIf cfg.enable {
 
+    sops.secrets = {
+      code-server-hashed-pass = {
+        sopsFile = ".../${hostName}/secrets.yaml";
+      };
+    };
+
     services.code-server = {
       auth = "password";
       disableTelemetry = true;
       disableUpdateCheck = true;
       enable = true;
-      hashedPassword = cfg.hashedPassword;
+      hashedPassword = builtins.readFile config.sops.secrets.code-server-hashed-pass.path;
       user = cfg.userName;
       userDataDir = "/home/${cfg.userName}/.code_server_data";
       host = cfg.host;

@@ -95,11 +95,17 @@ in
     domain = domain;
   };
 
+  sops.secrets = {
+    code-server-hashed-pass = {
+      sopsFile = ./secrets.yaml;
+    };
+  };
+
   my.code-server = {
     enable = true;
     userName = userName;
     host = domain;
-    hashedPassword = builtins.readFile config.sops.secrets.code-server-hashed-pass.path;
+    hostName = 
   };
 
   # my.dns.enable = true;
