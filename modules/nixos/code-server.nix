@@ -37,7 +37,7 @@ in {
       disableTelemetry = true;
       disableUpdateCheck = true;
       enable = true;
-      hashedPassword = hashedPassword;
+      hashedPassword = cfg.hashedPassword;
       user = cfg.userName;
       userDataDir = "/home/${cfg.userName}/.code_server_data";
       host = cfg.host;
