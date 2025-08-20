@@ -38,8 +38,10 @@ in {
 
   # my.dns.enable = false;
   
-  my.desktop.userName = userName;
-  my.desktop.enable = true;
+  my.desktop-base.userName = userName;
+  my.desktop-base.enable = true;
+  my.desktop-dev.userName = userName;
+  my.desktop-dev.enable = true;
   my.gaming.userName = userName;
   my.gaming.enable = true;
 

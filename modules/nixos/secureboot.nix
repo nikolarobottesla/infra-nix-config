@@ -26,7 +26,9 @@ in {
 
     boot.lanzaboote = {
       enable = true;
-      pkiBundle = "/var/lib/sbctl";
+      # TODO add as variable or fix on old
+      pkiBundle = "/var/lib/sbctl";  # 12th-turtle (new)
+      # pkiBundle = "/etc/secureboot";  # shialt (old)
     };
 
   };
