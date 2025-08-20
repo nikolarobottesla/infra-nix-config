@@ -26,9 +26,9 @@ in {
 
     boot.lanzaboote = {
       enable = true;
-      # TODO add as variable or fix on old
-      pkiBundle = "/var/lib/sbctl";  # 12th-turtle (new)
-      # pkiBundle = "/etc/secureboot";  # shialt (old)
+      # This error: 'Get stub name: No such file or directory (os error 2)'
+      # means you need to migrate your keys: 'sbctl setup --migrate'
+      pkiBundle = "/var/lib/sbctl";
     };
 
   };
