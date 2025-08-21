@@ -296,6 +296,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-master": {
+      "locked": {
+        "lastModified": 1755776958,
+        "narHash": "sha256-Qt/y8So1Rg/1quo8LvkbqRU1+nU6Nt19ZjOcs5+aQMo=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "1a01d22c982fc69956c3dba087d6d22b32b5984b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "master",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1730741070,
@@ -381,6 +397,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix",
         "vscode-server": "vscode-server"

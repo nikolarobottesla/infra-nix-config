@@ -29,7 +29,7 @@ in {
         #     pkgs.gamemode
         #   ];
         # })
-        unstable.nexusmods-app-unfree
+        master.nexusmods-app-unfree
         protonup-qt
         # xboxdrv # original xbox/xbox360 userspace driver
       ];
