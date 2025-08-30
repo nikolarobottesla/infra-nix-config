@@ -39,6 +39,7 @@ in {
         lapce
         kdePackages.kdeconnect-kde
         # miraclecast  # CLI Wifi-Display/Miracast implementation
+        unstable.radicle-tui
         rpi-imager
         # restic
         strawberry

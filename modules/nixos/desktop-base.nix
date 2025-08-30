@@ -112,6 +112,7 @@ in {
       packages = with pkgs; [
         _7zz  # 7zip
         brave
+        ente-desktop
         gh # github cli
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
@@ -129,8 +130,12 @@ in {
       kdePackages.kate
       ntfs3g
       snapper-gui # needs services.snapper... to work
-      tailscale
     ];
+
+    # programs.appimage = {
+    #   enable = true;
+    #   binfmt = true;
+    # };
 
     programs.chromium = {
       enable = true;

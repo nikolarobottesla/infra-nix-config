@@ -48,11 +48,6 @@ in {
   boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
   programs.steam.platformOptimizations.enable = true;
 
-  # programs.appimage = {
-  #   enable = true;
-  #   binfmt = true;
-  # };
-
   # programs.java.enable = true;
   # programs.java.binfmt = true;
   
