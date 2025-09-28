@@ -3,10 +3,9 @@
 {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
-      # inputs.nixos-hardware.nixosModules.deviceName
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.kernel.sysctl = { "vm.swappiness" = 10;};
@@ -17,12 +16,12 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  
+  # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.enableAllFirmware = lib.mkDefault true;
-
+  
   # This will save you money and possibly your life!
   services.thermald.enable = lib.mkDefault true;
-
 }
