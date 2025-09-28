@@ -196,6 +196,14 @@
             ./hosts/oak-2
           ];
       };
+      "pedro" = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            ./hosts/pedro
+          ];
+      };
       rpi4Image = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules =
