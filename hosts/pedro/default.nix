@@ -34,6 +34,15 @@ in {
   my.desktop-base.userName = userName;
   my.desktop-base.enable = true;
 
+  # printer
+  services.printing = { enable = true; drivers = [ pkgs.epson-escpr ]; };
+  # https://nixos.wiki/wiki/Scanners
+  users.users.${userName}.extraGroups = [ "scanner" "lp" ];
+  hardware.sane.enable = true; # enables support for SANE scanners
+  hardware.sane.extraBackends = [ pkgs.epkowa pkgs.epsonscan2 pkgs.sane-airscan ];
+  services.udev.packages = [ pkgs.sane-airscan ];
+  services.ipp-usb.enable=true;
+
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
