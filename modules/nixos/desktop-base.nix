@@ -222,5 +222,8 @@ in {
       user = cfg.userName;
     };
 
+    # auto update
+    system.autoUpgrade.operation = "switch";
+
   };
 }

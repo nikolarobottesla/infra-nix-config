@@ -37,7 +37,7 @@ in {
         dates = "02:00";  # every day at 2AM
         flags = cfg.flags;
         flake = cfg.flake;
-        operation = "boot";
+        operation = lib.mkDefault "boot";
         randomizedDelaySec = "45min";
         # rebuild needs to complete within the reboot window to reboot
         rebootWindow = {
