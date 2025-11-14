@@ -21,8 +21,7 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["gamemode"];
       packages = with pkgs; [
-        # 20250521 using EOL electron
-        heroic
+        master.heroic
         (heroic.override {
           extraPkgs = pkgs: [
             pkgs.gamescope
