@@ -22,13 +22,13 @@ in {
       extraGroups = ["gamemode"];
       packages = with pkgs; [
         # 20250521 using EOL electron
-        # heroic
-        # (heroic.override {
-        #   extraPkgs = pkgs: [
-        #     pkgs.gamescope
-        #     pkgs.gamemode
-        #   ];
-        # })
+        heroic
+        (heroic.override {
+          extraPkgs = pkgs: [
+            pkgs.gamescope
+            pkgs.gamemode
+          ];
+        })
         master.nexusmods-app-unfree
         protonup-qt
         # xboxdrv # original xbox/xbox360 userspace driver
