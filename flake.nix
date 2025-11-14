@@ -10,7 +10,7 @@
     # homebrew-core.flake = false;
     # homebrew-cask.url = "github:homebrew/homebrew-cask";
     # homebrew-cask.flake = false;
-    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.3";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
     nixos-wsl.url = github:nix-community/NixOS-WSL;
