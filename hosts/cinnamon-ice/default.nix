@@ -106,6 +106,7 @@ in {
     # }
   ];
 
+  system.primaryUser = userName;
   system.defaults.dock.autohide = false;
   system.defaults.dock.minimize-to-application = true;
   system.defaults.dock.mru-spaces = false;
@@ -134,7 +135,6 @@ in {
   # services.tailscale.enable = true;
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
   nix.gc.automatic = true;
   # Necessary for using flakes on this system.
