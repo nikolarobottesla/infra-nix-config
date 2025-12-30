@@ -59,8 +59,8 @@
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
-    userName = "nikolarobottesla";
-    userEmail = "13294739+nikolarobottesla@users.noreply.github.com";
+    settings.user.name = "nikolarobottesla";
+    settings.user.email = "13294739+nikolarobottesla@users.noreply.github.com";
   };
 
   # configure a .condarc file in .conda folder

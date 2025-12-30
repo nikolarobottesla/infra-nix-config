@@ -62,7 +62,7 @@ in {
     # $ nix search wget
     environment.systemPackages = with pkgs; [
       clinfo  # graphics
-      glxinfo  # graphics
+      mesa-demos  # graphics
       hddtemp
       iotop
       podman-compose
@@ -110,6 +110,7 @@ in {
 
     services.flatpak = {
       packages = [
+        "com.binarynonsense.acbr" # comic book reader and converter
         "com.calibre_ebook.calibre"
         "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
@@ -134,7 +135,6 @@ in {
     # networking.firewall.enable = false;
 
     services.udev.packages = [
-      pkgs.android-udev-rules
       pkgs.yubikey-personalization
     ];
 
