@@ -65,6 +65,7 @@ in {
       mesa-demos  # graphics
       hddtemp
       iotop
+      unstable.nix-sweep  # clean up old Nix profile generations and left-over garbage collection roots
       podman-compose
       powershell
       # partition-manager
@@ -74,6 +75,7 @@ in {
       # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
       # rclone # needs to be systemPackage for systemd.mounts
       # unstable.rkdeveloptool-pine64
+      unstable.vulnix  # CVE scanner for nix
       vulkan-tools  # graphics
       wayland-utils  # graphics
     ];
