@@ -28,7 +28,7 @@ in {
             pkgs.gamemode
           ];
         })
-        master.nexusmods-app-unfree
+        # master.nexusmods-app-unfree # nexusmods app was discontinued
         protonup-qt
         # xboxdrv # original xbox/xbox360 userspace driver
       ];
