@@ -25,4 +25,6 @@
       config.allowUnfree = true;
     };
   };
+  #TODO: fix the above, this section is causing this warning.
+  # evaluation warning: 'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'
 }

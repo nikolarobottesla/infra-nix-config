@@ -13,7 +13,7 @@
     lanzaboote.url = "github:nix-community/lanzaboote/v1.0.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
-    nixos-wsl.url = github:nix-community/NixOS-WSL;
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -85,7 +85,7 @@
     darwinConfigurations = let
       specialArgs = {inherit inputs outputs defaultModules;};
     in {
-      "3MC02CM4GNMD6N" = nix-darwin.lib.darwinSystem {
+      "3MJXFXK523D2" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;
         modules = [
           home-manager.darwinModules.home-manager

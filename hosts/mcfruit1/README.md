@@ -1,7 +1,8 @@
 # macos 
 
 ## setup
-1. install nix using https://github.com/DeterminateSystems/nix-installer
+1. installed homebrew using self service! - nix-homebrew didn't work, try not installing homebrew or turn off auto migration
+1. install nix using https://github.com/DeterminateSystems/nix-installer - tried lix but had HTTPS errors
 1. (optional) initialize a flake to check for new defaults including system.stateVersion
 ```bash
 nix flake init -t nix-darwin
@@ -10,7 +11,9 @@ nix flake init -t nix-darwin
 
 ```bash
 # first time
-nix run nix-darwin -- switch --flake '.#'
+sudo bash -c '. /etc/profile; nix run nix-darwin -- switch --flake '.#''
+# attempted with lix but still didn't resolve HTTPS errors
+#sudo bash -c '. /etc/profile; export NIX_SSL_CERT_FILE=~/tls-ca-bundle.crt; nix run nix-darwin -- switch --flake '.#''
 
 # rebuild
 darwin-rebuild switch --flake '.#'
