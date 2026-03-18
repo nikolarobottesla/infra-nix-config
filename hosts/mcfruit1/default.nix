@@ -48,7 +48,7 @@ in {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     awscli
-    unstable.bun
+    bun
     # curl # this curl doesn't seem to use system certs
     # darwin.xcode
     gh
