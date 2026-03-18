@@ -48,10 +48,12 @@ in {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     awscli
+    unstable.bun
     # curl # this curl doesn't seem to use system certs
     # darwin.xcode
     gh
     direnv
+    ghostty-bin # macos version of ghostty terminal emulator
     git
     gnupg
     htop
@@ -125,7 +127,8 @@ in {
     "/Applications/Microsoft Excel.app"
     "/Applications/Microsoft PowerPoint.app"
     "/Applications/Visual Studio Code.app"
-    "/System/Applications/Utilities/Terminal.app"
+    # "/System/Applications/Utilities/Terminal.app"
+    "/Applications/Nix Apps/Ghostty.app"
     "/Applications/Firefox.app"
     "/Applications/Safari.app"
     "/Applications/Self Service.app"

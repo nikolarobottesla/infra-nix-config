@@ -28,7 +28,16 @@ https://stackoverflow.com/questions/14527521/brew-doctor-says-warning-usr-local-
 sudo chown -R $(whoami) $(brew --prefix)/*
 ```
 
-5. init and start podman
+5. install conda
+```zsh
+curl -fsSLo Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-$(uname -m).sh"
+bash Miniforge3.sh -b -p "${HOME}/conda"
+source "${HOME}/conda/etc/profile.d/conda.sh"
+conda init
+conda init zsh
+```
+
+6. init and start podman
 https://podman.io/docs/installation
 ```zsh
 podman machine init
