@@ -67,6 +67,11 @@
       ./modules/nixos
       ./modules/home-manager
     ];
+    defaultModulesDarwin = [
+      home-manager.darwinModules.home-manager
+      nix-homebrew.darwinModules.nix-homebrew
+      ./modules/home-manager
+    ];
   in rec {
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
@@ -83,29 +88,24 @@
     # homeManagerModules = import ./modules/home-manager;
 
     darwinConfigurations = let
-      specialArgs = {inherit inputs outputs defaultModules;};
+      specialArgs = {inherit inputs outputs defaultModulesDarwin;};
     in {
       "3MJXFXK523D2" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;
-        modules = [
-          home-manager.darwinModules.home-manager
-          ./hosts/mcfruit1
-        ];
+        modules = 
+          defaultModulesDarwin ++ [
+            ./hosts/mcfruit1
+          ];
       };
       "cinnamon-ice" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;
-        modules = [
-          home-manager.darwinModules.home-manager
-          ./hosts/cinnamon-ice
-        ];
+        modules =
+          defaultModulesDarwin ++ [
+            ./hosts/cinnamon-ice
+          ];
       };
     };
     nixosConfigurations = let
-      # defaultModules = [
-      #   ./modules/nixos
-      #   home-manager.nixosModules.default
-      #   sops-nix.nixosModules.sops
-      # ];
       specialArgs = {inherit inputs outputs defaultModules;};
     in {
       "12TH-TURTLE" = nixpkgs.lib.nixosSystem {

@@ -55,12 +55,20 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
 
+  # Force home-manager's nix module to be enabled (overriding the False propagated
+  # from nix-darwin's nix.enable=false) so that the activation script uses
+  # the nix package (from nix-darwin's nix.package) for activation tools.
+  # This fixes the "missing operand" and "nix-build: command not found" errors
+  # when using determinate nix on macOS.
+  nix.enable = lib.mkForce true;
+
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
     settings.user.name = "nikolarobottesla";
     settings.user.email = "13294739+nikolarobottesla@users.noreply.github.com";
+    settings.credential.helper = "!${pkgs.gh}/bin/gh auth git-credential"; # used to override osxkeychain
   };
 
   # configure a .condarc file in .conda folder
@@ -69,15 +77,11 @@
       channels:
         - conda-forge
       envs_dirs:
-        - /home/${config.home.username}/.conda/envs
+        - ~/.conda/envs
       pkgs_dirs:
-        - /home/${config.home.username}/.conda/pkgs
+        - ~/.conda/pkgs
     '';
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
-
-  # The state version is required and should stay at the version you
-  # originally installed.
-  home.stateVersion = lib.mkDefault "23.11";
 }

@@ -35,7 +35,14 @@ in
   my.user.userName = userName;
   my.user.hashedPassFile = config.sops.secrets.hashedPassFile.path;
 
-  home-manager.users."${userName}" = import ../../home-manager/home.nix;
+  home-manager.users."${userName}" = lib.mkMerge [
+    (import ../../home-manager/home.nix)
+    {
+      # The state version is required and should stay at the version you
+      # originally installed.
+      home.stateVersion = "23.11";
+    }
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

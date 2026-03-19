@@ -14,8 +14,6 @@
   #   };
 in {
   imports = [
-    inputs.nix-homebrew.darwinModules.nix-homebrew
-    ../../modules/home-manager
   ];
 
   # this might be needed to get other stuff to work

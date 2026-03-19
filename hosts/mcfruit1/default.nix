@@ -15,8 +15,6 @@
   #   };
 in {
   imports = [
-    inputs.nix-homebrew.darwinModules.nix-homebrew
-    # ../../modules/home-manager
   ];
 
   nixpkgs.overlays = [
@@ -35,14 +33,14 @@ in {
   };
 
   # home-manager.extraSpecialArgs = specialArgs;
-  # home-manager.users."${userName}" = lib.mkMerge [
-  #   (import ../../home-manager/home.nix)
-  #   {
-  #     # The state version is required and should stay at the version you
-  #     # originally installed.
-  #     home.stateVersion = "25.11";
-  #   }
-  # ];
+  home-manager.users."${userName}" = lib.mkMerge [
+    (import ../../home-manager/home.nix)
+    {
+      # The state version is required and should stay at the version you
+      # originally installed.
+      home.stateVersion = "25.11";
+    }
+  ];
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -85,7 +83,7 @@ in {
   #   # Automatically migrate existing Homebrew installations
   #   autoMigrate = true;
   # };
-  homebrew.enable = true; # enables in nix-darwin, doeasn't install
+  homebrew.enable = true; # enables in nix-darwin, doesn't install
   homebrew.onActivation.cleanup = "zap";  # uninstall app
   homebrew.onActivation.upgrade = true; # upgrade homebrew on system activation
   homebrew.brews = [
