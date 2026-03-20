@@ -35,6 +35,7 @@ in {
   # home-manager.extraSpecialArgs = specialArgs;
   home-manager.users."${userName}" = lib.mkMerge [
     (import ../../home-manager/home.nix)
+    (import ../../home-manager/firefox.nix)
     {
       # The state version is required and should stay at the version you
       # originally installed.
@@ -94,7 +95,6 @@ in {
     "aldente" # macOS tool to limit maximum charging %
     # "avidemux"  # developer cannot be verified
     # "clementine"
-    "firefox"
     # "freecad"
     # "google-chrome"
     # "lm-studio"  # requires Arm 64
@@ -127,7 +127,7 @@ in {
     "/Applications/Visual Studio Code.app"
     # "/System/Applications/Utilities/Terminal.app"
     "/Applications/Nix Apps/Ghostty.app"
-    "/Applications/Firefox.app"
+    "/Home Manager Apps/Firefox.app"
     "/Applications/Safari.app"
     "/Applications/Self Service.app"
     "/System/Applications/System Settings.app"
