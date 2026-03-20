@@ -127,7 +127,7 @@ in {
     "/Applications/Visual Studio Code.app"
     # "/System/Applications/Utilities/Terminal.app"
     "/Applications/Nix Apps/Ghostty.app"
-    "/Home Manager Apps/Firefox.app"
+    "/Users/${userName}/Applications/Home Manager Apps/Firefox.app"
     "/Applications/Safari.app"
     "/Applications/Self Service.app"
     "/System/Applications/System Settings.app"

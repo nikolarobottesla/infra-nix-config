@@ -13,8 +13,8 @@
       in listToAttrs [
         (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
         # (extension "Ninja Cookie" "debug@ninja-cookie.com")
-        (extension "I still don't care about cookies" "idcac-pub@guus.ninja")
-        (extension "privacy-badger" "jid1-MnnxcxisBPnSXQ@jetpack")
+        (extension "istilldontcareaboutcookies" "idcac-pub@guus.ninja")
+        (extension "privacy-badger17" "jid1-MnnxcxisBPnSXQ@jetpack")
         (extension "ublock-origin" "uBlock0@raymondhill.net")
         (extension "UltraWideo" "{2339288d-f701-45d0-a57f-a847e9adc6cc}")
         # (extension "tree-style-tab" "treestyletab@piro.sakura.ne.jp")
