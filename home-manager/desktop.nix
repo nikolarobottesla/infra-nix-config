@@ -23,7 +23,7 @@ in {
     profiles.default.enableUpdateCheck = false;
     profiles.default.extensions = with pkgs.vscode-extensions; [
       bbenoist.nix
-      danielsanmedium.dscodegpt
+      # danielsanmedium.dscodegpt
       ms-python.python # pylance and debugger
       # ms-vscode.remote-explorer # not available
       ms-vscode-remote.remote-containers
@@ -34,12 +34,11 @@ in {
     ];
     # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
     profiles.default.userSettings = {
-      "CodeGPT.apiKey" = "Ollama";
+      # "CodeGPT.apiKey" = "Ollama";
       "powershell.powerShellAdditionalExePaths" = {
         "PowerShell Core 7 (x64)" = getExe pkgs.powershell;
       };
       "powershell.promptToUpdatePowerShell" = false;
-
       "extensions.autoCheckUpdates" = false;
       "extensions.autoUpdate" = false;
       "update.mode" = "none";
@@ -47,6 +46,7 @@ in {
       "[nix]"."editor.tabSize" = 2;
       "diffEditor.hideUnchangedRegions.enabled" = true;
       "git.autofetch" = true;
+      "git.enableCommitSigning" = true;
       # "remote.SSH.useLocalServer" = false;  had this set but don't know why
     };
   };

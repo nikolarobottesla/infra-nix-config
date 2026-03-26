@@ -19,10 +19,10 @@ in {
       userName = userName;
       remote-name = "pcloud";
     })
-    (import ../../modules/rclone {
-      userName = userName;
-      remote-name = "onedrive";
-    })
+    # (import ../../modules/rclone {
+    #   userName = userName;
+    #   remote-name = "onedrive";
+    # })
   ];
 
   # Use the systemd-boot EFI boot loader.
