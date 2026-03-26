@@ -33,11 +33,11 @@ in {
         # chromium
         # clementine
         devenv
+        discord
         gh # github cli
         gimp-with-plugins
-        discord
-        lapce
         kdePackages.kdeconnect-kde
+        lapce
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         unstable.radicle-tui
         unstable.rpi-imager
@@ -66,9 +66,10 @@ in {
       hddtemp
       iotop
       unstable.nix-sweep  # clean up old Nix profile generations and left-over garbage collection roots
+      # partition-manager
       podman-compose
       powershell
-      # partition-manager
+      python3
       quickemu
       # quickgui
       qemu_full
@@ -114,11 +115,13 @@ in {
       packages = [
         "com.binarynonsense.acbr" # comic book reader and converter
         "com.calibre_ebook.calibre"
+        "org.cryptomator.Cryptomator"
         "com.github.tchx84.Flatseal"
         "io.freetubeapp.FreeTube"
         # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
-        "io.gpt4all.gpt4all"
+        # "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
+        "net.mullvad.MullvadBrowser"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
       ];
