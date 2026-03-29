@@ -67,7 +67,7 @@
   programs.git = {
     enable = true;
     settings.user.name = "nikolarobottesla";
-    settings.user.email = "13294739+nikolarobottesla@users.noreply.github.com";
+    settings.signing.signByDefault = true;
     settings.credential.helper = "!${pkgs.gh}/bin/gh auth git-credential"; # used to override osxkeychain
   };
 

@@ -13,6 +13,8 @@
     lanzaboote.url = "github:nix-community/lanzaboote/v1.0.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
+    nixos-apple-silicon.url = "github:nix-community/nixos-apple-silicon";
+    nixos-apple-silicon.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
@@ -36,6 +38,7 @@
     homebrew-cask,
     lanzaboote,
     nixos-hardware,
+    nixos-apple-silicon,
     nixos-wsl,
     nixpkgs,
     nixpkgs-unstable,
@@ -238,6 +241,15 @@
           defaultModules
           ++ [
             ./hosts/shialt
+          ];
+      };
+      armadillo = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            inputs.nixos-apple-silicon.nixosModules.apple-silicon-support
+            ./hosts/armadillo
           ];
       };
     };

@@ -33,7 +33,6 @@ in {
         # chromium
         # clementine
         devenv
-        discord
         gh # github cli
         gimp-with-plugins
         kdePackages.kdeconnect-kde
