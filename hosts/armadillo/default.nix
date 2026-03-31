@@ -21,16 +21,25 @@ in {
 
   hardware.asahi = {
     enable = true;
-    peripheralFirmwareDirectory = /etc/nixos/firmware; # /mnt... pre instsall, updated post install
+    # manually copy firmware during install, see nixos-apple-silicon guide
+    # peripheralFirmwareDirectory = /etc/nixos/firmware; # post install path
+    peripheralFirmwareDirectory = /mnt/etc/nixos/firmware; # /mnt... pre instsall, updated post install
     #extractPeripheralFirmware = false;
     setupAsahiSound = true;
   };
 
+  networking.networkmanager.enable = false; # need to disable for iwd?
+  networking.wireless.iwd = {
+    enable = true;
+    settings.General.EnableNetworkConfiguration = true;
+  };
+
+  my.laptop.enable = true;
   my.desktop-base.userName = userName;
-  my.desktop-dev.userName = userName;
-  my.desktop-dev.homeStateVersion = "25.11";
+  # my.desktop-dev.userName = userName;
+  # my.desktop-dev.homeStateVersion = "25.11";
   my.desktop-base.enable = true;
-  my.desktop-dev.enable = true;
+  # my.desktop-dev.enable = true;
 
   nix.settings = {
     extra-substituters = [

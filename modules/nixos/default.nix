@@ -14,6 +14,7 @@
     ./gaming.nix
     ./dns.nix
     ./jellyfin.nix
+    ./desktop.nix
     ./llm-server.nix
     ./nextcloud.nix
     ./nginx.nix
