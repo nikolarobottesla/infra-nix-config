@@ -26,11 +26,11 @@
             NixOSContainer = {
               priority = 3;
               type = "AF0A";
-              uuid = "ed19c93e-0bc7-4a61-b683-6a7182e59c9d";
+              uuid = "b1d41983-abb6-4f13-a575-3f2589f8f68f";
             };
 
             ESP = {
-              uuid = "10ec1b50-b0c9-4585-94d9-bfbb75e88bff";
+              uuid = "3898a948-ef3d-4114-af58-e502b89fcaaa";
               priority = 4;
               type = "EF00";
               content = {
