@@ -51,12 +51,15 @@ in {
     # curl # this curl doesn't seem to use system certs
     # darwin.xcode
     gh
+    devenv
     direnv
     ghostty-bin # macos version of ghostty terminal emulator
     git
-    gnupg
+    # gnupg # vscode can't seem to find it
     htop
     jq
+    nodejs_24
+    powershell # pwsh
     unstable.tailscale
     # xcodes
   ];
@@ -88,6 +91,7 @@ in {
   homebrew.onActivation.cleanup = "zap";  # uninstall app
   homebrew.onActivation.upgrade = true; # upgrade homebrew on system activation
   homebrew.brews = [
+    "gnupg"
     "podman"
     "podman-compose"
   ];
@@ -96,7 +100,7 @@ in {
     # "avidemux"  # developer cannot be verified
     # "clementine"
     # "freecad"
-    # "google-chrome"
+    "google-chrome"
     # "lm-studio"  # requires Arm 64
     "nextcloud"
     "obsidian"

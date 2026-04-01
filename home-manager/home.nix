@@ -69,6 +69,7 @@
     settings.user.name = "nikolarobottesla";
     settings.signing.signByDefault = true;
     settings.credential.helper = "!${pkgs.gh}/bin/gh auth git-credential"; # used to override osxkeychain
+    settings.commit.gpgSign = true;
   };
 
   # configure a .condarc file in .conda folder
