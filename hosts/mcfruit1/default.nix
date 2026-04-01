@@ -55,7 +55,7 @@ in {
     direnv
     ghostty-bin # macos version of ghostty terminal emulator
     git
-    # gnupg # vscode can't seem to find it
+    gnupg # if vscode can't find gpg, restart it
     htop
     jq
     nodejs_24
@@ -91,7 +91,6 @@ in {
   homebrew.onActivation.cleanup = "zap";  # uninstall app
   homebrew.onActivation.upgrade = true; # upgrade homebrew on system activation
   homebrew.brews = [
-    "gnupg"
     "podman"
     "podman-compose"
   ];
