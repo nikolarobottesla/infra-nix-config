@@ -111,7 +111,7 @@ in {
       extraGroups = ["wheel"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
-        brave
+        unstable.chromium
         ente-desktop
         gh # github cli
         hunspell # spell check in libreoffice
@@ -200,7 +200,7 @@ in {
     services.flatpak = {
       enable = true;
       packages = [
-        "com.google.Chrome"
+        # "com.google.Chrome/x86_64"  #  apply_extra script failing on aarch64
         "org.mozilla.firefox"
         "com.github.zocker_160.SyncThingy"
       ];

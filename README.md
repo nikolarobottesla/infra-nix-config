@@ -62,6 +62,16 @@ nix build .#image.oak
 2. boot image, connect ethernet and ssh in
 3. use disko to format and mount
 ```bash
+## nixos-apple-silicon ##
+# use these uuids to label partitions, also set 'destroy = false;'
+ls /dev/disk/by-partuuid/ -l
+# fix swap (after running disko)
+sudo swapon --fixpgsz /mnt/swap/swapfile
+sudo swapon -s  # turn it on
+# copy firmware (after running disko)
+sudo mkdir -p /mnt/etc/nixos/firmware
+sudo cp /mnt/boot/asahi/{all_firmware.tar.gz,kernelcache*} /mnt/etc/nixos/firmware
+
 # https://github.com/nix-community/disko/blob/master/docs/quickstart.md
 # fresh install (disks overwrite)
 nano /tmp/disko-config.nix  # paste config

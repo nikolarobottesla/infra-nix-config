@@ -32,7 +32,7 @@ in {
 
     # Auto system update
     system.autoUpgrade = {
-        enable = true;
+        enable = lib.mkDefault true;
         allowReboot = true;
         dates = "02:00";  # every day at 2AM
         flags = cfg.flags;

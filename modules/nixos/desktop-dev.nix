@@ -29,7 +29,7 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
-        brave
+        unstable.brave
         # chromium
         # clementine
         devenv
@@ -112,7 +112,7 @@ in {
 
     services.flatpak = {
       packages = [
-        "com.binarynonsense.acbr" # comic book reader and converter
+        "com.binarynonsense.acbr/x86_64" # comic book reader and converter
         "com.calibre_ebook.calibre"
         "org.cryptomator.Cryptomator"
         "com.github.tchx84.Flatseal"
@@ -120,7 +120,7 @@ in {
         # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         # "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
-        "net.mullvad.MullvadBrowser"
+        "net.mullvad.MullvadBrowser/x86_64"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
       ];

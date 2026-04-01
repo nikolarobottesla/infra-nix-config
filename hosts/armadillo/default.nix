@@ -14,6 +14,7 @@ in {
     ./hardware-configuration.nix
   ];
 
+  boot.binfmt.emulatedSystems = [ "x86_64-linux" ];  # run more flatpaks etc
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
 
@@ -22,24 +23,25 @@ in {
   hardware.asahi = {
     enable = true;
     # manually copy firmware during install, see nixos-apple-silicon guide
-    # peripheralFirmwareDirectory = /etc/nixos/firmware; # post install path
-    peripheralFirmwareDirectory = /mnt/etc/nixos/firmware; # /mnt... pre instsall, updated post install
-    #extractPeripheralFirmware = false;
+    peripheralFirmwareDirectory = /etc/nixos/firmware; # post install path
+    # peripheralFirmwareDirectory = /mnt/etc/nixos/firmware; # during install paths
+    # extractPeripheralFirmware = false;
     setupAsahiSound = true;
   };
 
-  networking.networkmanager.enable = false; # need to disable for iwd?
+  # iwd recommended 
   networking.wireless.iwd = {
     enable = true;
     settings.General.EnableNetworkConfiguration = true;
   };
+  networking.networkmanager.wifi.backend = "iwd";
 
   my.laptop.enable = true;
   my.desktop-base.userName = userName;
-  # my.desktop-dev.userName = userName;
-  # my.desktop-dev.homeStateVersion = "25.11";
+  my.desktop-dev.userName = userName;
+  my.desktop-dev.homeStateVersion = "25.11";
   my.desktop-base.enable = true;
-  # my.desktop-dev.enable = true;
+  my.desktop-dev.enable = true;
 
   nix.settings = {
     extra-substituters = [
@@ -51,6 +53,8 @@ in {
   };
 
   services.tailscale.useRoutingFeatures = "client";
+
+  system.autoUpgrade.enable = false;
 
   system.stateVersion = "25.11";
 }

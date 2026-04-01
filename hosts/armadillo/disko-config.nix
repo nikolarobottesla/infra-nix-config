@@ -81,10 +81,10 @@
                         "noatime"
                       ];
                     };
-                    # "/swap" = {
-                    #   mountpoint = "/swap";
-                    #   swap.swapfile.size = "16G";
-                    # };
+                    "/swap" = {
+                      mountpoint = "/swap";
+                      swap.swapfile.size = "16G";
+                    };
                   };
                 };
               };
