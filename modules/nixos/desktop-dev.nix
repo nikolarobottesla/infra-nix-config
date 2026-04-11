@@ -30,9 +30,11 @@ in {
       extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         unstable.brave
+        bun
         # chromium
         # clementine
         devenv
+        distrobox
         gh # github cli
         gimp-with-plugins
         kdePackages.kdeconnect-kde
@@ -40,9 +42,12 @@ in {
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         unstable.radicle-tui
         unstable.rpi-imager
+        uv
         # restic
+        scrcpy # Display and control Android devices over USB or TCP/IP
         strawberry
         # timeshift
+        unstable.vulnix  # CVE scanner for nix
         yubioath-flutter
       ];
     };
@@ -75,7 +80,6 @@ in {
       # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
       # rclone # needs to be systemPackage for systemd.mounts
       # unstable.rkdeveloptool-pine64
-      unstable.vulnix  # CVE scanner for nix
       vulkan-tools  # graphics
       wayland-utils  # graphics
     ];
@@ -120,6 +124,7 @@ in {
         # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         # "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
+        "no.mifi.losslesscut"
         "net.mullvad.MullvadBrowser/x86_64"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
