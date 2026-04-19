@@ -51,12 +51,15 @@ in {
     # curl # this curl doesn't seem to use system certs
     # darwin.xcode
     gh
+    devenv
     direnv
     ghostty-bin # macos version of ghostty terminal emulator
     git
-    gnupg
+    gnupg # if vscode can't find gpg, restart it
     htop
     jq
+    nodejs_24
+    powershell # pwsh
     unstable.tailscale
     # xcodes
   ];
@@ -96,7 +99,7 @@ in {
     # "avidemux"  # developer cannot be verified
     # "clementine"
     # "freecad"
-    # "google-chrome"
+    "google-chrome"
     # "lm-studio"  # requires Arm 64
     "nextcloud"
     "obsidian"

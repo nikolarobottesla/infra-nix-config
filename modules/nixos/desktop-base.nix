@@ -19,7 +19,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    boot.loader.efi.canTouchEfiVariables = true;
+    boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
     boot.supportedFilesystems = ["ntfs"];
 
     # enable clamav with services
