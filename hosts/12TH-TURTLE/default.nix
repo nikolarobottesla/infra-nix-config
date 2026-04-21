@@ -11,6 +11,7 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
+    inputs.nixos-hardware.nixosModules.hp-elitebook-840g9
     ./disko-config.nix
     ./hardware-configuration.nix
     # comment in after rclone config
