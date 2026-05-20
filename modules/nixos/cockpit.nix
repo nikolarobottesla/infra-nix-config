@@ -49,7 +49,7 @@ in {
       enable = true;
       port = cfg.port;
       allowed-origins = [
-        cfg.domain # The public-facing URL clients will connect from in the browser
+        "${cfg.domain}:${cfg.port}" # The public-facing URL clients will connect from in the browser
       ];
       # openFirewall = true; # Not needed for tailscale
       settings = {
