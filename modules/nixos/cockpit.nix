@@ -16,7 +16,7 @@ in {
     };
 
     port = mkOption {
-      type = types.num;
+      type = types.port;
       description = "port";
       default = 9090;
     };
