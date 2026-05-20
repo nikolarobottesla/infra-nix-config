@@ -47,9 +47,9 @@ in {
 
     services.cockpit = {
       enable = true;
-      port = ${cfg.port};
+      port = cfg.port;
       allowed-origins = [
-        ${cfg.domain} # The public-facing URL clients will connect from in the browser
+        cfg.domain # The public-facing URL clients will connect from in the browser
       ];
       # openFirewall = true; # Not needed for tailscale
       settings = {
