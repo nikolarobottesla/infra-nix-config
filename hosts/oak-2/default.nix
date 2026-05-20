@@ -108,6 +108,8 @@ in
     };
   };
 
+  my.cockpit.enable = true;
+
   my.code-server = {
     enable = true;
     userName = userName;
