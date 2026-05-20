@@ -154,7 +154,10 @@ in
     domain = domain;
   };
 
-  my.cockpit.enable = true;
+  my.cockpit = {
+    enable = true;
+    domain = domain;
+  };
 
   my.code-server = {
     enable = true;

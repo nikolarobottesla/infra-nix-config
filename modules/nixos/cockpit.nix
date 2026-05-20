@@ -10,6 +10,17 @@ in {
   options.my.cockpit = {
     enable = mkEnableOption "cockpit";
 
+    domain = mkOption {
+      type = types.str;
+      description = "Client connection URL without the port";
+    };
+
+    port = mkOption {
+      type = types.num;
+      description = "port";
+      default = 9090;
+    };
+
     sslCertificate = mkOption {
       type = types.str;
       description = "Where to find ssl certificate";
@@ -36,9 +47,9 @@ in {
 
     services.cockpit = {
       enable = true;
-      port = 9090;
+      port = ${cfg.port};
       allowed-origins = [
-        "https://oak-1.stork-galaxy.ts.net:9090"  # The public-facing URL clients will connect from in the browser
+        ${cfg.domain} # The public-facing URL clients will connect from in the browser
       ];
       # openFirewall = true; # Not needed for tailscale
       settings = {
