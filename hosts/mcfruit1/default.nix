@@ -54,7 +54,7 @@ in {
     devenv
     direnv
     ghostty-bin # macos version of ghostty terminal emulator
-    git
+    # git # git is provided by developer tools, nix version doesn't use system certs by default 
     gnupg # if vscode can't find gpg, restart it
     htop
     jq
@@ -95,7 +95,7 @@ in {
     "podman-compose"
   ];
   homebrew.casks = [
-    "aldente" # macOS tool to limit maximum charging %
+    # "aldente" # macOS has user config limit built in now
     # "avidemux"  # developer cannot be verified
     # "clementine"
     # "freecad"

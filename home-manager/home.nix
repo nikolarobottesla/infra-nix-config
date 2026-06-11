@@ -46,11 +46,6 @@
   #   # };
   # };
 
-#   home = {
-#     username = "your-username";
-#     homeDirectory = "/home/your-username";
-#   };
-
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
@@ -62,26 +57,69 @@
   # when using determinate nix on macOS.
   nix.enable = lib.mkForce true;
 
-  # Enable home-manager and git
+  # Enable home-manager
   programs.home-manager.enable = true;
-  programs.git = {
-    enable = true;
-    settings.user.name = "nikolarobottesla";
-    settings.signing.signByDefault = true;
-    settings.credential.helper = "!${pkgs.gh}/bin/gh auth git-credential"; # used to override osxkeychain
-    settings.commit.gpgSign = true;
+
+  # configure git
+  xdg.configFile."git/config".text = lib.generators.toGitINI {
+    user.name = "nikolarobottesla";
+    signing.signByDefault = true;
+    credential.helper = "!${pkgs.gh}/bin/gh auth git-credential";
+    commit.gpgSign = true;
   };
+
+  # configure an npm global prefix in home directory and add to path
+  home.file.".npmrc".text =
+    ''
+      prefix=~/.npm-global
+    '';
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.npm-global/bin/"
+  ];
 
   # configure a .condarc file in .conda folder
   home.file.".conda/.condarc".text =
     ''
       channels:
         - conda-forge
+      mirrored_channels:
+        conda-forge:
+          - https://conda.anaconda.org/conda-forge
+          - https://prefix.dev/conda-forge
       envs_dirs:
         - ~/.conda/envs
       pkgs_dirs:
         - ~/.conda/pkgs
     '';
+
+  programs.zsh = {
+    enable = true;
+    # Migrate existing ~/.zshrc content here so home-manager can manage ~/.zshrc.
+    # This also causes home-manager to generate ~/.zshenv, which sources
+    # hm-session-vars.sh and makes home.sessionPath work.
+    initContent = ''
+      export PATH="''${HOMEBREW_PREFIX}/opt/openssl/bin:$PATH"
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+
+      # >>> conda initialize >>>
+      # !! Contents within this block are managed by 'conda init' !!
+      __conda_setup="$('${config.home.homeDirectory}/.conda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+      if [ $? -eq 0 ]; then
+          eval "$__conda_setup"
+      else
+          if [ -f "${config.home.homeDirectory}/.conda/etc/profile.d/conda.sh" ]; then
+              . "${config.home.homeDirectory}/.conda/etc/profile.d/conda.sh"
+          else
+              export PATH="${config.home.homeDirectory}/.conda/bin:$PATH"
+          fi
+      fi
+      unset __conda_setup
+      # <<< conda initialize <<<
+
+      # Created by `pipx` on 2026-03-23 19:38:32
+      export PATH="$PATH:${config.home.homeDirectory}/.local/bin"
+    '';
+  };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

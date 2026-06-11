@@ -10,7 +10,7 @@ nix flake init -t nix-darwin
 2. install nix-darwin, might need to run again after developer tools are installed
 
 ```bash
-# first time
+# first time (and rebuild if installed for all users)
 sudo bash -c '. /etc/profile; nix run nix-darwin -- switch --flake '.#''
 # attempted with lix but still didn't resolve HTTPS errors
 #sudo bash -c '. /etc/profile; export NIX_SSL_CERT_FILE=~/tls-ca-bundle.crt; nix run nix-darwin -- switch --flake '.#''
@@ -37,18 +37,27 @@ conda init
 conda init zsh
 ```
 
-6. init and start podman
+6. vscode setup
+  * install extensions
+  * use where pwsh to find bin and add to 'command+,' -> 'powershell additional'
+  * commit signing
+  * tabs = 2 spaces
+
+7. init and start podman
 https://podman.io/docs/installation
 ```zsh
 podman machine init
 podman machine start
 ```
 
-7. trying to fix lazy-trees warning
+8. trying to fix lazy-trees warning
 ```bash
 sudo bash -c 'echo "lazy-trees = true" >> /etc/nix/nix.custom.conf'
 sudo determinate-nixd upgrade # doesn't work, see below 
+```
 
+9. haven't gotten determinate-nixd upgrade to work on corporate, upgrade by re-installing using macOS installer
+```bash
 (base) a1rc7zz@3MJXFXK523D2:~/code/infra-nix-config/ > sudo determinate-nixd upgrade
 Password:
   2026-03-25T23:53:20.551240Z  WARN determinate_nixd::version_check: Version check failed, e: error sending request for url (https://install.determinate.systems/determinate-nixd/stable/macOS)
