@@ -21,10 +21,12 @@ in {
         ];
     services.resolved = {
         enable = true;
-        dnssec = "false";
         # domains = [ "~." ];
-        fallbackDns = null;  # when null a default list is used
-        dnsovertls = "opportunistic";
+        settings.Resolve = {
+          FallbackDNS = null;  # when null a default list is used
+          DNSSEC = "false";
+          DNSOverTLS = "opportunistic";
+        };
     };
   };
 }

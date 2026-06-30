@@ -61,6 +61,7 @@ in {
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [
+      android-tools
       clinfo  # graphics
       mesa-demos  # graphics
       hddtemp
@@ -88,12 +89,6 @@ in {
         # VISUAL = "code --wait";
       };
     };
-
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-
-    # android platform tools
-    programs.adb.enable = true;
 
     programs.chromium.extensions = [
       "kcgpggonjhmeaejebeoeomdlohicfhce" # Cookie Remover

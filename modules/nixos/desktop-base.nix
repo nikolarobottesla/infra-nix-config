@@ -45,16 +45,29 @@ in {
         keyMap = "us";
         # useXkbConfig = true; # use xkb.options in tty.
     };
-    
-    # Enable the X11 windowing system.
-    services.xserver.enable = true;
 
-    # Enable the Plasma 6 Desktop Environment.
-    # https://github.com/NixOS/nixpkgs/issues/363797#issuecomment-2558384445
-    services.displayManager.sddm.enable = true;  # needed or else login screen is just nix icon and you have to type blind
-    services.displayManager.sddm.wayland.enable = true; # fix plasma login freeze, see above
-    services.desktopManager.plasma6.enable = true;
-    services.displayManager.defaultSession = "plasma"; # uses wayland
+    # desktop/login
+    services = {
+      # Enable Plasma 
+      desktopManager.plasma6.enable = true;
+      displayManager.plasma-login-manager.enable = true;
+      displayManager.autoLogin.user = cfg.userName;
+    };
+    # auto-login
+    boot.initrd.systemd.enable = true;
+    systemd.services.plasmalogin.serviceConfig.KeyringMode = "inherit";
+    security.pam.services.plasmalogin-autologin.rules.auth = {
+      systemd_loadkey = {
+        order = 0;
+        control = "optional";
+        modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
+      };
+      plasmalogin = {
+        order = 1;
+        control = "include";
+        modulePath = "plasmalogin";
+      };
+    };
 
     # disable KDE indexer because it's preventing sleep
     # https://github.com/NixOS/nixpkgs/issues/63489
