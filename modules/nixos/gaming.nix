@@ -17,6 +17,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
           
     users.users."${cfg.userName}" = {
       extraGroups = ["gamemode"];
@@ -28,7 +30,6 @@ in {
             pkgs.gamemode
           ];
         })
-        # master.nexusmods-app-unfree # nexusmods app was discontinued
         protonup-qt
         # xboxdrv # original xbox/xbox360 userspace driver
       ];
@@ -51,9 +52,10 @@ in {
     programs.steam = {
       enable = true;
       gamescopeSession.enable = true;
+      platformOptimizations.enable = true;
       # ptricks flatpak works, this gives errors when starting, also takes a while to build
       # protontricks.enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play      
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     };
 
     programs.gamescope.enable = true;

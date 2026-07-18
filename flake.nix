@@ -1,6 +1,7 @@
 {
   description = "nikolarobottesla NixOS flake";
   inputs = {
+    bc250.url = "github:nikolarobottesla/bc250-nixos";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-26.05";
@@ -28,10 +29,10 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-    vscode-server.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = {
     self,
+    bc250,
     disko,
     home-manager,
     homebrew-core,
@@ -64,6 +65,7 @@
     # pass to it, with each system as an argument
     forAllSystems = nixpkgs.lib.genAttrs systems;
     defaultModules = [
+      bc250.nixosModules.bc250
       home-manager.nixosModules.default
       nix-flatpak.nixosModules.nix-flatpak
       sops-nix.nixosModules.sops
@@ -125,6 +127,14 @@
           defaultModules
           ++ [
             ./hosts/15TH-TURTLE
+          ];
+      };
+      bw-bc250 = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            ./hosts/bw-bc250
           ];
       };
       # coconuts: set user password before applying

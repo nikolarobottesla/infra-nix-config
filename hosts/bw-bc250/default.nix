@@ -1,0 +1,51 @@
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  options,
+  ...
+}: let
+  device-name = "bw-bc250";
+  userName = "igor";
+in {
+  imports = [
+    inputs.disko.nixosModules.disko
+    inputs.nix-gaming.nixosModules.platformOptimizations
+    ./disko-config.nix
+    ./hardware-configuration.nix
+  ];
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+
+  networking.hostName = device-name; # Define your hostname
+
+  # my.dns.enable = false;
+  
+  my.desktop-base.userName = userName;
+  my.desktop-base.enable = true;
+  my.desktop-dev.userName = userName;
+  my.desktop-dev.enable = true;
+  my.desktop-dev.homeStateVersion = "26.05";
+  my.gaming.userName = userName;
+  my.gaming.enable = true;
+  
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  system.stateVersion = "26.05"; # Did you read the comment?
+}
