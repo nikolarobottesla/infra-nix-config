@@ -23,7 +23,7 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["gamemode"];
       packages = with pkgs; [
-        master.heroic
+        heroic
         (heroic.override {
           extraPkgs = pkgs: [
             pkgs.gamescope
@@ -31,6 +31,7 @@ in {
           ];
         })
         protonup-qt
+        lm_sensors
         # xboxdrv # original xbox/xbox360 userspace driver
       ];
     };

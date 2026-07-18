@@ -2,6 +2,8 @@
   description = "nikolarobottesla NixOS flake";
   inputs = {
     bc250.url = "github:nikolarobottesla/bc250-nixos";
+    # bc250.url = "path:/home/igor/code/bc250-nixos/";
+    bc250.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-26.05";
@@ -20,7 +22,7 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-master.url = "github:nixos/nixpkgs/master";
+    # nixpkgs-master.url = "github:nixos/nixpkgs/master";
     nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
@@ -43,7 +45,7 @@
     nixos-wsl,
     nixpkgs,
     nixpkgs-unstable,
-    nixpkgs-master,
+    # nixpkgs-master,
     nix-darwin,
     nix-flatpak,
     nix-gaming,
@@ -113,14 +115,6 @@
     nixosConfigurations = let
       specialArgs = {inherit inputs outputs defaultModules;};
     in {
-      "12TH-TURTLE" = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        modules =
-          defaultModules
-          ++ [
-            ./hosts/12TH-TURTLE
-          ];
-      };
       "15TH-TURTLE" = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules =
@@ -147,18 +141,6 @@
             {
               time.timeZone = "America/Chicago";
               services.tailscale.useRoutingFeatures = "client";
-            }
-          ];
-      };
-      coconut-3 = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        modules =
-          defaultModules
-          ++ [
-            (import ./hosts/coconut {hostName = "coconut-3";})
-            {
-              time.timeZone = "America/Los_Angeles";
-              services.tailscale.useRoutingFeatures = "both";
             }
           ];
       };

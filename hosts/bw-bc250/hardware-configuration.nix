@@ -15,29 +15,33 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.kernelParams = [ "mitigations=off" "clearcpuid=rdseed" ];
-  boot.kernel.sysctl = { "vm.swappiness" = 180;};
-  boot.zswap.enable = true;
-  boot.zswap.compressor = "lz4";
+  # configured in hardware.bc250
+  # boot.kernel.sysctl = { "vm.swappiness" = 180;};
+  # boot.zswap.enable = true;
+  # boot.zswap.compressor = "lz4";
   boot.extraModulePackages = [ ];
+
+  environment.systemPackages = with pkgs; [
+    amdgpu_top
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.enableAllFirmware = lib.mkDefault true;
-
-  # This will save you money and possibly your life!
-  services.thermald.enable = lib.mkDefault true;
 
   hardware.bc250 = {
     enable = true;
     features = {
       # Disabled by default
       aic8800d80.enable = false;
-      cuLiveManager.enable = false;
+      cuLiveManager.enable = true;
+      cpuOverclock.enable = true;
+      cpuOverclock.configFile = ./overclock.conf;
 
       # Enabled by default
       sensors.enable = true;
-      governor.enable = true;
-      zram.enable = false;
+      gpuGovernor.enable = true;
+      zswap.enable = true;
     };
   };
 
@@ -46,5 +50,7 @@
     enable = true;  # Should be enabled by wayland
     enable32Bit = true;  # default is false
   };
+
+  programs.coolercontrol.enable = lib.mkDefault true;
 
 }
