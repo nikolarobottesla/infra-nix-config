@@ -11,19 +11,8 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
-    inputs.nix-gaming.nixosModules.platformOptimizations
-#     inputs.nixos-hardware.nixosModules.hp-elitebook-830g6
     ./disko-config.nix
     ./hardware-configuration.nix
-    # comment in after rclone config
-    # (import ../../modules/rclone {
-    #   userName = userName;
-    #   remote-name = "pcloud";
-    # })
-    # (import ../../modules/rclone {
-    #   userName = userName;
-    #   remote-name = "onedrive";
-    # })
   ];
 
   # Use the systemd-boot EFI boot loader.

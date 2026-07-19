@@ -70,6 +70,7 @@
       bc250.nixosModules.bc250
       home-manager.nixosModules.default
       nix-flatpak.nixosModules.nix-flatpak
+      nix-gaming.nixosModules.platformOptimizations
       sops-nix.nixosModules.sops
       ./modules/nixos
       ./modules/home-manager

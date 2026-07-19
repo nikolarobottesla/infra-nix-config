@@ -37,6 +37,7 @@ in {
         gh # github cli
         gimp-with-plugins
         kdePackages.kdeconnect-kde
+        kdePackages.krdc
         lapce
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         unstable.radicle-tui

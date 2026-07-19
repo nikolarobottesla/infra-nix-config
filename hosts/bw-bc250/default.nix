@@ -11,7 +11,6 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
-    inputs.nix-gaming.nixosModules.platformOptimizations
     ./disko-config.nix
     ./hardware-configuration.nix
   ];

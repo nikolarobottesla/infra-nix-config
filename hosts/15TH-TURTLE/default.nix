@@ -29,10 +29,15 @@ in {
 
   networking.hostName = device-name; # Define your hostname
   
-  my.desktop-base.userName = userName;
-  my.desktop-dev.userName = userName;
   my.desktop-base.enable = true;
+  my.desktop-base.userName = userName;
   my.desktop-dev.enable = true;
+  my.desktop-dev.userName = userName;
+  my.gaming.enable = true;
+  my.gaming.userName = userName;
+
+  # remove if ever re-installing to adopt new (26.05) default profile directory
+  home-manager.users."${userName}".programs.firefox.configPath = ".mozilla/firefox";
 
   services.tailscale.useRoutingFeatures = "client";
   services.tailscale.extraSetFlags = [
