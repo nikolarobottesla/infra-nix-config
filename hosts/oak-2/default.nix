@@ -23,7 +23,7 @@ in
   # semi-active-av.enable = true;
 
   networking.hostName = "${ hostName }"; # Define your hostname.
-  networking.wireless.enable = false;
+  networking.wireless.enable = lib.mkForce false;
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.

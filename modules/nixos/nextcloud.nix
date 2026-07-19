@@ -5,7 +5,7 @@
   config,
   ...
 }: let
-  nextcloud_package = pkgs.nextcloud32;
+  nextcloud_package = pkgs.nextcloud34;
   cfg = config.my.nextcloud;
   inherit (lib) mkOption mkEnableOption types mkIf;
 in {
