@@ -43,7 +43,11 @@ conda init zsh
   * commit signing
   * tabs = 2 spaces
 
-7. init and start podman
+7. npm cert issue - coudn't get system cert variable to work, maybe because js installed via nix?
+# download .pem from IT
+
+
+8. init and start podman
 https://podman.io/docs/installation
 ```zsh
 podman machine init

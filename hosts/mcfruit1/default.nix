@@ -53,6 +53,7 @@ in {
     gh
     devenv
     direnv
+    ffmpeg # req for hermes
     ghostty-bin # macos version of ghostty terminal emulator
     # git # git is provided by developer tools, nix version doesn't use system certs by default 
     gnupg # if vscode can't find gpg, restart it
@@ -60,9 +61,14 @@ in {
     jq
     nodejs_24
     powershell # pwsh
-    unstable.tailscale
+    ripgrep # req for hermes
+    tailscale
+    uv # req for hermes
     # xcodes
   ];
+
+  environment.variables.UV_SYSTEM_CERTS  = "true";
+  environment.variables.NODE_EXTRA_CA_CERTS = "${userHome}/tls-ca-bundle.pem"; # get from IT
 
   # nix-homebrew = {
   #   # Install Homebrew under the default prefix
@@ -93,6 +99,7 @@ in {
   homebrew.brews = [
     "podman"
     "podman-compose"
+    "rtk" # rtk gain
   ];
   homebrew.casks = [
     # "aldente" # macOS has user config limit built in now
@@ -100,6 +107,8 @@ in {
     # "clementine"
     # "freecad"
     "google-chrome"
+    # "kicad" # installed an out of date version even thougn the current version is listed on homebrew site, maybe it was because the flake wasn't updated but the declarative tap managemnt is commented out, waht is the default?
+    "krita"
     # "lm-studio"  # requires Arm 64
     "nextcloud"
     "obsidian"
