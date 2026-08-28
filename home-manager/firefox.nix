@@ -1,6 +1,29 @@
 { ... }: {
   programs.firefox.enable = true;
   # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
+## neither of these worked, also they blow away your profile (history, windows, etc) ##
+## restore profile by deleting /home/igor/.mozilla/firefox
+## original located /home/igor/.config/mozilla/firefox/
+# adds extra bar above firefox window :(
+# programs.firefox.profiles.default.settings = {
+#     # Enable system theme detection
+#     "widget.content.allow-gtk-dark-theme" = true;
+#     # Force use of system colors
+#     "browser.display.use_system_colors" = true;
+#   };
+# doesn't do anything :(
+# programs.firefox.profiles.default.settings = {
+#     # Follow system theme
+#     "ui.systemUsesDarkTheme" = 0; # 0 = follow system, 1 = dark, 2 = light
+#     "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    
+#     # Ensure Firefox uses GTK theme for colors
+#     "browser.theme.content-theme" = true;
+#     "browser.theme.toolbar-theme" = true;
+    
+#     # Optional: Enable native titlebar to match system windows
+#     "browser.tabs.inTitlebar" = 0;
+#   };
   programs.firefox.policies = {
     ExtensionSettings = with builtins;
       let extension = shortId: uuid: {

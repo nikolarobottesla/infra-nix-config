@@ -29,10 +29,12 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
-        brave
+        unstable.brave
+        bun
         # chromium
         # clementine
         devenv
+        # distrobox
         discord
         gh # github cli
         gimp-with-plugins
@@ -42,9 +44,12 @@ in {
         # miraclecast  # CLI Wifi-Display/Miracast implementation
         unstable.radicle-tui
         unstable.rpi-imager
+        uv
         # restic
+        scrcpy # Display and control Android devices over USB or TCP/IP
         strawberry
         # timeshift
+        unstable.vulnix  # CVE scanner for nix
         yubioath-flutter
       ];
     };
@@ -78,7 +83,6 @@ in {
       # (quickemu.override { qemu = qemu_full; })  # this isn't working anymore, gives anonymous lambda error
       # rclone # needs to be systemPackage for systemd.mounts
       # unstable.rkdeveloptool-pine64
-      unstable.vulnix  # CVE scanner for nix
       vulkan-tools  # graphics
       wayland-utils  # graphics
     ];
@@ -109,7 +113,7 @@ in {
 
     services.flatpak = {
       packages = [
-        "com.binarynonsense.acbr" # comic book reader and converter
+        "com.binarynonsense.acbr/x86_64" # comic book reader and converter
         "com.calibre_ebook.calibre"
         "org.cryptomator.Cryptomator"
         "com.github.tchx84.Flatseal"
@@ -117,7 +121,8 @@ in {
         # "it.mijorus.gearlever"  # app image manager, check nixpkgs for the app you want instead
         # "io.gpt4all.gpt4all"
         "com.github.iwalton3.jellyfin-media-player"
-        "net.mullvad.MullvadBrowser"
+        "no.mifi.losslesscut"
+        "net.mullvad.MullvadBrowser/x86_64"
         "md.obsidian.Obsidian"
         "io.podman_desktop.PodmanDesktop"
       ];
