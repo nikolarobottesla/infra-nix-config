@@ -24,7 +24,8 @@ in {
   hardware.asahi = {
     enable = true;
     # manually copy firmware during install, see nixos-apple-silicon guide
-    peripheralFirmwareDirectory = /etc/nixos/firmware; # post install path
+    # peripheralFirmwareDirectory = /etc/nixos/firmware; # post install path
+    peripheralFirmwareDirectory = /boot/vendorfw; # post install path
     # peripheralFirmwareDirectory = /mnt/etc/nixos/firmware; # during install paths
     # extractPeripheralFirmware = false;
     setupAsahiSound = true;

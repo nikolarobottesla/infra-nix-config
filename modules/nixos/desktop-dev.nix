@@ -35,7 +35,6 @@ in {
         # clementine
         devenv
         # distrobox
-        discord
         gh # github cli
         gimp-with-plugins
         kdePackages.kdeconnect-kde

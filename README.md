@@ -2,7 +2,8 @@
 my nixos configurations, setup to use flakes
 
 ## hosts
-* desktops: 15TH-TURTLE, dark-desk, shialt
+* desktops: dark-desk, *-bc250
+* laptops: 15TH-TURTLE, shialt, armadillo, pedro
 * darwin: mcfruit1, cinnamon-ice
 * servers: coconut, oak*
 * WSL: nixos
@@ -12,6 +13,7 @@ my nixos configurations, setup to use flakes
 ```bash
 # navigate to this folder, then (assumes host name matches flake)
 # if remote TMUX first!!!
+# if the build takes too long the sudo can run out and prevent writing to protected directories, try re-running
 sudo nixos-rebuild switch --flake '.#'
 sudo nixos-rebuild boot --flake '.#'
 

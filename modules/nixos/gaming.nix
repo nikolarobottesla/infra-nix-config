@@ -23,6 +23,7 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["gamemode"];
       packages = with pkgs; [
+        discord
         heroic
         (heroic.override {
           extraPkgs = pkgs: [
