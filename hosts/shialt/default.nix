@@ -35,7 +35,6 @@ in {
   my.gaming.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
-  programs.steam.platformOptimizations.enable = true;
 
   # programs.java.enable = true;
   # programs.java.binfmt = true;

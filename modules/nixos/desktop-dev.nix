@@ -35,6 +35,7 @@ in {
         # clementine
         devenv
         # distrobox
+        unstable.ente-desktop # stable version used EOL electron
         gh # github cli
         gimp-with-plugins
         kdePackages.kdeconnect-kde
@@ -93,6 +94,11 @@ in {
         # VISUAL = "code --wait";
       };
     };
+
+    # programs.appimage = {
+    #   enable = true;
+    #   binfmt = true;
+    # };
 
     programs.chromium.extensions = [
       "kcgpggonjhmeaejebeoeomdlohicfhce" # Cookie Remover

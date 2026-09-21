@@ -11,7 +11,6 @@
 in {
   imports = [
     inputs.disko.nixosModules.disko
-    inputs.nix-gaming.nixosModules.platformOptimizations
     ./disko-config.nix
     ./hardware-configuration.nix
     # comment in after rclone config
@@ -43,7 +42,6 @@ in {
   # my.llm-server.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_xanmod; # kernel mentioned in nix-gaming
-  programs.steam.platformOptimizations.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

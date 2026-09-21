@@ -124,8 +124,7 @@ in {
       extraGroups = ["wheel"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         _7zz  # 7zip
-        unstable.chromium
-        ente-desktop
+        chromium
         gh # github cli
         hunspell # spell check in libreoffice
         hunspellDicts.en_US # english dict
@@ -144,11 +143,6 @@ in {
       ntfs3g
       snapper-gui # needs services.snapper... to work
     ];
-
-    # programs.appimage = {
-    #   enable = true;
-    #   binfmt = true;
-    # };
 
     programs.chromium = {
       enable = true;
