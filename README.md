@@ -11,6 +11,9 @@ my nixos configurations, setup to use flakes
 ## usage
 
 ```bash
+# unstable opencode
+nix-shell -I nixpkgs=channel:nixos-unstable -p opencode
+
 # navigate to this folder, then (assumes host name matches flake)
 # if remote TMUX first!!!
 # if the build takes too long the sudo can run out and prevent writing to protected directories, try re-running
