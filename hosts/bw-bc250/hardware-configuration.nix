@@ -15,10 +15,6 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.kernelParams = [ "mitigations=off" "clearcpuid=rdseed" ];
-  # configured in hardware.bc250
-  # boot.kernel.sysctl = { "vm.swappiness" = 180;};
-  # boot.zswap.enable = true;
-  # boot.zswap.compressor = "lz4";
   boot.extraModulePackages = [ ];
 
   environment.systemPackages = with pkgs; [
@@ -33,10 +29,13 @@
     enable = true;
     features = {
       # Disabled by default
-      aic8800d80.enable = false;
       cuLiveManager.enable = true;
       cpuOverclock.enable = true;
       cpuOverclock.configFile = ./overclock.conf;
+      # Modded BIOSes may already provide their own ACPI fixes, so to avoid
+      # conflicts, check first and either turn those off in the BIOS setup
+      # or leave this disabled.
+      acpiFix.enable = true;
 
       # Enabled by default
       sensors.enable = true;
@@ -52,5 +51,4 @@
   };
 
   programs.coolercontrol.enable = lib.mkDefault true;
-
 }
