@@ -19,7 +19,9 @@
     ./llm-server.nix
     ./nextcloud.nix
     ./nginx.nix
+    ./nps.nix
     ./code-server.nix
+    # ./pinepods.nix
     ./remote-install.nix
     ./secureboot.nix
     ./semi-active-av.nix
@@ -50,10 +52,14 @@
     pciutils
     sops
     ssh-to-age
-    tmux
     tree
     wget
   ];
+
+  programs.tmux = {
+    enable = true;
+    extraConfig = "set -g allow-passthrough on";  # allow clipboard passthrough
+  };
 
   sops = {
     # This will add secrets.yml to the nix store

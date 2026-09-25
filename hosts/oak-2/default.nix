@@ -3,7 +3,6 @@ let
   hostName = "oak-2";
   userName = "deer";
   domain = "${hostName}.stork-galaxy.ts.net";
-  userSrv = "/home/${userName}/srv";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
 in

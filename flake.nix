@@ -1,8 +1,9 @@
 {
   description = "nikolarobottesla NixOS flake";
+  nixConfig.extra-experimental-features = "pipe-operators";
   inputs = {
     bc250.url = "github:nikolarobottesla/bc250-nixos";
-    # bc250.url = "path:/home/igor/code/bc250-nixos/";
+    # bc250.url = "path:/home/igor/code/bc250-nixos/"; # example of local path
     bc250.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +30,9 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    nix-podman-stacks.url = "github:Tarow/nix-podman-stacks/v0.14.0";
+    nix-podman-stacks.inputs.nixpkgs.follows = "nixpkgs";
+    nix-podman-stacks.inputs.home-manager.follows = "home-manager";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
