@@ -29,8 +29,6 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
-        unstable.brave
-        bun
         # chromium
         # clementine
         devenv

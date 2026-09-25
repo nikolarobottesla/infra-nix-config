@@ -133,6 +133,14 @@
             ./hosts/bw-bc250
           ];
       };
+      gp-bc250 = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules =
+          defaultModules
+          ++ [
+            ./hosts/gp-bc250
+          ];
+      };
       # coconuts: set user password before applying
       coconut-2 = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
