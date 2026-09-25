@@ -44,6 +44,7 @@
   # default packages
   environment.systemPackages = with pkgs; [
     direnv
+    gh # github cli
     git
     htop
     jq
