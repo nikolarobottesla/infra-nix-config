@@ -21,7 +21,6 @@
     ./nginx.nix
     ./nps.nix
     ./code-server.nix
-    # ./pinepods.nix
     ./remote-install.nix
     ./secureboot.nix
     ./semi-active-av.nix
@@ -50,6 +49,7 @@
     jq
     lshw
     ookla-speedtest
+    unstable.opencode
     pciutils
     sops
     ssh-to-age

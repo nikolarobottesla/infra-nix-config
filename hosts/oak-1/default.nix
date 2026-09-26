@@ -115,6 +115,18 @@ in
       group = "users";
       mode = "0400";
     };
+    "authelia/smtp_user" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "authelia/smtp_app_password" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
     "authelia/oidc_hmac_secret" = {
       sopsFile = ./secrets.yaml;
       owner = userName;
@@ -193,6 +205,24 @@ in
       group = "users";
       mode = "0400";
     };
+    "pinepods/admin_pass" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "pinepods/db_pass" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "pinepods/oidc_client_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
     "cloudflared-tunnel-token" = {
       sopsFile = ./secrets.yaml;
       owner = "root";
@@ -214,6 +244,8 @@ in
     secrets.authelia.jwtSecret = config.sops.secrets."authelia/jwt_secret".path;
     secrets.authelia.sessionSecret = config.sops.secrets."authelia/session_secret".path;
     secrets.authelia.storageEncryptionKey = config.sops.secrets."authelia/encryption_key".path;
+    secrets.authelia.smtpUser = config.sops.secrets."authelia/smtp_user".path;
+    secrets.authelia.smtpPassword = config.sops.secrets."authelia/smtp_app_password".path;
     secrets.authelia.oidc.hmacSecret = config.sops.secrets."authelia/oidc_hmac_secret".path;
     secrets.authelia.oidc.jwksRsaKey = config.sops.secrets."authelia/oidc_rsa_pk".path;
     secrets.lldap.adminPassword = config.sops.secrets."lldap/admin_password".path;
@@ -227,6 +259,9 @@ in
     secrets.paperless.dbPassword = config.sops.secrets."paperless/db_password".path;
     secrets.paperless.adminPassword = config.sops.secrets."paperless/admin_password".path;
     secrets.monitoring.grafanaOidcClientSecret = config.sops.secrets."monitoring/grafana_oidc_client_secret".path;
+    secrets.pinepods.adminPassword = config.sops.secrets."pinepods/admin_pass".path;
+    secrets.pinepods.dbPassword = config.sops.secrets."pinepods/db_pass".path;
+    secrets.pinepods.oidcClientSecret = config.sops.secrets."pinepods/oidc_client_secret".path;
   };
 
   home-manager.users."${userName}" = lib.mkMerge [
@@ -277,22 +312,6 @@ in
 
   my.jellyfin.enable = true;
 
-  # sops.secrets = {
-  #   pinepods-admin-pass = {
-  #     sopsFile = ./secrets.yaml;
-  #   };
-  #   pinepods-db-pass = {
-  #     sopsFile = ./secrets.yaml;
-  #   };
-  # };
-  # my.pinepods = {
-  #   enable = true;
-  #   dataDir = "${serviceData}/pinepods";
-  #   hostname = "http://${domain}:8040";
-  #   dbPassword = "changeme"; # TODO use sops
-  #   admin.password = "changeme"; # TODO use sops
-  # };
-
   sops.secrets = {
     nextcloud-admin-pass = {
       sopsFile = ./secrets.yaml;
@@ -313,6 +332,35 @@ in
     enable = true;
     domain = domain;
   };
+  # lldap UI is tailnet-only: host nginx terminates the Tailscale cert on the
+  # tailnet IP and proxies into Traefik (loopback socket), presenting the
+  # original public Host header so traefik routes it and applies the
+  # `ipwhitelist-tailnet` middleware (RFC1918 + Tailscale CGNAT). Public
+  # clients therefore never reach lldap directly.
+  services.nginx.virtualHosts."lldap-tailnet" = {
+    serverName = domain;
+    addSSL = true;
+    listen = [
+      {
+        addr = "100.92.38.20";
+        port = 17170;
+        ssl = true;
+      }
+    ];
+    sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
+    sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
+    locations."/" = {
+      proxyPass = "https://127.0.0.1:8443";
+      extraConfig = ''
+        proxy_set_header Host lldap.${baseDomain};
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_ssl_verify off;
+        proxy_ssl_server_name on;
+        proxy_ssl_name lldap.${baseDomain};
+      '';
+    };
+  };
+  systemd.services.nginx.after = [ "tailscaled.service" ];
 
   my.cockpit = {
     enable = true;

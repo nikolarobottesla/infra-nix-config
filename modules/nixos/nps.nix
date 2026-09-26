@@ -7,9 +7,11 @@ let
     "traefik"
     "homepage"
     "authelia"
-    "lldap"
+    # "lldap" -- no longer publicly reachable; now served tailnet-only via a
+    # dedicated host nginx vhost proxying to Traefik (see hosts/oak-1/default.nix).
     "paperless"
     "grafana"
+    "pinepods"
     "alloy"
     "prometheus"
   ];
@@ -91,6 +93,9 @@ in {
         jwtSecret = mkOption {type = types.path;};
         sessionSecret = mkOption {type = types.path;};
         storageEncryptionKey = mkOption {type = types.path;};
+        # Gmail SMTP notifier credentials (replaces the default filesystem notifier)
+        smtpUser = mkOption {type = types.path;};
+        smtpPassword = mkOption {type = types.path;};
         oidc = {
           hmacSecret = mkOption {type = types.path;};
           jwksRsaKey = mkOption {type = types.path;};
@@ -114,6 +119,11 @@ in {
       };
       monitoring = {
         grafanaOidcClientSecret = mkOption {type = types.path;};
+      };
+      pinepods = {
+        adminPassword = mkOption {type = types.path;};
+        dbPassword = mkOption {type = types.path;};
+        oidcClientSecret = mkOption {type = types.path;};
       };
     };
   };
@@ -168,22 +178,63 @@ in {
               };
               # Custom LE email (build-time value, cannot come from a file)
               staticConfig.certificatesResolvers.letsencrypt.acme.email = mkForce cfg.acmeEmail;
-              dynamicConfig.tls.options.default.sniStrict = mkForce false;
-              # Traffic arrives at Traefik from cloudflared's loopback origin
-              # (127.0.0.1:8443), so the bouncer must trust that hop to read the
-              # real client IP from X-Forwarded-For.
-              dynamicConfig.http.middlewares.crowdsec.plugin.bouncer.clientTrustedIPs =
+              # Trust the cloudflared loopback origin so the real client IP in
+              # X-Forwarded-For reaches the middleware plugins (geoblock,
+              # crowdsec). Without this, Traefik rebuilds XFF from the loopback
+              # connection and geoblock's allowPrivate makes it a no-op. Applies
+              # to websecure-internal too (it mirrors websecure).
+              staticConfig.entryPoints.websecure.forwardedHeaders.trustedIPs =
                 mkForce [
                   "127.0.0.1/32"
                   "::1/128"
+                ];
+              staticConfig.entryPoints.websecure-internal.forwardedHeaders.trustedIPs =
+                mkForce [
+                  "127.0.0.1/32"
+                  "::1/128"
+                ];
+              dynamicConfig.tls.options.default.sniStrict = mkForce false;
+              # Allowlist used by lldap: RFC1918 LAN ranges plus Tailscale CGNAT
+              # (IPv4 + IPv6), so the service is reachable from the LAN and the
+              # tailnet but not from the public internet.
+              #
+              # ipAllowList must match on the X-Forwarded-For client IP rather
+              # than the connection address: nginx proxies every request to
+              # Traefik over the loopback socket bind, so the raw RemoteAddr is
+              # always 127.0.0.1. depth=1 selects the rightmost XFF entry, which
+              # nginx appends ($proxy_add_x_forwarded_for). Without ipStrategy
+              # the middleware would reject everything regardless of source
+              # (Traefik only shows the XFF-derived client in the access log).
+              dynamicConfig.http.middlewares."ipwhitelist-tailnet".ipAllowList = {
+                sourceRange = [
                   "10.0.0.0/8"
                   "172.16.0.0/12"
                   "192.168.0.0/16"
+                  "100.64.0.0/10"
+                  "fd7a:115c:a1e0::/48"
                 ];
+                ipStrategy.depth = 1;
+              };
             };
 
             authelia = {
               enable = true;
+              # 2FA everywhere: OIDC clients and the default access-control policy
+              defaultAllowPolicy = "two_factor";
+              # Brand the TOTP enrollment (shown by authenticator apps)
+              settings.totp.issuer = cfg.domain;
+              # Deliver identity-validation codes by email instead of writing them
+              # to the filesystem notifier. Gmail rewrites the From header to the
+              # authenticated account, so sender/username come from the sops secret
+              # (via AUTHELIA_NOTIFIER_SMTP_USERNAME); password from the _FILE secret.
+              settings.notifier = {
+                smtp = {
+                  address = "submission://smtp.gmail.com:587";
+                  identifier = cfg.domain;
+                  username = ''{{ env "AUTHELIA_NOTIFIER_SMTP_USERNAME" }}'';
+                  sender = "Authelia <{{ env \"AUTHELIA_NOTIFIER_SMTP_USERNAME\" }}>";
+                };
+              };
               jwtSecretFile = cfg.secrets.authelia.jwtSecret;
               sessionSecretFile = cfg.secrets.authelia.sessionSecret;
               storageEncryptionKeyFile = cfg.secrets.authelia.storageEncryptionKey;
@@ -192,15 +243,27 @@ in {
                 hmacSecretFile = cfg.secrets.authelia.oidc.hmacSecret;
                 jwksRsaKeyFile = cfg.secrets.authelia.oidc.jwksRsaKey;
               };
+              # Authelia(-only) container env: feed the SMTP credentials to the
+              # `template` config filters. Username comes from a sops file's
+              # content; password via the _FILE secret mount (never inline).
+              containers.authelia = {
+                extraEnv.AUTHELIA_NOTIFIER_SMTP_USERNAME.fromFile = cfg.secrets.authelia.smtpUser;
+                fileEnvMount.AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = cfg.secrets.authelia.smtpPassword;
+              };
             };
 
             lldap = {
               enable = true;
+              # lldap only reads its config via the LLDAP_* env prefix, so NPS's
+              # unprefixed FORCE_LDAP_USER_PASS_RESET=always is ignored. Put it in
+              # the config file instead so the admin password is re-synced from the
+              # secret file at every start (makes secret rotation take effect).
+              # settings.force_ldap_user_pass_reset = "always"; # comment in if admin secret changes
               adminPasswordFile = cfg.secrets.lldap.adminPassword;
               jwtSecretFile = cfg.secrets.lldap.jwtSecret;
               keySeedFile = cfg.secrets.lldap.keySeed;
               # bootstrap.users.deer = {
-              #   email = "deer@${cfg.domain}";
+              #   email = "no_reply@${cfg.domain}";
               #   password_file = cfg.secrets.lldap.deerPassword;
               #   groups = ["homepage_user" "paperless_user" "grafana_admin" "grafana_user"];
               # };
@@ -222,7 +285,7 @@ in {
               oidc.clientSecretFile = cfg.secrets.paperless.oidcClientSecret;
               secretKeyFile = cfg.secrets.paperless.secretKey;
               db.passwordFile = cfg.secrets.paperless.dbPassword;
-              adminProvisioning.email = "deer@${cfg.domain}";
+              adminProvisioning.email = "no_reply@${cfg.domain}";
               adminProvisioning.passwordFile = cfg.secrets.paperless.adminPassword;
             };
 
@@ -231,6 +294,20 @@ in {
               grafana.oidc = {
                 enable = true;
                 clientSecretFile = cfg.secrets.monitoring.grafanaOidcClientSecret;
+              };
+            };
+
+            pinepods = {
+              enable = true;
+              adminProvisioning = {
+                enable = true;
+                email = "no_reply@${cfg.domain}";
+                passwordFile = cfg.secrets.pinepods.adminPassword;
+              };
+              db.passwordFile = cfg.secrets.pinepods.dbPassword;
+              oidc = {
+                enable = true;
+                clientSecretFile = cfg.secrets.pinepods.oidcClientSecret;
               };
             };
           };
@@ -248,6 +325,14 @@ in {
             # create-extra-files), so order them after the generator.
             crowdsec.dependsOn = ["crowdsec-bouncer-key.service"];
             traefik.dependsOn = ["crowdsec-bouncer-key.service"];
+            # lldap is tailnet-only: replace the default `private` middleware
+            # (RFC1918-only) with one that also allows Tailscale CGNAT.
+            lldap = {
+              traefik.middleware = {
+                private.enable = mkForce false;
+                "ipwhitelist-tailnet".enable = true;
+              };
+            };
           };
 
         # Generate the Crowdsec LAPI key for the Traefik bouncer before the
