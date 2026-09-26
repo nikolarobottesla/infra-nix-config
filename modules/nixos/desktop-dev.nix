@@ -34,7 +34,6 @@ in {
         devenv
         # distrobox
         unstable.ente-desktop # stable version used EOL electron
-        gh # github cli
         gimp-with-plugins
         kdePackages.kdeconnect-kde
         kdePackages.krdc

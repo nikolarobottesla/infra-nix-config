@@ -3,7 +3,12 @@ let
   hostName = "oak-1";
   userName = "deer";
   domain = "${hostName}.stork-galaxy.ts.net";
-  userSrv = "/home/${userName}/srv";
+  # Private public domain. Read at build time from an untracked file so the
+  # literal never appears in this repo. Rebuild needs `--impure`.
+  # sudo echo '<string>' | sudo tee /etc/nixos/<file>
+  baseDomain = lib.trim (builtins.readFile /etc/nixos/nps-domain);
+  acmeEmail = lib.trim (builtins.readFile /etc/nixos/acme-email);
+  userMnt = "/home/${userName}/mnt";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
   # script to update podman containers
@@ -57,11 +62,11 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  sops.secrets = {
-    smb-secrets = {
-      sopsFile = ./secrets.yaml;
-    };
-  };
+  # sops.secrets = {
+  #   smb-secrets = {
+  #     sopsFile = ./secrets.yaml;
+  #   };
+  # };
 
   # for mounting previous server share
   # fileSystems."${userSrv}/<server host name>/media" = {
@@ -83,6 +88,146 @@ in
   ];
 
   my.user.userName = userName;
+
+  sops.secrets = {
+    # NPS / Nix Podman Stacks
+    "traefik/cf_api_token" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "authelia/jwt_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "authelia/session_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "authelia/encryption_key" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "authelia/oidc_hmac_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "authelia/oidc_rsa_pk" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "lldap/admin_password" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "lldap/jwt_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "lldap/key_seed" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    # "lldap/deer_password" = {
+    #   sopsFile = ./secrets.yaml;
+    #   owner = userName;
+    #   group = "users";
+    #   mode = "0400";
+    # };
+    "homepage/auth_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "homepage/oidc_client_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "paperless/oidc_client_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "paperless/secret_key" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "paperless/db_password" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "paperless/admin_password" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "monitoring/grafana_oidc_client_secret" = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+    "cloudflared-tunnel-token" = {
+      sopsFile = ./secrets.yaml;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+  };
+
+  my.nps = {
+    enable = true;
+    domain = baseDomain;
+    hostIP4Address = "127.0.0.1";
+    acmeEmail = acmeEmail;
+    cloudflared = {
+      enable = true;
+      tokenFile = config.sops.secrets."cloudflared-tunnel-token".path;
+    };
+    secrets.traefik.cfDnsApiToken = config.sops.secrets."traefik/cf_api_token".path;
+    secrets.authelia.jwtSecret = config.sops.secrets."authelia/jwt_secret".path;
+    secrets.authelia.sessionSecret = config.sops.secrets."authelia/session_secret".path;
+    secrets.authelia.storageEncryptionKey = config.sops.secrets."authelia/encryption_key".path;
+    secrets.authelia.oidc.hmacSecret = config.sops.secrets."authelia/oidc_hmac_secret".path;
+    secrets.authelia.oidc.jwksRsaKey = config.sops.secrets."authelia/oidc_rsa_pk".path;
+    secrets.lldap.adminPassword = config.sops.secrets."lldap/admin_password".path;
+    secrets.lldap.jwtSecret = config.sops.secrets."lldap/jwt_secret".path;
+    secrets.lldap.keySeed = config.sops.secrets."lldap/key_seed".path;
+    # secrets.lldap.deerPassword = config.sops.secrets."lldap/deer_password".path;
+    secrets.homepage.authSecret = config.sops.secrets."homepage/auth_secret".path;
+    secrets.homepage.oidcClientSecret = config.sops.secrets."homepage/oidc_client_secret".path;
+    secrets.paperless.oidcClientSecret = config.sops.secrets."paperless/oidc_client_secret".path;
+    secrets.paperless.secretKey = config.sops.secrets."paperless/secret_key".path;
+    secrets.paperless.dbPassword = config.sops.secrets."paperless/db_password".path;
+    secrets.paperless.adminPassword = config.sops.secrets."paperless/admin_password".path;
+    secrets.monitoring.grafanaOidcClientSecret = config.sops.secrets."monitoring/grafana_oidc_client_secret".path;
+  };
 
   home-manager.users."${userName}" = lib.mkMerge [
     (import ../../home-manager/home.nix)
@@ -132,6 +277,22 @@ in
 
   my.jellyfin.enable = true;
 
+  # sops.secrets = {
+  #   pinepods-admin-pass = {
+  #     sopsFile = ./secrets.yaml;
+  #   };
+  #   pinepods-db-pass = {
+  #     sopsFile = ./secrets.yaml;
+  #   };
+  # };
+  # my.pinepods = {
+  #   enable = true;
+  #   dataDir = "${serviceData}/pinepods";
+  #   hostname = "http://${domain}:8040";
+  #   dbPassword = "changeme"; # TODO use sops
+  #   admin.password = "changeme"; # TODO use sops
+  # };
+
   sops.secrets = {
     nextcloud-admin-pass = {
       sopsFile = ./secrets.yaml;
@@ -140,7 +301,6 @@ in
       group = "nextcloud";
     };
   };
-
   my.nextcloud = {
     enable = true;
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
@@ -178,15 +338,12 @@ in
       mode = "0400";
       owner = "syncthing";
       group = "syncthing";
-      # path = /var/lib/syncthing/.config/syncthing/cert.pem;
-      # path = "${config.services.syncthing.configDir}/cert.pem";
     };
     syncthing-key = {
       sopsFile = ./secrets.yaml;
       mode = "0400";
       owner = "syncthing";
       group = "syncthing";
-      # path = "${config.services.syncthing.configDir}/key.pem";
     };
   };
   my.syncthing = {
