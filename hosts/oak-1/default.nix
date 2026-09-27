@@ -90,6 +90,13 @@ in
   my.user.userName = userName;
 
   sops.secrets = {
+    code-server-hashed-pass = {
+      sopsFile = ./secrets.yaml;
+      owner = userName;
+      group = "users";
+      mode = "0400";
+    };
+
     # NPS / Nix Podman Stacks
     "traefik/cf_api_token" = {
       sopsFile = ./secrets.yaml;
@@ -371,7 +378,7 @@ in
     enable = true;
     userName = userName;
     host = domain;
-    hashedPassword = "$argon2i$v=19$m=4096,t=3,p=1$TU1ySTRTZWRvL3dTaHdsclp1Zm9TZlNVUzhBPQ$s4DNlVzUU0o+TWY84mc9WcFF356mUep1IaQuL0e6f8k";
+    hashedPasswordFile = config.sops.secrets.code-server-hashed-pass.path;
   };
   
   # samba
