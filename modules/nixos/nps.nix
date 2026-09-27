@@ -333,6 +333,27 @@ in {
                 "ipwhitelist-tailnet".enable = true;
               };
             };
+            # AntennaPod syncs through Cloudflare, so pinepods has to be
+            # reachable from the internet. Without `expose`, nps attaches the
+            # `private` middleware (an RFC1918 ipAllowList with no ipStrategy)
+            # and Traefik answers 403 with OriginStatus 0 for everything arriving
+            # over cloudflared's loopback origin, so the request never reaches
+            # pinepods. `expose` switches to the `public` chain instead: rate
+            # limit, security headers, US geoblock, crowdsec. Pinepods' own auth
+            # (admin password / OIDC) still gates the admin UI, and the gpodder
+            # API stays reachable so AntennaPod can authenticate and sync.
+            pinepods = {
+              expose = true;
+
+              # Pinepods' nginx drops its workers to the `nginx` user (uid 100)
+              # but chowns /var/lib/nginx/tmp to PUID:PGID. At the nps default of
+              # 0:0 that leaves the tree root-only, so any POST with a body
+              # larger than client_body_buffer_size 500s, breaking gpodder sync.
+              extraEnv = {
+                PUID = mkForce 100;
+                PGID = mkForce 101;
+              };
+            };
           };
 
         # Generate the Crowdsec LAPI key for the Traefik bouncer before the
