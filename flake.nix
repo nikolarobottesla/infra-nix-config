@@ -14,6 +14,8 @@
     homebrew-core.flake = false;
     homebrew-cask.url = "github:homebrew/homebrew-cask";
     homebrew-cask.flake = false;
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+    hermes-agent.inputs.nixpkgs.follows = "nixpkgs-unstable";
     lanzaboote.url = "github:nix-community/lanzaboote/v1.1.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
@@ -44,6 +46,7 @@
     home-manager,
     homebrew-core,
     homebrew-cask,
+    hermes-agent,
     lanzaboote,
     nixos-hardware,
     nixos-apple-silicon,
@@ -73,6 +76,7 @@
     forAllSystems = nixpkgs.lib.genAttrs systems;
     defaultModules = [
       bc250.nixosModules.bc250
+      hermes-agent.nixosModules.default
       home-manager.nixosModules.default
       nix-flatpak.nixosModules.nix-flatpak
       nix-gaming.nixosModules.platformOptimizations

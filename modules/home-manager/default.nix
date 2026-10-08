@@ -5,6 +5,7 @@
 {
     imports = [
     # ./desktop.nix
+    ./opencode.nix
   ];
 
   home-manager.useGlobalPkgs = true;

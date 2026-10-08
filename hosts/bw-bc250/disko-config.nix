@@ -1,4 +1,16 @@
 {
+  # for the final mount
+  fileSystems."/boot".options = [ "fmask=0077" "dmask=0077" ];
+
+  boot.initrd.kernelModules = [ "vfat" "nls_cp437" "nls_iso8859-1"];
+  boot.initrd.systemd.mounts = [{
+    wantedBy = [ "cryptsetup-pre.target" ];
+    what = "/dev/disk/by-partlabel/disk-vdb-ESP";
+    where = "/boot";
+    type = "vfat";
+    options = "fmask=0077,dmask=0077";
+  }];
+
   disko.devices = {
     disk = {
       vdb = {
@@ -28,6 +40,8 @@
                 #passwordFile = "/tmp/secret.key"; # Interactive
                 settings = {
                   allowDiscards = true;
+                  keyFile = "/boot/keys/crypted-os.key";  # comment in for build
+                  keyFileTimeout = 10;  # initrd.systemd only
                 };
                 content = {
                   type = "btrfs";

@@ -39,7 +39,7 @@ in {
         kdePackages.krdc
         lapce
         # miraclecast  # CLI Wifi-Display/Miracast implementation
-        # radicle-tui # decentralized git tui
+        # unstable.radicle-tui # decentralized git tui
         unstable.rpi-imager
         uv
         # restic
