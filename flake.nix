@@ -16,6 +16,9 @@
     homebrew-cask.flake = false;
     hermes-agent.url = "github:NousResearch/hermes-agent";
     hermes-agent.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    # Use git+https (not the github: shorthand, which needs nix access-tokens);
+    # Nix's git fetcher authenticates via the `gh auth git-credential` helper.
+    infra-nix-private.url = "git+https://github.com/nikolarobottesla/infra-nix-private";
     lanzaboote.url = "github:nix-community/lanzaboote/v1.1.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";

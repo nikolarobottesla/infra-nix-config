@@ -3,11 +3,10 @@ let
   hostName = "oak-1";
   userName = "deer";
   domain = "${hostName}.stork-galaxy.ts.net";
-  # Private public domain. Read at build time from an untracked file so the
-  # literal never appears in this repo. Rebuild needs `--impure`.
-  # sudo echo '<string>' | sudo tee /etc/nixos/<file>
-  baseDomain = lib.trim (builtins.readFile /etc/nixos/nps-domain);
-  acmeEmail = lib.trim (builtins.readFile /etc/nixos/acme-email);
+  # domain + Let's Encrypt email. The plaintext lives in the
+  # separate infra-nix-private repo, avoids --impure
+  baseDomain = inputs.infra-nix-private.nps.domain;
+  acmeEmail = inputs.infra-nix-private.nps.acmeEmail;
   userMnt = "/home/${userName}/mnt";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";

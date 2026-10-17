@@ -357,6 +357,21 @@
         "type": "github"
       }
     },
+    "infra-nix-private": {
+      "locked": {
+        "lastModified": 1792259964,
+        "narHash": "sha256-UJ1iaEpNXqkoFFY2FW6X+vW41wq4zEWik6eTGKYbQ+I=",
+        "ref": "refs/heads/main",
+        "rev": "c158e1d35aa2e9459e2688cc46884b13fef9b1c0",
+        "revCount": 2,
+        "type": "git",
+        "url": "https://github.com/nikolarobottesla/infra-nix-private"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/nikolarobottesla/infra-nix-private"
+      }
+    },
     "ixx": {
       "inputs": {
         "flake-utils": [
@@ -735,6 +750,7 @@
         "home-manager": "home-manager_2",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
+        "infra-nix-private": "infra-nix-private",
         "lanzaboote": "lanzaboote",
         "nix-darwin": "nix-darwin",
         "nix-flatpak": "nix-flatpak",
