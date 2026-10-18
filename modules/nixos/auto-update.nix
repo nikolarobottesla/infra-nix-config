@@ -38,6 +38,7 @@ in {
         flags = cfg.flags;
         flake = cfg.flake;
         operation = lib.mkDefault "boot";
+        persistent = true; # Ensures missed upgrades execute immediately on boot
         randomizedDelaySec = "45min";
         # rebuild needs to complete within the reboot window to reboot
         rebootWindow = {
@@ -46,5 +47,16 @@ in {
         };
     };
 
+    # Prevent auto-upgrade failures due to early-boot network absence
+    systemd.services.nixos-upgrade = {
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = "60"; # Wait 1 minute before retrying
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 600;
+        StartLimitBurst = 3; # Allow 3 attempts within 10 minutes
+      };
+    };
   };
 }
