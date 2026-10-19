@@ -25,13 +25,14 @@ in {
 
   config = mkIf cfg.enable {
 
+    my.dev.enable = true;
+
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {
       extraGroups = ["adbusers" "libvirtd"]; # wheel enables ‘sudo’ for the user.
       packages = with pkgs; [
         # chromium
         # clementine
-        devenv
         # distrobox
         unstable.ente-desktop # stable version used EOL electron
         gimp-with-plugins
@@ -46,7 +47,6 @@ in {
         scrcpy # Display and control Android devices over USB or TCP/IP
         strawberry
         # timeshift
-        unstable.vulnix  # CVE scanner for nix
         yubioath-flutter
       ];
     };
@@ -106,8 +106,6 @@ in {
       # "hlepfoohegkhhmjieoechaddaejaokhf" # Refined GitHub
       # "hipekcciheckooncpjeljhnekcoolahp" # Tabliss
     ];
-
-    programs.mtr.enable = true; # network diagnostic tool combining ping and traceroute
 
     programs.partition-manager.enable = true;  # run with 'sudo partitionmanager'
 

@@ -86,6 +86,8 @@ in
     "z ${serviceData} 0755 root root"
   ];
 
+  my.dev.enable = true;
+
   my.user.userName = userName;
 
   sops.secrets = {
@@ -294,7 +296,6 @@ in
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
 
-  programs.mtr.enable = true;  # network diagnostic tool combining ping and traceroute
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

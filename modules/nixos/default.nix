@@ -12,6 +12,7 @@
     ./create_ap.nix
     ./desktop-base.nix
     ./desktop-dev.nix
+    ./dev.nix
     ./gaming.nix
     ./dns.nix
     ./jellyfin.nix
@@ -42,14 +43,12 @@
 
   # default packages
   environment.systemPackages = with pkgs; [
-    direnv
     gh # github cli
     git
     htop
     jq
     lshw
     ookla-speedtest
-    unstable.opencode
     pciutils
     sops
     ssh-to-age
