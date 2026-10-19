@@ -26,6 +26,7 @@ in {
   config = mkIf cfg.enable {
 
     my.dev.enable = true;
+    my.dev.userName = cfg.userName;
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users."${cfg.userName}" = {

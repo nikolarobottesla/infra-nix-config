@@ -87,6 +87,7 @@ in
   ];
 
   my.dev.enable = true;
+  my.dev.userName = userName;
 
   my.user.userName = userName;
 
