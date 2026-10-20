@@ -316,6 +316,8 @@ in
     sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   };
 
+  # my.auto-update.enable = lib.mkForce false;
+
   my.btrbk-client.enable = true;
 
   my.jellyfin.enable = true;

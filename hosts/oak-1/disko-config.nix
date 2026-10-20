@@ -123,7 +123,12 @@ in
         device = "/dev/disk/by-uuid/${arrayid}";
         fsType = "btrfs";
         mountpoint = "/srv/array0";
-        mountOptions = [ "compress=zstd" "noatime" ];
+        mountOptions = [
+          "compress=zstd"
+          "noatime"
+        # "degraded"
+        # "nofail"
+        ];
       };
     };
   };
