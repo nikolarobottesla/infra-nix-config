@@ -5,32 +5,21 @@ let
   # ls -l /dev/disk/by-uuid
   usbid = "88e2f3bb-980e-46f9-adf5-f5e1064c2040";
   arrayid = "6644f36e-54c4-4d92-84f7-4ef2ab3f9a42";
-  array-disks = lib.genAttrs [ "a" "b" ] (name: {
-    type = "disk";
-    device = "/dev/sd${name}";
-    content = {
-      type = "gpt";
-      partitions = {
-        "luks-sd${name}" = {
-          size = "100%";
-          content = {
-            type = "luks";
-            name = "crypted-${name}";
-            # disable settings.keyFile if you want to use interactive password entry           
-            settings = {
-              allowDiscards = true;
-              # fallbackToPassword = true; # not able to build when set, error: "implied by systemd stage 1"
-              keyFile = "/key/crypted-${name}.key";  # comment in for build
-              keyFileTimeout = 10;  # initrd.systemd only
-            };
-          };
-        };
-      };
-    };
-  });
+
+  # array partition UUIDs
+  uuid-map = {
+    "a" = "5b4f2fff-270a-41da-968c-4bc402392891";
+    "b" = "947a851a-3ca5-4c2e-8210-9b6ddcefb447";
+  };
 in
 
 {
+  boot.initrd.luks.devices = lib.mapAttrs (name: uuid: {
+    device = "/dev/disk/by-uuid/${uuid}";
+    allowDiscards = true;
+    keyFile = "/key/crypted-${name}.key";
+    keyFileTimeout = 10;
+  }) uuid-map;
 
   boot.initrd.systemd.mounts = [{
     wantedBy = [ "cryptsetup-pre.target" ];
@@ -115,8 +104,6 @@ in
           };
         };
       };
-      a = array-disks.a;
-      b = array-disks.b;
     };
     nodev = {
       array0 = {
