@@ -61,6 +61,11 @@
     extraConfig = "set -g allow-passthrough on";  # allow clipboard passthrough
   };
 
+  security.pki.caCertificateBlacklist = [
+    "Comodo AAA Services root"
+    "emSign ECC Root CA - G3"
+  ];
+
   sops = {
     # This will add secrets.yml to the nix store
     # You can avoid this by adding a string to the full path instead, i.e.
