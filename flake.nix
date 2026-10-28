@@ -14,8 +14,8 @@
     homebrew-core.flake = false;
     homebrew-cask.url = "github:homebrew/homebrew-cask";
     homebrew-cask.flake = false;
-    hermes-agent.url = "github:NousResearch/hermes-agent";
-    hermes-agent.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    # hermes-agent.url = "github:NousResearch/hermes-agent";
+    # hermes-agent.inputs.nixpkgs.follows = "nixpkgs-unstable";
     # Use git+https (not the github: shorthand, which needs nix access-tokens);
     # Nix's git fetcher authenticates via the `gh auth git-credential` helper.
     infra-nix-private.url = "git+https://github.com/nikolarobottesla/infra-nix-private";
@@ -49,7 +49,7 @@
     home-manager,
     homebrew-core,
     homebrew-cask,
-    hermes-agent,
+    # hermes-agent,
     lanzaboote,
     nixos-hardware,
     nixos-apple-silicon,
@@ -79,7 +79,7 @@
     forAllSystems = nixpkgs.lib.genAttrs systems;
     defaultModules = [
       bc250.nixosModules.bc250
-      hermes-agent.nixosModules.default
+      # hermes-agent.nixosModules.default
       home-manager.nixosModules.default
       nix-flatpak.nixosModules.nix-flatpak
       nix-gaming.nixosModules.platformOptimizations

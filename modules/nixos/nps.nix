@@ -415,7 +415,7 @@ in {
           Restart = "on-failure";
           RestartSec = "5s";
           EnvironmentFile = cfg.cloudflared.tokenFile;
-          ExecStart = "${pkgs.cloudflared}/bin/cloudflared --no-autoupdate tunnel run";
+          ExecStart = "${pkgs.unstable.cloudflared}/bin/cloudflared --no-autoupdate tunnel run";
         };
       };
     })
