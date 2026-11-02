@@ -46,6 +46,28 @@ conda init zsh
 7. npm cert issue - coudn't get system cert variable to work, maybe because js installed via nix?
 # download .pem from IT
 
+8. getting RTK to work in vscode when installed from homebrew
+```json
+{
+  "env": {
+    "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 
 8. init and start podman
 https://podman.io/docs/installation

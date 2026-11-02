@@ -8,17 +8,44 @@
 }: let
   userName = "a1rc7zz";
   userHome = "/Users/${userName}";
+  brewBundleLog = "/var/log/nix-darwin-brew-bundle.log"; # overwritten each activation
+  ansiblePython = pkgs.python3.withPackages (pythonPackages: [
+    pythonPackages.boto3
+    pythonPackages.botocore
+    pythonPackages.cryptography
+    pythonPackages.truststore
+  ]);
   # specialArgs =
   #   inputs
   #   // {
   #     inherit userName userHome ;
   #   };
+
+  # .pth hook makes Python's ssl use the macOS Keychain via truststore
+  truststorePth = pkgs.runCommand "truststore-pth" {} ''
+    mkdir -p $out/${pkgs.python3.sitePackages}
+    echo 'import truststore; truststore.inject_into_ssl()' \
+      > $out/${pkgs.python3.sitePackages}/truststore-inject.pth
+  '';
 in {
   imports = [
   ];
 
   nixpkgs.overlays = [
     outputs.overlays.unstable-packages
+    # Ansible's wrappers use ansible-core's own closure, so its Python dependencies belong here.
+    (final: prev: {
+      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+        (pyfinal: pyprev: {
+          ansible-core = pyprev.ansible-core.overridePythonAttrs (old: {
+            propagatedBuildInputs = (old.propagatedBuildInputs or []) ++ [
+              pyfinal.truststore
+              truststorePth
+            ];
+          });
+        })
+      ];
+    })
   ];
 
   # Let Determinate Nix handle Nix configuration
@@ -37,6 +64,8 @@ in {
     (import ../../home-manager/home.nix)
     (import ../../home-manager/firefox.nix)
     {
+      # activation script runs nix-build; HM only puts nix on its PATH when this is set
+      nix.package = pkgs.nix;
       # The state version is required and should stay at the version you
       # originally installed.
       home.stateVersion = "25.11";
@@ -46,7 +75,9 @@ in {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    awscli
+    ansible
+    ansiblePython
+    awscli2
     bun
     # curl # this curl doesn't seem to use system certs
     # darwin.xcode
@@ -59,9 +90,11 @@ in {
     gnupg # if vscode can't find gpg, restart it
     htop
     jq
+    # moonlight-qt # didn't work, couldn't connect to the server, ports blocked by crowdstrike?
     nodejs_24
     powershell # pwsh
     ripgrep # req for hermes
+    sshpass # used by ansible for SSH password authentication
     tailscale
     uv # req for hermes
     # xcodes
@@ -96,6 +129,8 @@ in {
   homebrew.enable = true; # enables in nix-darwin, doesn't install
   homebrew.onActivation.cleanup = "zap";  # uninstall app
   homebrew.onActivation.upgrade = true; # upgrade homebrew on system activation
+  # nix-darwin doesn't log `brew bundle`; flags are appended last, so this tees its output (pipefail keeps errors)
+  homebrew.onActivation.extraFlags = [ "2>&1 | tee ${brewBundleLog}" ];
   homebrew.brews = [
     "podman"
     "podman-compose"
@@ -122,6 +157,19 @@ in {
     #   greedy = true;
     # }
   ];
+
+  # Upgrading the stats cask can leave a stale code signature cache ("macOS cannot verify"); reinstall clears it
+  system.activationScripts.postActivation.text = ''
+    if [ -f ${brewBundleLog} ] && grep -qxF 'Upgrading stats' ${brewBundleLog}; then
+      echo >&2 "stats was upgraded, reinstalling to clear stale code signature cache..."
+      if ! PATH="${config.homebrew.prefix}/bin:$PATH" \
+        sudo --preserve-env=PATH --user=${userName} --set-home \
+          sh -c 'brew update-reset && brew update && brew uninstall --cask stats && brew install --cask stats'
+      then
+        echo -e "\e[1;33mwarning: stats reinstall failed, run it manually\e[0m" >&2
+      fi
+    fi
+  '';
 
   system.primaryUser = userName;
   system.defaults.dock.autohide = true;
