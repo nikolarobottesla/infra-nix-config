@@ -33,8 +33,8 @@ in {
   my.desktop-base.userName = userName;
   my.desktop-dev.enable = true;
   my.desktop-dev.userName = userName;
-  my.gaming.enable = true;
-  my.gaming.userName = userName;
+  # my.gaming.enable = true;
+  # my.gaming.userName = userName;
 
   # remove if ever re-installing to adopt new (26.05) default profile directory
   home-manager.users."${userName}".programs.firefox.configPath = ".mozilla/firefox";

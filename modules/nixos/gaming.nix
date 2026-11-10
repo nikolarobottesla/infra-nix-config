@@ -23,7 +23,7 @@ in {
     users.users."${cfg.userName}" = {
       extraGroups = ["gamemode"];
       packages = with pkgs; [
-        discord
+        # discord # use flatpak
         heroic
         (heroic.override {
           extraPkgs = pkgs: [
@@ -75,6 +75,7 @@ in {
 
     services.flatpak = {
       packages = [
+        "com.discordapp.Discord"
         "com.github.Matoking.protontricks"
       ];
     };

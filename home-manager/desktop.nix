@@ -33,6 +33,7 @@ in {
       yzhang.markdown-all-in-one
     ];
     # package = pkgs.vscode.fhs;  # if enabled, server needs special treatment
+    package = pkgs.unstable.vscode; #TODO go back to stable when the ripgrep location issue is fixed
     profiles.default.userSettings = {
       # "CodeGPT.apiKey" = "Ollama";
       "powershell.powerShellAdditionalExePaths" = {
