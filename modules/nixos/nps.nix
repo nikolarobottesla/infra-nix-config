@@ -34,14 +34,14 @@ in {
       type = types.str;
       description = ''
         Base domain handled by Traefik. Build-time value.
-        Read from a private, untracked file (e.g. /etc/nixos/nps-domain) by the
+        Read from a private, untracked file (e.g. /etc/nixos/private.nix) by the
         host so the literal domain never lives in this repo.
       '';
     };
 
     acmeEmail = mkOption {
       type = types.str;
-      description = "Let's Encrypt registration email. Cannot be loaded from a file (Traefik static config sources are mutually exclusive).";
+      description = "Let's Encrypt registration email (set at build time; Traefik static config sources are mutually exclusive).";
     };
 
     defaultTz = mkOption {
@@ -153,7 +153,7 @@ in {
           hostIP4Address = cfg.hostIP4Address;
 
           stacks = {
-            docker-socket-proxy.enable = true;
+            socket-proxy.enable = true;
 
             crowdsec = {
               enable = true;

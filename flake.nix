@@ -16,10 +16,7 @@
     homebrew-cask.flake = false;
     # hermes-agent.url = "github:NousResearch/hermes-agent";
     # hermes-agent.inputs.nixpkgs.follows = "nixpkgs-unstable";
-    # Use git+https (not the github: shorthand, which needs nix access-tokens);
-    # Nix's git fetcher authenticates via the `gh auth git-credential` helper.
-    infra-nix-private.url = "git+https://github.com/nikolarobottesla/infra-nix-private";
-    lanzaboote.url = "github:nix-community/lanzaboote/v1.1.0";
+    lanzaboote.url = "github:nix-community/lanzaboote/v1.2.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nixos-hardware.url = "github:nikolarobottesla/nixos-hardware/master";
     nixos-apple-silicon.url = "github:nix-community/nixos-apple-silicon";
@@ -35,7 +32,7 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
-    nix-podman-stacks.url = "github:Tarow/nix-podman-stacks/v0.14.0";
+    nix-podman-stacks.url = "github:Tarow/nix-podman-stacks/v0.19.0";
     nix-podman-stacks.inputs.nixpkgs.follows = "nixpkgs";
     nix-podman-stacks.inputs.home-manager.follows = "home-manager";
     sops-nix.url = "github:Mic92/sops-nix";

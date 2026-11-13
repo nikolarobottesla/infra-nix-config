@@ -3,10 +3,15 @@ let
   hostName = "oak-1";
   userName = "deer";
   domain = "${hostName}.stork-galaxy.ts.net";
-  # domain + Let's Encrypt email. The plaintext lives in the
-  # separate infra-nix-private repo, avoids --impure
-  baseDomain = inputs.infra-nix-private.nps.domain;
-  acmeEmail = inputs.infra-nix-private.nps.acmeEmail;
+  # Host-local private values (public domain + Let's Encrypt email), untracked
+  # in this repo. fetchurl copies the file into the store at evaluation time
+  # with a pinned hash, keeping evaluation pure (no --impure). After editing
+  # /etc/nixos/private.nix, update the hash with:
+  #   nix hash file --sri /etc/nixos/private.nix
+  externalFile = builtins.fetchurl {
+    url = "file:///etc/nixos/private.nix";
+    sha256 = "sha256-Kkzc1gc5AJMVlOgT6bRMkD3BZ87ycwX86SC5vTW3lao=";
+  };
   userMnt = "/home/${userName}/mnt";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
@@ -30,6 +35,7 @@ let
 in
 {
   imports = [
+    externalFile
     inputs.disko.nixosModules.disko
     ./disko-config.nix
     ./hardware-configuration.nix
@@ -242,9 +248,7 @@ in
 
   my.nps = {
     enable = true;
-    domain = baseDomain;
     hostIP4Address = "127.0.0.1";
-    acmeEmail = acmeEmail;
     cloudflared = {
       enable = true;
       tokenFile = config.sops.secrets."cloudflared-tunnel-token".path;
@@ -362,11 +366,11 @@ in
     locations."/" = {
       proxyPass = "https://127.0.0.1:8443";
       extraConfig = ''
-        proxy_set_header Host lldap.${baseDomain};
+        proxy_set_header Host lldap.${config.my.nps.domain};
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_ssl_verify off;
         proxy_ssl_server_name on;
-        proxy_ssl_name lldap.${baseDomain};
+        proxy_ssl_name lldap.${config.my.nps.domain};
       '';
     };
   };
