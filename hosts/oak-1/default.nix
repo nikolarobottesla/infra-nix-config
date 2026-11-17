@@ -15,6 +15,10 @@ let
   userMnt = "/home/${userName}/mnt";
   arrayMnt = "/srv/array0";
   serviceData = "${arrayMnt}/services";
+  # Tailnet address of this host. Traefik reaches host-native services (nginx)
+  # through it so the Tailscale certificate matches the requested name.
+  tailnetIP = "100.92.38.20";
+  nextcloudPublicDomain = "nextcloud.${config.my.nps.domain}";
   # script to update podman containers
   # TODO add service to run this periodically, move this and other podman stuff into a module
   update-containers = pkgs.writeShellScriptBin "update-containers" ''
@@ -244,6 +248,31 @@ in
       group = "root";
       mode = "0400";
     };
+    # Cloudflare IP list sync (read by systemd LoadCredential as root).
+    "cloudflare/ip-list-urls" = {
+      sopsFile = ./secrets.yaml;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+    "cloudflare/account-id" = {
+      sopsFile = ./secrets.yaml;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+    "cloudflare/ip-list-id" = {
+      sopsFile = ./secrets.yaml;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+    "cloudflare/api-token" = {
+      sopsFile = ./secrets.yaml;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
   };
 
   my.nps = {
@@ -252,6 +281,13 @@ in
     cloudflared = {
       enable = true;
       tokenFile = config.sops.secrets."cloudflared-tunnel-token".path;
+    };
+    # Nextcloud stays a host-native NixOS service behind the host nginx; expose
+    # it publicly as nextcloud.<baseDomain> through Traefik's file provider.
+    hostServices.nextcloud = {
+      host = nextcloudPublicDomain;
+      upstream = "https://${tailnetIP}";
+      tlsServerName = domain;
     };
     secrets.traefik.cfDnsApiToken = config.sops.secrets."traefik/cf_api_token".path;
     secrets.authelia.jwtSecret = config.sops.secrets."authelia/jwt_secret".path;
@@ -275,6 +311,17 @@ in
     secrets.pinepods.adminPassword = config.sops.secrets."pinepods/admin_pass".path;
     secrets.pinepods.dbPassword = config.sops.secrets."pinepods/db_pass".path;
     secrets.pinepods.oidcClientSecret = config.sops.secrets."pinepods/oidc_client_secret".path;
+  };
+
+  # Replace the Cloudflare IP list with the union of IPs published by the
+  # configured sources (HTTP URLs or DNS names). The list is the allowlist used
+  # by the Nextcloud Cloudflare WAF rule.
+  my.cloudflareIpList = {
+    enable = true;
+    sourcesFile = config.sops.secrets."cloudflare/ip-list-urls".path;
+    accountIdFile = config.sops.secrets."cloudflare/account-id".path;
+    listIdFile = config.sops.secrets."cloudflare/ip-list-id".path;
+    tokenFile = config.sops.secrets."cloudflare/api-token".path;
   };
 
   home-manager.users."${userName}" = lib.mkMerge [
@@ -316,6 +363,7 @@ in
   my.actualbudget = {
     enable = true;
     dataDir = "${serviceData}/actualbudget";
+    domain = domain;
     sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
     sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
   };
@@ -338,6 +386,8 @@ in
     enable = true;
     adminpassFile = config.sops.secrets.nextcloud-admin-pass.path;
     domain = domain;
+    publicDomain = nextcloudPublicDomain;
+    trustedProxies = [tailnetIP];
   };
   # allow nextcloud to read syncthing files
   users.users.nextcloud.extraGroups = [ config.services.syncthing.group ];
@@ -356,7 +406,7 @@ in
     addSSL = true;
     listen = [
       {
-        addr = "100.92.38.20";
+        addr = tailnetIP;
         port = 17170;
         ssl = true;
       }

@@ -26,6 +26,16 @@ in {
       default = null;
       description = "Required, no default";
     };
+    publicDomain = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Optional public FQDN (e.g. via Traefik/Cloudflare) in addition to the tailnet domain.";
+    };
+    trustedProxies = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Proxy addresses trusted for X-Forwarded-* headers.";
+    };
   };
   config = mkIf cfg.enable {
 
@@ -48,13 +58,23 @@ in {
       };
       settings = {
         defaultPhoneRegion = "US";
-        overwriteProtocol = "https";
+        overwriteprotocol = "https";
+        trusted_domains = lib.optional (cfg.publicDomain != null) cfg.publicDomain;
+        trusted_proxies = cfg.trustedProxies;
       };
       # Let NixOS install and configure the database automatically.
       database.createLocally = true;
 
       package = nextcloud_package;
     };
+
+    # Answer for the public hostname on the same vhost as the tailnet domain.
+    # Repeat the nginx module's default loopback aliases because any explicit
+    # serverAliases definition overrides that mkDefault list.
+    services.nginx.virtualHosts.${cfg.domain}.serverAliases =
+      ["127.0.0.1"]
+      ++ lib.optional config.networking.enableIPv6 "[::1]"
+      ++ lib.optional (cfg.publicDomain != null) cfg.publicDomain;
 
   };
 }

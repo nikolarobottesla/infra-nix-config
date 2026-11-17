@@ -49,6 +49,22 @@ in {
         # };
       };
 
+      # nginx binds the tailnet IP for the `lldap-tailnet` / `actual-tailnet`
+      # vhosts. During a switch that restarts tailscaled the address is briefly
+      # gone, and nginx's config test then fails with "Cannot assign requested
+      # address" (making switch-to-configuration exit 4). Wait for tailscale0 to
+      # have its address before the config test runs.
+      services.nginx.preStart = ''
+        n=0
+        while [ "$n" -lt 60 ]; do
+          if ${pkgs.iproute2}/bin/ip -4 addr show dev tailscale0 2>/dev/null | ${pkgs.gnugrep}/bin/grep -q 'inet '; then
+            break
+          fi
+          n=$((n + 1))
+          ${pkgs.coreutils}/bin/sleep 1
+        done
+      '';
+
       my.tailscale-tls.enable = true;
 
       # don't know how to use, need to find an example

@@ -44,6 +44,37 @@ in {
       description = "Let's Encrypt registration email (set at build time; Traefik static config sources are mutually exclusive).";
     };
 
+    hostServices = mkOption {
+      type = types.attrsOf (types.submodule {
+        options = {
+          host = mkOption {
+            type = types.str;
+            description = "Public hostname routed to this service.";
+          };
+          upstream = mkOption {
+            type = types.str;
+            description = "Upstream URL, e.g. https://100.92.38.20 (a host-native service).";
+          };
+          middlewares = mkOption {
+            type = types.listOf types.str;
+            default = ["public@file"];
+            description = "Traefik middleware chain applied to the router.";
+          };
+          tlsServerName = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              SNI/server name used to verify the upstream certificate. When set,
+              a scoped serversTransport is generated instead of disabling
+              verification globally.
+            '';
+          };
+        };
+      });
+      default = {};
+      description = "Host-native HTTP services published through Traefik's file provider.";
+    };
+
     defaultTz = mkOption {
       type = types.str;
       default = "America/Chicago";
@@ -215,6 +246,37 @@ in {
                 ];
                 ipStrategy.depth = 1;
               };
+
+              # Host-native (non-container) services published through the file
+              # provider. Each entry gets a router, a load-balancer service, and
+              # (when tlsServerName is set) a scoped serversTransport so the
+              # upstream certificate is verified instead of skipping TLS
+              # verification globally.
+              dynamicConfig.http.routers =
+                lib.mapAttrs' (name: svc: lib.nameValuePair name {
+                  rule = "Host(`${svc.host}`)";
+                  service = name;
+                  middlewares = svc.middlewares;
+                })
+                cfg.hostServices;
+
+              dynamicConfig.http.services =
+                lib.mapAttrs' (name: svc: lib.nameValuePair name {
+                  loadBalancer =
+                    {
+                      servers = [{url = svc.upstream;}];
+                    }
+                    // lib.optionalAttrs (svc.tlsServerName != null) {
+                      serversTransport = "${name}-transport";
+                    };
+                })
+                cfg.hostServices;
+
+              dynamicConfig.http.serversTransports =
+                lib.mapAttrs' (name: svc: lib.nameValuePair "${name}-transport" {
+                  serverName = svc.tlsServerName;
+                })
+                (lib.filterAttrs (_: svc: svc.tlsServerName != null) cfg.hostServices);
             };
 
             authelia = {

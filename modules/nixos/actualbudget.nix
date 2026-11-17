@@ -12,7 +12,13 @@ in {
 
     dataDir = mkOption {
       type = types.str;
-      description = "Defaults to...";
+      description = "Defaults to null";
+      default = null;
+    };
+
+    domain = mkOption {
+      type = types.str;
+      description = "Defaults to null";
       default = null;
     };
 
@@ -62,16 +68,39 @@ in {
       };
       # hostname = "<ts domain>";
       image = "ghcr.io/actualbudget/actual-server:latest";
-      ports = ["5006:5006"];
+      # Loopback only. The tailnet-facing listener is the `actual-tailnet`
+      # nginx vhost below; nothing binds 0.0.0.0, so the app is unreachable
+      # except through that vhost.
+      ports = ["127.0.0.1:5006:5006"];
       user = "992:989";
       volumes = ["${cfg.dataDir}/:/data"];
     };
 
-    # services.nginx.virtualHosts."oak-1.budget.stork-galaxy.ts.net" = {
-    #   locations."/".proxyPass = "https://localhost:5006";
-    #   # forceSSL = true;
-    #   # useACMEHost = "stork-galaxy.ts.net";
-    # };
+    # Actual Budget is loopback-only; nginx terminates the Tailscale cert on
+    # the tailnet IP (cfg.domain, set per host) and proxies into it, so the app
+    # is reachable only over the tailnet (never on 0.0.0.0). Mirrors the
+    # `lldap-tailnet` vhost in hosts/oak-1/default.nix.
+    services.nginx.virtualHosts."actual-tailnet" = {
+      serverName = cfg.domain;
+      addSSL = true;
+      listen = [
+        {
+          addr = "100.92.38.20";
+          port = 5006;
+          ssl = true;
+        }
+      ];
+      sslCertificate = "${config.my.tailscale-tls.certDir}/cert.crt";
+      sslCertificateKey = "${config.my.tailscale-tls.certDir}/key.key";
+      locations."/" = {
+        proxyPass = "https://127.0.0.1:5006";
+        extraConfig = ''
+          proxy_ssl_verify off;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $connection_upgrade;
+        '';
+      };
+    };
 
     systemd.services.actual-tls = {
       description = "Copy Tailsscale tls into Actual Budget volume folder";

@@ -8,6 +8,7 @@
     ./auto-update.nix
     ./btrbk-client.nix
     ./btrbk-server.nix
+    ./cloudflare-ip-list.nix
     ./cockpit.nix
     ./create_ap.nix
     ./desktop-base.nix
