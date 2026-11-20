@@ -47,6 +47,7 @@ in {
       "Z /srv/array0/private/k-laptop 0750 syncthing syncthing"
       "Z /srv/array0/private/y-l 0750 syncthing syncthing"
       "Z /srv/array0/private/y-n---uid 0750 syncthing syncthing"
+      "Z /srv/array0/private/l-n 0750 syncthing syncthing"
       "Z /srv/array0/media/music 0755 syncthing syncthing"
       #symlink SSL
       "C+ ${config.services.syncthing.configDir}/https-cert.pem - - - - ${cfg.sslCertificate}"
@@ -73,7 +74,6 @@ in {
       "m-phone" = { id = "PLGB372-UDUIG6Y-4SEDZ34-B6YMYMP-3XZI33O-NGMOWA2-2QN3IXJ-5W36RQI"; };
       "k-phone" = { id = "L52UGOC-ZLI353U-CAA6BXA-AQLGAG7-CSCA3LC-U4ZWC7T-I74YCK2-NKZONA5"; };
       "laptop840" = { id = "Q4MJJUY-A6ILQNI-GF2YZYA-ITQFNMM-EOW4QIZ-HGGG6MJ-E7CZH5G-LQ755AD"; };
-      "12th-turtle" = { id = "7V5LZUZ-GJLL4RI-PSDS5EE-ZE4ZZIX-7RYXVKD-GHXUTR5-GCYLREQ-3VIHXQ5"; };
       "cinnamon-ice" = { id = "OAEXK4I-LXC3XUF-4Y57RI7-B3Q7BKO-RBVZWXQ-AGV5CD3-W5MVPXV-EY5Z6QE"; };
       "hoolichinn" = { id = "3RCG5NT-SZWP3YB-XIBM2GJ-E6HTOAO-2LECZ3R-SELTP25-UYPLWTF-XZ2LNQC"; };
       # "device" = { id = "DEVICE-ID-GOES-HERE"; };
@@ -83,7 +83,7 @@ in {
       "default" = {  # Name of folder in Syncthing, also the default folder ID
         id = "default";  # needs to be the same for all devices
         path = "/srv/array0/private/sync";  # Which folder to add to Syncthing
-        devices = [ "15th-turtle" "d-desk" "d-shi" "laptop840" "12th-turtle" ];  # Which devices to share the folder with
+        devices = [ "15th-turtle" "d-desk" "d-shi" "laptop840" "hoolichinn"];  # Which devices to share the folder with
         type = "receiveonly";
       };
       "music" = {
@@ -101,25 +101,25 @@ in {
       "k-laptop-desktop" = { 
         id = "rehhq-athup";
         path = "/srv/array0/private/k-laptop/desktop";
-        devices = [ "laptop840" "12th-turtle" "cinnamon-ice"] ;
+        devices = [ "laptop840" "cinnamon-ice" "hoolichinn"] ;
         type = "receiveonly";
       };
       "k-laptop-music" = { 
         id = "qrysd-avxft";
         path = "/srv/array0/private/k-laptop/music";
-        devices = [ "laptop840" "12th-turtle" "k-phone" ];
+        devices = [ "laptop840" "k-phone" "hoolichinn"];
         type = "receiveonly";
       };
       "k-laptop-pictures" = { 
         id = "rrmn9-ybzyr";
         path = "/srv/array0/private/k-laptop/pictures";
-        devices = [ "laptop840" "12th-turtle" ];
+        devices = [ "laptop840" "hoolichinn"];
         type = "receiveonly";
       };
       "k-laptop-videos" = { 
         id = "4tkum-u9ttx";
         path = "/srv/array0/private/k-laptop/videos";
-        devices = [ "laptop840" "12th-turtle" ];
+        devices = [ "laptop840" "hoolichinn"];
         type = "receiveonly";
       };
       "c-save" = {
@@ -137,6 +137,12 @@ in {
       "y-l" = {
         id = "pvndr-ukxex";
         path = "/srv/array0/private/y-l";
+        devices = [ "d-desk" ];
+        type = "receiveonly";
+      };
+      "l-n" = {
+        id = "vkjrz-mvc2k";
+        path = "/srv/array0/private/l-n";
         devices = [ "d-desk" ];
         type = "receiveonly";
       };

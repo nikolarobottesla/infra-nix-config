@@ -10,7 +10,7 @@ let
   #   nix hash file --sri /etc/nixos/private.nix
   externalFile = builtins.fetchurl {
     url = "file:///etc/nixos/private.nix";
-    sha256 = "sha256-Kkzc1gc5AJMVlOgT6bRMkD3BZ87ycwX86SC5vTW3lao=";
+    sha256 = "sha256-W9e89zKDBSop1wnbi9BgVrSMzsz2a1nuIR/0FBmuqb0=";
   };
   userMnt = "/home/${userName}/mnt";
   arrayMnt = "/srv/array0";

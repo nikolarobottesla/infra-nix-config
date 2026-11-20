@@ -167,6 +167,16 @@ with lib; let
             + "/items"
         )
 
+        ipv4_count = sum(1 for network in networks if network.version == 4)
+        ipv6_count = sum(1 for network in networks if network.version == 6)
+        print(
+            "collected "
+            + str(ipv4_count)
+            + " IPv4 and "
+            + str(ipv6_count)
+            + " IPv6 entries",
+            flush=True,
+        )
         print("replacing " + str(len(payload)) + " list items", flush=True)
         print("PUT " + url, flush=True)
         result = subprocess.run(
