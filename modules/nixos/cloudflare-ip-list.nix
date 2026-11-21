@@ -28,6 +28,7 @@ with lib; let
 
     CREDENTIALS = os.environ["CREDENTIALS_DIRECTORY"]
     RUNTIME = os.environ["RUNTIME_DIRECTORY"]
+    STATE_PATH = os.path.join(os.environ["STATE_DIRECTORY"], "state.json")
 
     # Candidate tokens: anything composed of hex digits, dots and colons,
     # optionally followed by a CIDR prefix. Every candidate is validated by
@@ -47,6 +48,99 @@ with lib; let
                 name + " must be a bare ID, not a URL or path: " + value
             )
         return value
+
+
+    def network_key(network):
+        return (network.version, int(network.network_address), network.prefixlen)
+
+
+    def as_network(value):
+        try:
+            return ipaddress.ip_network(value, strict=False)
+        except ValueError:
+            return None
+
+
+    def load_state():
+        try:
+            with open(STATE_PATH, encoding="utf-8") as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                raise ValueError("state is not a JSON object")
+            return data
+        except FileNotFoundError:
+            return {}
+        except Exception as error:
+            print(
+                "warning: could not read state file, starting fresh: " + str(error),
+                file=sys.stderr,
+                flush=True,
+            )
+            return {}
+
+
+    def save_state(state):
+        temp = STATE_PATH + ".tmp." + str(os.getpid())
+        with open(temp, "w", encoding="utf-8") as f:
+            json.dump(state, f, sort_keys=True)
+            f.flush()
+            os.fsync(f.fileno())
+        os.chmod(temp, 0o600)
+        os.replace(temp, STATE_PATH)
+
+
+    def history_from(entry, version):
+        result = []
+        for value in entry.get(str(version), []):
+            network = as_network(value)
+            if network is not None and network not in result:
+                result.append(network)
+        return result
+
+
+    def cached_addresses(state, host):
+        entry = state.get(host, {})
+        found = set()
+        for version in (4, 6):
+            found.update(history_from(entry, version))
+        return found
+
+
+    def family_text(current, history, version):
+        current_list = sorted(
+            (n for n in current if n.version == version), key=network_key
+        )
+        previous = [n for n in history if not current_list or n != current_list[0]]
+        return (
+            "current=" + (",".join(render(n) for n in current_list) or "none")
+            + " previous=" + (",".join(render(n) for n in previous[:1]) or "none")
+        )
+
+
+    def remember(state, host, current):
+        # Keep the newest address and the one it replaced for each family.
+        entry = state.get(host, {})
+        if not isinstance(entry, dict):
+            entry = {}
+        contributed = set(current)
+        details = []
+        for version in (4, 6):
+            key = str(version)
+            current_family = sorted(
+                (n for n in current if n.version == version), key=network_key
+            )
+            history = history_from(entry, version)
+            if current_family:
+                primary = current_family[0]
+                history = [n for n in history if n != primary]
+                history.insert(0, primary)
+                history = history[:2]
+            contributed.update(history)
+            details.append(str(version) + ": " + family_text(current_family, history, version))
+            entry[key] = [render(n) for n in history]
+        state[host] = entry
+        print(host + " " + "; ".join(details), flush=True)
+        return contributed, set(current)
 
 
     def sources():
@@ -122,24 +216,47 @@ with lib; let
 
 
     def main():
-        # Fail closed: if any source cannot be read, do not replace the list
-        # with a partial result.
+        # Fail closed: if a source cannot be read and no cached addresses are
+        # available for that DNS entry, do not replace the list with a partial
+        # result.
+        state = load_state()
         networks = set()
+        current_seen = set()
+        remembered_seen = set()
+        active_hosts = set()
         for kind, target in sources():
             if kind == "dns":
+                active_hosts.add(target)
                 print("resolving " + target, flush=True)
-                networks.update(resolve(target))
+                try:
+                    current = resolve(target)
+                except Exception as error:
+                    cached = cached_addresses(state, target)
+                    if cached:
+                        print(
+                            "warning: DNS lookup failed for " + target + ": "
+                            + str(error) + "; using cached addresses",
+                            file=sys.stderr,
+                            flush=True,
+                        )
+                        remembered_seen.update(cached)
+                        networks.update(cached)
+                        continue
+                    raise
+                contributed, current_set = remember(state, target, current)
+                current_seen.update(current_set)
+                remembered_seen.update(contributed - current_set)
+                networks.update(contributed)
             else:
                 print("fetching " + target, flush=True)
-                networks.update(extract(fetch(target)))
+                found = extract(fetch(target))
+                current_seen.update(found)
+                networks.update(found)
 
         if not networks:
             raise RuntimeError("no IP addresses or CIDRs found in any source")
 
-        ordered = sorted(
-            networks,
-            key=lambda n: (n.version, int(n.network_address), n.prefixlen),
-        )
+        ordered = sorted(networks, key=network_key)
         payload = [{"ip": render(network)} for network in ordered]
 
         payload_path = os.path.join(RUNTIME, "payload.json")
@@ -167,14 +284,17 @@ with lib; let
             + "/items"
         )
 
-        ipv4_count = sum(1 for network in networks if network.version == 4)
-        ipv6_count = sum(1 for network in networks if network.version == 6)
+        remembered_only = remembered_seen - current_seen
         print(
             "collected "
-            + str(ipv4_count)
-            + " IPv4 and "
-            + str(ipv6_count)
-            + " IPv6 entries",
+            + str(sum(1 for n in current_seen if n.version == 4))
+            + " current and "
+            + str(sum(1 for n in remembered_only if n.version == 4))
+            + " remembered IPv4, "
+            + str(sum(1 for n in current_seen if n.version == 6))
+            + " current and "
+            + str(sum(1 for n in remembered_only if n.version == 6))
+            + " remembered IPv6 entries",
             flush=True,
         )
         print("replacing " + str(len(payload)) + " list items", flush=True)
@@ -212,6 +332,17 @@ with lib; let
             return result.returncode
         if result.stderr:
             print(result.stderr, file=sys.stderr)
+
+        # Only persist history after Cloudflare accepted the update, so state
+        # describes addresses that were actually installed in the list.
+        try:
+            save_state({host: state[host] for host in active_hosts})
+        except Exception as error:
+            print(
+                "warning: could not save state file: " + str(error),
+                file=sys.stderr,
+                flush=True,
+            )
         return 0
 
 
@@ -237,6 +368,12 @@ in {
           explicit `dns:hostname` form. This is the recommended mode for
           DuckDNS names, since DuckDNS does not issue TLS certificates for
           subdomains and a router's self-signed certificate cannot be verified.
+
+        For each DNS hostname, the newest IPv4 and IPv6 addresses are remembered
+        along with the addresses they replaced, so a DDNS change keeps both the
+        old and new address in the list. History is stored in
+        `/var/lib/cloudflare-ip-list/state.json` and survives rebuilds and
+        reboots. Failed DNS lookups fall back to cached addresses when available.
 
         Blank lines and lines starting with `#` are ignored.
       '';
@@ -283,6 +420,10 @@ in {
         DynamicUser = true;
         RuntimeDirectory = "cloudflare-ip-list";
         RuntimeDirectoryMode = "0700";
+        # Remembered previous addresses live outside the Nix store so they
+        # survive rebuilds and reboots.
+        StateDirectory = "cloudflare-ip-list";
+        StateDirectoryMode = "0700";
         UMask = "0077";
 
         # Read as root before privileges are dropped, so the secrets do not

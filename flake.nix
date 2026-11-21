@@ -32,7 +32,7 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
-    nix-podman-stacks.url = "github:Tarow/nix-podman-stacks/v0.19.0";
+    nix-podman-stacks.url = "github:Tarow/nix-podman-stacks/v0.20.0";
     nix-podman-stacks.inputs.nixpkgs.follows = "nixpkgs";
     nix-podman-stacks.inputs.home-manager.follows = "home-manager";
     sops-nix.url = "github:Mic92/sops-nix";
