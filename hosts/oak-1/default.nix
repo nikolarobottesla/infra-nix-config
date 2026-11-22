@@ -18,6 +18,15 @@ let
   # Tailnet address of this host. Traefik reaches host-native services (nginx)
   # through it so the Tailscale certificate matches the requested name.
   tailnetIP = "100.92.38.20";
+  # Private/LAN and Tailscale ranges allowed to reach tailnet-only services.
+  # Single source of truth for Samba's host filter and Traefik's lldap allowlist.
+  tailnetAllowlist = [
+    "10.0.0.0/8"
+    "172.16.0.0/12"
+    "192.168.0.0/16"
+    "100.64.0.0/10"
+    "fd7a:115c:a1e0::/48"
+  ];
   nextcloudPublicDomain = "nextcloud.${config.my.nps.domain}";
   # script to update podman containers
   # TODO add service to run this periodically, move this and other podman stuff into a module
@@ -277,6 +286,7 @@ in
 
   my.nps = {
     enable = true;
+    tailnetAllowlist = tailnetAllowlist;
     hostIP4Address = "127.0.0.1";
     cloudflared = {
       enable = true;
@@ -442,6 +452,7 @@ in
   my.samba-server = {
     enable = true;
     userName = userName;
+    hostsAllow = tailnetAllowlist;
   };
 
   sops.secrets = {

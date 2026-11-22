@@ -33,6 +33,11 @@ in {
       default = "deer";
     };
 
+    hostsAllow = mkOption {
+      type = types.listOf types.str;
+      description = "Networks allowed by Samba's hosts allow directive (from the host allowlist).";
+    };
+
     # writeList = mkOption {
     #   type = types.list;
     #   description = "list of write access samba users";
@@ -81,7 +86,10 @@ in {
     systemd.tmpfiles.rules = [
       # "z /srv/array0 0750 deer users"
       # "Z ${cfg.arrayMnt}/media 0775 ${cfg.userName} samba-users"  # ran once in the beginning
-      # "Z ${cfg.arrayMnt}/private 0755 ${parent.userName} samba-users"
+      # Non-recursive on purpose: syncthing.nix's recursive Z rules for the
+      # receive-only subfolders (sync, k-laptop, ...) must stay authoritative.
+      # The setgid bit makes new entries inherit samba-users as their group.
+      "z ${cfg.arrayMnt}/private 2775 ${cfg.userName} samba-users"
       # "Z ${cfg.arrayMnt}/private/duplicati 0755 igor samba-users"  # used to allow samba igor to write
     ];
       
@@ -107,8 +115,8 @@ in {
           # these next 2 are for tailscale
           interfaces = "lo eno1";
           # "bind interfaces only" = "yes"; # doesn't seem to be an available option anymore 20241200
-          # note: localhost is the ipv6 localhost ::1
-          "hosts allow" = "192.168.1.0 127.0.0.1 localhost 100.0";
+          # Loopback stays allowed so `tailscale serve --tcp 445` can reach smbd.
+          "hosts allow" = lib.concatStringsSep " " (cfg.hostsAllow ++ [ "127.0.0.1" "localhost" ]);
           "hosts deny" = "0.0.0.0/0";
           "guest account" = "nobody";
           "map to guest" = "bad user";
@@ -130,12 +138,17 @@ in {
         private = {
           path = "${cfg.arrayMnt}/private";
           "valid users" = "igor sauce";
-          # "read only" = "no";
+          # Share defaults to writable globally; make it read only here so
+          # only users in write list (igor) can write. Otherwise sauce would
+          # be writable too, despite being intended as read only.
+          "read only" = "yes";
+          "write list" = "igor";
           # "guest ok" = "no";
-          # "create mask" = "0644";
-          # "directory mask" = "0755";
-          # "force user" = "deer";
-          # "force group" = "users";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          # Filesystem permissions grant samba-users write access; do not
+          # force a user, otherwise igor loses write access to his own
+          # duplicati folder (owned by igor:samba-users).
         };
       };
     };

@@ -68,4 +68,42 @@ in {
       Exec=${lib.getExe plasmaDarkMode}
       X-KDE-autostart-condition=ksmserver
     '';
+
+  # Reject pushes containing unsigned commits, on top of the commit.gpgSign
+  # setting in home.nix.
+  xdg.configFile = {
+    "git/config".text = lib.mkAfter ''
+      ${lib.generators.toGitINI {core.hooksPath = "${config.xdg.configHome}/git/hooks";}}
+    '';
+
+    "git/hooks/pre-push" = {
+      executable = true;
+      text = ''
+        #!/bin/sh
+        set -eu
+
+        zero=0000000000000000000000000000000000000000
+
+        while read -r local_ref local_sha remote_ref remote_sha; do
+          if [ "$local_sha" = "$zero" ]; then
+            continue # ref deletion, nothing to verify
+          fi
+
+          if [ "$remote_sha" = "$zero" ]; then
+            range="$local_sha"
+          else
+            range="$remote_sha..$local_sha"
+          fi
+
+          commits=$(git rev-list "$range") || exit 1
+          for commit in $commits; do
+            if ! git verify-commit "$commit" >/dev/null 2>&1; then
+              echo "error: refusing to push unsigned commit $commit ($local_ref)" >&2
+              exit 1
+            fi
+          done
+        done
+      '';
+    };
+  };
 }

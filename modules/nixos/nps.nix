@@ -12,8 +12,8 @@ let
     "paperless"
     "grafana"
     "pinepods"
-    "alloy"
-    "prometheus"
+    # "alloy"
+    # "prometheus"
   ];
 in {
   options.my.nps = {
@@ -28,6 +28,11 @@ in {
     hostIP4Address = mkOption {
       type = types.str;
       description = "IPv4 address used for explicit bindings (only relevant when Traefik is disabled).";
+    };
+
+    tailnetAllowlist = mkOption {
+      type = types.listOf types.str;
+      description = "Source ranges allowed by the ipwhitelist-tailnet middleware (set by the host).";
     };
 
     domain = mkOption {
@@ -225,9 +230,9 @@ in {
                   "::1/128"
                 ];
               dynamicConfig.tls.options.default.sniStrict = mkForce false;
-              # Allowlist used by lldap: RFC1918 LAN ranges plus Tailscale CGNAT
-              # (IPv4 + IPv6), so the service is reachable from the LAN and the
-              # tailnet but not from the public internet.
+              # Allowlist used by lldap: provided by the host (RFC1918 LAN
+              # ranges plus Tailscale CGNAT/ULA), so the service is reachable
+              # from the LAN and the tailnet but not from the public internet.
               #
               # ipAllowList must match on the X-Forwarded-For client IP rather
               # than the connection address: nginx proxies every request to
@@ -237,13 +242,7 @@ in {
               # the middleware would reject everything regardless of source
               # (Traefik only shows the XFF-derived client in the access log).
               dynamicConfig.http.middlewares."ipwhitelist-tailnet".ipAllowList = {
-                sourceRange = [
-                  "10.0.0.0/8"
-                  "172.16.0.0/12"
-                  "192.168.0.0/16"
-                  "100.64.0.0/10"
-                  "fd7a:115c:a1e0::/48"
-                ];
+                sourceRange = cfg.tailnetAllowlist;
                 ipStrategy.depth = 1;
               };
 
